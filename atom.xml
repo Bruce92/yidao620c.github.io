@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-07T10:31:33+08:00</updated>
+  <updated>2015-04-07T10:54:13+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Servlet Filter详解]]></title>
+    <title type="html"><![CDATA[servlet filter详解]]></title>
     <link href="http://yidao620c.github.io/blog/20150406/servlet-filter.html"/>
     <updated>2015-04-06T21:08:25+08:00</updated>
     <id>http://yidao620c.github.io/blog/20150406/servlet-filter</id>
