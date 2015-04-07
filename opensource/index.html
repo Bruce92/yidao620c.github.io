@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>笨跑的一刀</title>
+  <title>开源项目 - 笨跑的一刀</title>
   <meta name="author" content="熊能">
 
   
-  <meta name="description" content="在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点，最好使用Servlet Filter实现这个需求。 &hellip;">
+  <meta name="description" content="开源项目 2015年04月06日 5:09 pm python3-cookbook
+《Python Cookbook》第三版中文翻译 simpleblog Django1.7开发一个开源博客系统 2015年04月06日 5:09 pm Comments Please enable &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://yidao620c.github.io/index.html">
+  <link rel="canonical" href="http://yidao620c.github.io/opensource/index.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
@@ -65,64 +66,58 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article role="article">
   
-  
-  
-    <article>
-      
   <header>
-    
-      <h1 class="entry-title"><a href="/blog/20150406/servlet-filter.html">Servlet Filter详解</a></h1>
-    
-    
-      <p class="meta">
-        
+    <h1 class="entry-title">开源项目</h1>
+    <p class="meta">
 
 
 
 
-<time class='entry-date' datetime='2015-04-06T21:08:25+08:00'><span class='date'>2015年04月06日</span> <span class='time'>9:08 pm</span></time>
-        
-      </p>
-    
+<time class='entry-date' datetime='2015-04-06T17:09:00+08:00'><span class='date'>2015年04月06日</span> <span class='time'>5:09 pm</span></time></p>
   </header>
-
-
-  <div class="entry-content"><p>在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点，最好使用Servlet Filter实现这个需求。</p>
-
-<p>本文将通过几个实际的例子展示下Servlet中的Filter的使用。</p>
-
-<p>1). 我们为什么需要使用Filter？</p>
-
-<p>通常我们会使用session来保存登录用户的信息，通过从session中取出保存的属性值来判断用户是否登录，但是如果我们有大量的请求方法，每个人方法中都这样去判断就会有很多重复代码，将来我们想改动下逻辑，那得改动所有的请求方法实现，所以这个是不可取的。</p>
-
-<p>这时候就是使用Servlet Filter的时候了，它是可插拔的，对于普通的action方法来讲是透明的。它会在执行其他方法之前或将结果返回给客户端之前来执行其他逻辑。</p>
-
-<p>以下几种场景下我们会使用到Servlet Filter：</p>
-
-<ul>
-  <li>将请求的参数写入日志文件</li>
-  <li>对于资源的访问进行统一的授权与验证</li>
-  <li>在请求到达实际Servlet之前格式化请求内容或请求头</li>
-  <li>压缩返回数据后发送给客户端</li>
-  <li>修改返回内容，增加一些cookie、header等信息</div>
   
+  <ul>
+  <li><a href="https://github.com/yidao620c/python3-cookbook" title="python3-cookbook">python3-cookbook</a>
+《Python Cookbook》第三版中文翻译</li>
+  <li><a href="https://github.com/yidao620c/simpleblog" title="simpleblog base on django1.7">simpleblog</a>
+ Django1.7开发一个开源博客系统</li>
+</ul>
+
   
     <footer>
-      <a rel="full-article" href="/blog/20150406/servlet-filter.html">「阅读全文」&rarr;</a>
+      <p class="meta">
+        
+        
+
+
+
+
+<time class='entry-date' datetime='2015-04-06T17:09:00+08:00'><span class='date'>2015年04月06日</span> <span class='time'>5:09 pm</span></time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  
+  
+</div>
+
+      
     </footer>
   
+</article>
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
+  </section>
+
+</div>
+
 <aside class="sidebar">
   
     <section>
@@ -179,6 +174,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -193,7 +189,10 @@
       var disqus_shortname = 'yidao620cgithubio';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://yidao620c.github.io/opensource/index.html';
+        var disqus_url = 'http://yidao620c.github.io/opensource/index.html';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
