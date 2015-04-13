@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：linux | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-13T19:10:16+08:00</updated>
+  <updated>2015-04-13T19:21:27+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -20,14 +20,13 @@
     <id>http://yidao620c.github.io/blog/20150413/centos-yum</id>
     <content type="html"><![CDATA[<h4 id="section">先备份</h4>
 
-<p><code>bash
+<p><code>
 mv /etc/yum.repos.d/CentOS-Base.repo{,.bak}
 </code></p>
 
 <h4 id="centos-baserepo">修改CentOS-Base.repo</h4>
 
-<p>&#8220;`sh
-# CentOS-Base.repo
+<pre><code># CentOS-Base.repo
 #
 # The mirror system uses the connecting IP address of the client and the
 # update status of each mirror to pick mirrors that are updated to and
@@ -37,70 +36,71 @@ mv /etc/yum.repos.d/CentOS-Base.repo{,.bak}
 # If the mirrorlist= does not work for you, as a fall back you can try the 
 # remarked out baseurl= line instead.
 #
-#</p>
-
-<p>[base]
+#
+ 
+[base]
 name=CentOS-$releasever - Base
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os
 baseurl=http://mirrors.163.com/centos/$releasever/os/$basearch/
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</p>
-
-<h1 id="released-updates">released updates</h1>
-<p>[updates]
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+  
+#released updates 
+[updates]
 name=CentOS-$releasever - Updates
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates
 baseurl=http://mirrors.163.com/centos/$releasever/updates/$basearch/
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</p>
-
-<h1 id="additional-packages-that-may-be-useful">additional packages that may be useful</h1>
-<p>[extras]
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+  
+#additional packages that may be useful
+[extras]
 name=CentOS-$releasever - Extras
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras
 baseurl=http://mirrors.163.com/centos/$releasever/extras/$basearch/
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</p>
-
-<h1 id="additional-packages-that-extend-functionality-of-existing-packages">additional packages that extend functionality of existing packages</h1>
-<p>[centosplus]
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+  
+#additional packages that extend functionality of existing packages
+[centosplus]
 name=CentOS-$releasever - Plus
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus
 baseurl=http://mirrors.163.com/centos/$releasever/centosplus/$basearch/
 gpgcheck=1
 enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</p>
-
-<h1 id="contrib---packages-by-centos-users">contrib - packages by Centos Users</h1>
-<p>[contrib]
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+  
+#contrib - packages by Centos Users
+[contrib]
 name=CentOS-$releasever - Contrib
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=contrib
 baseurl=http://mirrors.163.com/centos/$releasever/contrib/$basearch/
 gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-&#8220;`</p>
+</code></pre>
 
-<p><code>bash
-yum clean all
-yum makecache     #将服务器上的软件包信息缓存到本地,以提高搜索安装软件的速度
-yum install vim*    #测试域名是否可用
-</code></p>
+<p>接下来我们来更新下yum：</p>
+
+<pre><code>yum clean all
+yum makecache #将服务器上的软件包信息缓存到本地,以提高搜索安装软件的速度
+yum install vim*#测试域名是否可用
+</code></pre>
 
 <h4 id="rpmforge">附：增加RPMforge源</h4>
 <ol>
   <li>download the rpmforge package:
 <a href="http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm">http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm</a></li>
   <li>Install DAG’s GPG key
-<code>sudo rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt</code>
+ <code>sudo rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt</code>
 如果上面出现错误，确认下：
-<code>sudo rpm -K rpmforge-release-0.5.2-2.el6.rf.*.rpm</code></li>
+ <code>sudo rpm -K rpmforge-release-0.5.2-2.el6.rf.*.rpm</code></li>
   <li>然后安装rpm
-<code>sudo rpm -i rpmforge-release-0.5.2-2.el6.rf.*.rpm</code></li>
+ <code>sudo rpm -i rpmforge-release-0.5.2-2.el6.rf.*.rpm</code></li>
   <li>试试看：
-<code>sudo yum install htop</code></li>
+ <code>sudo yum install htop</code></li>
   <li>开始更新系统：
-<code>sudo yum update</code></li>
+ <code>sudo yum update</code></li>
 </ol>
 
 ]]></content>
