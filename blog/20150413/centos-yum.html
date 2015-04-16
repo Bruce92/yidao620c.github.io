@@ -9,9 +9,33 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="Centos6更新yum源 先备份 mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo # CentOS-Base.repo
-#
-# The mirror system uses the connecting IP &hellip;">
+	<meta name="description" content="Centos6更新yum源 先备份 1
+mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,88 +120,157 @@
 	<h1 class="title" itemprop="name">Centos6更新yum源</h1>
 	<div class="entry-content" itemprop="articleBody"><h4 id="section">先备份</h4>
 
-<p><code>
-mv /etc/yum.repos.d/CentOS-Base.repo{,.bak}
-</code></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo<span class="o">{</span>,.bak<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h4 id="centos-baserepo">修改CentOS-Base.repo</h4>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># CentOS-Base.repo</span>
+</span><span class="line"><span class="c">#</span>
+</span><span class="line"><span class="c"># The mirror system uses the connecting IP address of the client and the</span>
+</span><span class="line"><span class="c"># update status of each mirror to pick mirrors that are updated to and</span>
+</span><span class="line"><span class="c"># geographically close to the client. You should use this for CentOS updates</span>
+</span><span class="line"><span class="c"># unless you are manually picking other mirrors.</span>
+</span><span class="line"><span class="c">#</span>
+</span><span class="line"><span class="c"># If the mirrorlist= does not work for you, as a fall back you can try the </span>
+</span><span class="line"><span class="c"># remarked out baseurl= line instead.</span>
+</span><span class="line"><span class="c">#</span>
+</span><span class="line"><span class="c">#</span>
+</span><span class="line">
+</span><span class="line"><span class="o">[</span>base<span class="o">]</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Base
+</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os</span>
+</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/os/<span class="nv">$basearch</span>/
+</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</span><span class="line">
+</span><span class="line"><span class="c">#released updates </span>
+</span><span class="line"><span class="o">[</span>updates<span class="o">]</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Updates
+</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates</span>
+</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/updates/<span class="nv">$basearch</span>/
+</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</span><span class="line">
+</span><span class="line"><span class="c">#additional packages that may be useful</span>
+</span><span class="line"><span class="o">[</span>extras<span class="o">]</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Extras
+</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras</span>
+</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/extras/<span class="nv">$basearch</span>/
+</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</span><span class="line">
+</span><span class="line"><span class="c">#additional packages that extend functionality of existing packages</span>
+</span><span class="line"><span class="o">[</span>centosplus<span class="o">]</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Plus
+</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus</span>
+</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/centosplus/<span class="nv">$basearch</span>/
+</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">enabled</span><span class="o">=</span>0
+</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</span><span class="line">
+</span><span class="line"><span class="c">#contrib - packages by Centos Users</span>
+</span><span class="line"><span class="o">[</span>contrib<span class="o">]</span>
+</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Contrib
+</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=contrib</span>
+</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/contrib/<span class="nv">$basearch</span>/
+</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
+</span><span class="line"><span class="nv">enabled</span><span class="o">=</span>0
+</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<pre><code># CentOS-Base.repo
-#
-# The mirror system uses the connecting IP address of the client and the
-# update status of each mirror to pick mirrors that are updated to and
-# geographically close to the client. You should use this for CentOS updates
-# unless you are manually picking other mirrors.
-#
-# If the mirrorlist= does not work for you, as a fall back you can try the 
-# remarked out baseurl= line instead.
-#
-#
- 
-[base]
-name=CentOS-$releasever - Base
-#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os
-baseurl=http://mirrors.163.com/centos/$releasever/os/$basearch/
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-  
-#released updates 
-[updates]
-name=CentOS-$releasever - Updates
-#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates
-baseurl=http://mirrors.163.com/centos/$releasever/updates/$basearch/
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-  
-#additional packages that may be useful
-[extras]
-name=CentOS-$releasever - Extras
-#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras
-baseurl=http://mirrors.163.com/centos/$releasever/extras/$basearch/
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-  
-#additional packages that extend functionality of existing packages
-[centosplus]
-name=CentOS-$releasever - Plus
-#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus
-baseurl=http://mirrors.163.com/centos/$releasever/centosplus/$basearch/
-gpgcheck=1
-enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-  
-#contrib - packages by Centos Users
-[contrib]
-name=CentOS-$releasever - Contrib
-#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=contrib
-baseurl=http://mirrors.163.com/centos/$releasever/contrib/$basearch/
-gpgcheck=1
-enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</code></pre>
-
-<p>接下来我们来更新下yum：</p>
-
-<pre><code>yum clean all
-yum makecache #将服务器上的软件包信息缓存到本地,以提高搜索安装软件的速度
-yum install vim*#测试域名是否可用
-</code></pre>
+<p>接下来我们来更新下yum：<!--more--></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">yum clean all
+</span><span class="line">yum makecache  <span class="c"># 将服务器上的软件包信息缓存到本地,以提高搜索安装软件的速度</span>
+</span><span class="line">yum install vim*  <span class="c"># 测试域名是否可用</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h4 id="rpmforge">附：增加RPMforge源</h4>
-<ol>
-  <li>download the rpmforge package:
+<ul>
+  <li>download the rpmforge package：
 <a href="http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm">http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm</a></li>
-  <li>Install DAG’s GPG key
- <code>sudo rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt</code>
-如果上面出现错误，确认下：
- <code>sudo rpm -K rpmforge-release-0.5.2-2.el6.rf.*.rpm</code></li>
-  <li>然后安装rpm
- <code>sudo rpm -i rpmforge-release-0.5.2-2.el6.rf.*.rpm</code></li>
-  <li>试试看：
- <code>sudo yum install htop</code></li>
-  <li>开始更新系统：
- <code>sudo yum update</code></li>
-</ol>
+  <li>Install DAG’s GPG key</li>
+</ul>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>如果上面出现错误，确认下：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo rpm -K rpmforge-release-0.5.2-2.el6.rf.*.rpm
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li>然后安装rpm</li>
+</ul>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo rpm -i rpmforge-release-0.5.2-2.el6.rf.*.rpm
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li>试试看：</li>
+</ul>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo yum install htop
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li>开始更新系统：</li>
+</ul>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo yum update
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 </div>
 
