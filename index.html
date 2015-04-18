@@ -9,31 +9,7 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="linux Centos6更新yum源 先备份 1
-mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23 &hellip;">
+	<meta name="description" content="2015-04-18 八皇后, 回溯法 回溯法解决八皇后问题 八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。八皇后问题可以推广为更一般的n皇后摆放问题： &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -132,7 +108,329 @@ mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo
   
 
 
-<time datetime="2015-04-13T19:02:42+08:00" data-updated="true" itemprop="datePublished"></time></div>
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ba-huang-hou/'>八皇后</a>, <a class='category' href='/blog/categories/hui-su-fa/'>回溯法</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/eight-queens.html" itemprop="url">回溯法解决八皇后问题</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。八皇后问题可以推广为更一般的n皇后摆放问题：这时棋盘的大小变为n×n，而皇后个数也变成n。当且仅当n = 1或n ≥ 4时问题有解 — 摘自<a href="http://zh.wikipedia.org/wiki/%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98">八皇后问题wiki</a></p>
+
+<p>利用回溯法解决这个问题：
+		
+		<a href="/blog/20150418/eight-queens.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/redis/'>redis</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/redis-install.html" itemprop="url">Redis入门与安装</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="redis">一 Redis介绍</h2>
+
+<p>Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</p>
+
+<p>Redis能运行在大多数POSIX(Linux, *BSD, OS X 和Solaris等)系统上，官方没有支持Windows的版本。目前最新的版本是2.2.11，这个版本主要是修复了一个2.2.7版本中遍历方式优化带来的一个bug。</p>
+
+<p>和普通的Key-Value结构不同，Redis的Key支持灵活的数据结构，除了strings，还有hashes、lists、 sets 和sorted sets等结构。正是这些灵活的数据结构，丰富了Redis的应用场景，能满足更多业务上的灵活存储需求。</p>
+
+<p>Redis的数据都保存在内存中，而且底层实现上是自己写了epoll event loop部分，而没有采用开源的libevent等通用框架，所以读写效率很高。
+为了实现数据的持久化，Redis支持定期刷新(可通过配置实现)或写日志的方式来保存数据到磁盘。</p>
+
+<p><strong>1. 数据类型</strong></p>
+
+<p>作为Key-value型数据库，Redis也提供了键(Key)和键值(Value)的映射关系。但是，除了常规的数值或字符串，Redis的键值还可以是以下形式之一：</p>
+
+<ul>
+  <li>Lists (列表)</li>
+  <li>Sets (集合)</li>
+  <li>Sorted sets (有序集合)</li>
+  <li>Hashes (哈希表)
+		
+		<a href="/blog/20150418/redis-install.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/memcached/'>memcached</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/xmemecached.html" itemprop="url">使用xmemcached客户端</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Xmemcached是基于java nio实现的高性能可扩展的memcached客户端。它的主要特点：</p>
+
+<ol>
+  <li>高性能，稳定可靠，已经在众多公司的众多项目里得到应用。</li>
+  <li>功能完备：客户端分布式、权重、最新最完整的协议支持。</li>
+  <li>可扩展，易于集成</li>
+  <li>可动态增删memached节点</li>
+  <li>客户端操作统计</li>
+  <li>NIO连接池</li>
+</ol>
+
+<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：
+		
+		<a href="/blog/20150418/xmemecached.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/memcached/'>memcached</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/memcached-install.html" itemprop="url">Linux上安装memcached</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>一 准备安装文件</strong></p>
+
+<p>下载memcached与libevent的安装文件：</p>
+
+<p>memcached下载地址：<a href="http://memcached.googlecode.com/files/memcached-1.4.15.tar.gz">memcached-1.4.15.tar.gz</a></p>
+
+<p>libevent下载地址：<a href="https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz">libevent-2.0.21-stable.tar.gz</a></p>
+
+<p><strong>二 具体安装步骤</strong></p>
+
+<ol>
+  <li>由于memcached依赖于libevent，因此需要安装libevent。由于linux系统可能默认已经安装libevent，执行命令：</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">rpm -qa|grep libevent </span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>查看系统是否带有该安装软件，如果有执行命令:</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># 由于系统自带的版本旧，忽略依赖删除
+</span><span class="line">rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>安装libevent命令：
+		
+		<a href="/blog/20150418/memcached-install.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/bing-xing/'>并行</a>, <a class='category' href='/blog/categories/mi-ti/'>谜题</a>, <a class='category' href='/blog/categories/di-gui/'>递归</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/concurrent-recursive.html" itemprop="url">利用递归算法并行化解决谜题框架</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>我们将谜题定义为：包含一个初始位置，一个目标位置，以及用于判断是否是有效移动的规则集。</p>
+
+<p>规则集包含两部分：计算从指定位置开始的所有合法移动，以及每次移动的结果位置。</p>
+
+<p>下面先给出表示谜题的抽象类，其中的类型参数P和M表示位置类和移动类。根据这个接口，我们可以写一个简单的串行求解程序，该程序将在谜题空间Puzzle Space中查找，直到找到一个解答或者找遍了整个空间都没有发现答案。注：一个移动M代表一步</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/** 表示 搬箱子 之类谜题的抽象类*/</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Puzzle</span><span class="o">&lt;</span><span class="n">P</span><span class="o">,</span> <span class="n">M</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">P</span> <span class="nf">initialPosition</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="kt">boolean</span> <span class="nf">isGoal</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">Set</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="nf">legalMoves</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">P</span> <span class="nf">move</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">,</span> <span class="n">M</span> <span class="n">move</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>下面的PuzzleNode代表通过一系列的移动到达的一个位置，其中保存了到达该位置的移动以及前一个Node。只要沿着PuzzleNode链接逐步回溯，就可以重新构建出达到当前位置的移动序列。
+		
+		<a href="/blog/20150418/concurrent-recursive.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/suan-fa-dao-lun/'>算法导论</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/sort-search.html" itemprop="url">快速排序和二分查找</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">快速排序算法和二分搜索算法：</h3>
+
+<p>算法主要分为排序算法、搜索算法、图算法。图算法我用得不多，没有发言权，本文就不说了。</p>
+
+<p>排序算法中最快的是快速排序算法，搜索算法中最快的是二分搜索算法。我也最喜欢这2 个算法。
+因为它们是使用递归实现的，代码简洁清晰，效率又非常高。</p>
+
+<p>根据我的理解，算法的本质就是数学。根据输入和设定的目标，采用有限的步骤实现输出。通常，使用计算机实现的算法，都会用到循环，这样才能发挥计算机高速运算的优势。</p>
+
+<p>循环和递归是等效的，这已经被科学家所证明。数学上没有循环，只有递归的概念，因此使用递归代替循环表示算法有很多好处：</p>
+
+<ol>
+  <li>递归的代码要比循环简洁很多，也优雅很多。</li>
+  <li>递归的代码可以用数学方式建模，可以从数学角度验证其正确性。</li>
+</ol>
+
+<p>很多函数式语言甚至没有循环的概念和关键字，强迫你使用递归来实现循环。如，ErLang 。
+递归也有一些缺点，递归使用栈来保存函数地址和参数、返回值，而栈是有一定大小的，过多的递归调用可能会造成栈溢出。但是，递归算法会容易转变为循环。我更欣赏递归的简洁，除非真的出现栈溢出的问题，我是不会使用循环的。</p>
+
+<p><br />
+<strong>二分搜索算法</strong></p>
+
+<p>理论：</p>
+
+<p>二分搜索算法用于针对已排序的集合进行搜索。</p>
+
+<p>它的原理是：</p>
+
+<ol>
+  <li>找到排序数组的中间元素，如果它匹配目标值，那么就返回它在数组中的索引。</li>
+  <li>如果没有找到，那么判断中间值比目标值大还是小，
+如果中间值比目标值大，那么就对第一个元素到middle-1 的元素递归这个过程。
+如果中间值比目标值小，那么就对middle+1 到最后一个元素。</li>
+  <li>如果结束的索引小于开始的索引，返回-1 ，表示没有找到。</li>
+  <li>如果子集合有2 个元素，那么各自比较。因为Java 的整数除法会舍弃小数，如果数组只有2 个元素，那么middle 值一直都是第一个元素。</li>
+</ol>
+
+<p>经过上述的递归过程，最终将返回匹配元素的索引，或者是-1 ，表示找不到。
+		
+		<a href="/blog/20150418/sort-search.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-13</div>
 		<div class="tags">
 
 
@@ -264,60 +562,11 @@ mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo
 
 </article>
 
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-04-06T21:08:25+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/webkai-fa/'>web开发</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150406/servlet-filter.html" itemprop="url">Servlet Filter详解</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点，最好使用Servlet Filter实现这个需求。</p>
-
-<p>本文将通过几个实际的例子展示下Servlet中的Filter的使用。</p>
-
-<p><strong>1 我们为什么需要使用Filter？</strong></p>
-
-<p>通常我们会使用session来保存登录用户的信息，通过从session中取出保存的属性值来判断用户是否登录，但是如果我们有大量的请求方法，每个人方法中都这样去判断就会有很多重复代码，将来我们想改动下逻辑，那得改动所有的请求方法实现，所以这个是不可取的。</p>
-
-<p>这时候就是使用Servlet Filter的时候了，它是可插拔的，对于普通的action方法来讲是透明的。它会在执行其他方法之前或将结果返回给客户端之前来执行其他逻辑。</p>
-
-<p>以下几种场景下我们会使用到Servlet Filter：</p>
-
-<ul>
-  <li>将请求的参数写入日志文件</li>
-  <li>对于资源的访问进行统一的授权与验证</li>
-  <li>在请求到达实际Servlet之前格式化请求内容或请求头</li>
-  <li>压缩返回数据后发送给客户端</li>
-  <li>修改返回内容，增加一些cookie、header等信息
-		
-		<a href="/blog/20150406/servlet-filter.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
 </div>
 <nav id="pagenavi">
     
+    
+        <a href="/posts/2" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
