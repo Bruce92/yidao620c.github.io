@@ -48,22 +48,19 @@
     <loc>http://yidao620c.github.io/opensource/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/webkai-fa/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/servlet/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/blog/categories/linux/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/suan-fa-dao-lun/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/algorithm/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/di-gui/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/recursive/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/bing-xing/</loc>
-  </url>
-  <url>
-    <loc>http://yidao620c.github.io/blog/categories/mi-ti/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/puzzle/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/blog/categories/memcached/</loc>
@@ -72,9 +69,9 @@
     <loc>http://yidao620c.github.io/blog/categories/redis/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/hui-su-fa/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/backtracking/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/ba-huang-hou/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/eight-queens/</loc>
   </url>
 </urlset>

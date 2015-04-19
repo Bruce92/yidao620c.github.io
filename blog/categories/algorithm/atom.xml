@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[分类目录：算法导论 | 笨跑的一刀]]></title>
-  <link href="http://yidao620c.github.io/blog/categories/suan-fa-dao-lun/atom.xml" rel="self"/>
+  <title><![CDATA[分类目录：algorithm | 笨跑的一刀]]></title>
+  <link href="http://yidao620c.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-18T18:12:42+08:00</updated>
+  <updated>2015-04-19T17:24:54+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
