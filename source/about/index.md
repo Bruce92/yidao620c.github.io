@@ -17,6 +17,13 @@ My work skills are Java, Python, Linux, BigData. In addition, I also like algori
 
 Thanks for coming here and wish we could be friends. I'll be appreciate if you leave a comment to me.
 
+### Contact me:
+
+* Email: <yidao620@gmail.com>
+* Blog: <http://yidao620c.github.io>
+* GitHub: <https://github.com/yidao620c>
+* Company: [Guangzhou Winhong Information Technology Co.,Ltd](http://www.winhong.com/)
+
 <br />
 
 ----------
@@ -33,3 +40,11 @@ Thanks for coming here and wish we could be friends. I'll be appreciate if you l
 我的工作技能是Java、Python、Linux以及大数据技术。此外我还对算法有极高的兴趣，我会坚持写算法方面的博客的。
 
 非常感谢您能来到这里，希望我们能成为好朋友。也欢迎你给我任何的建议和评论。
+
+### 联系方式
+
+* 邮件: <yidao620@gmail.com>
+* 博客: <http://yidao620c.github.io>
+* GitHub: <https://github.com/yidao620c>
+* 公司: [广州云宏信息科技股份有限公司](http://www.winhong.com/)
+

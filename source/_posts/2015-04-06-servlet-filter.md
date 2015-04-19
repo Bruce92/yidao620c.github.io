@@ -3,7 +3,7 @@ layout: post
 title: "servlet filter详解"
 date: 2015-04-06 21:08:25 +0800
 comments: true
-categories: Web开发
+categories: servlet
 ---
 
 在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点，最好使用Servlet Filter实现这个需求。
