@@ -8,17 +8,16 @@ footer: true
 ---
 
 <style type="text/css">
-    li {
+    .myli {
         float:left;
         margin-right:20px;
         margin-top:20px;
         list-style-type:none;
     }
-
 </style>
 
 <ul>
 {% for item in site.categories %}
-    <li><a href="/blog/categories/{{ item[0] }}/">{{ item[0] | capitalize }}</a> [ {{ item[1].size }} ]</li>
+    <li class="myli"><a href="/blog/categories/{{ item[0] }}/">{{ item[0] | capitalize }}</a> [ {{ item[1].size }} ]</li>
 {% endfor %}
 </ul>
