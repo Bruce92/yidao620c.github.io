@@ -9,7 +9,7 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-18 puzzle, recursive 利用递归算法并行化解决谜题框架 我们将谜题定义为：包含一个初始位置，一个目标位置，以及用于判断是否是有效移动的规则集。 规则集包含两部分：计算从指定位置开始的所有合法移动，以及每次移动的结果位置。 下面先给出表示谜题的抽象类， &hellip;">
+	<meta name="description" content="2015-04-18 redis Redis入门与安装 一 Redis介绍 Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -93,6 +93,161 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/redis/'>redis</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/redis-install.html" itemprop="url">Redis入门与安装</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="redis">一 Redis介绍</h2>
+
+<p>Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</p>
+
+<p>Redis能运行在大多数POSIX(Linux, *BSD, OS X 和Solaris等)系统上，官方没有支持Windows的版本。目前最新的版本是2.2.11，这个版本主要是修复了一个2.2.7版本中遍历方式优化带来的一个bug。</p>
+
+<p>和普通的Key-Value结构不同，Redis的Key支持灵活的数据结构，除了strings，还有hashes、lists、 sets 和sorted sets等结构。正是这些灵活的数据结构，丰富了Redis的应用场景，能满足更多业务上的灵活存储需求。</p>
+
+<p>Redis的数据都保存在内存中，而且底层实现上是自己写了epoll event loop部分，而没有采用开源的libevent等通用框架，所以读写效率很高。
+为了实现数据的持久化，Redis支持定期刷新(可通过配置实现)或写日志的方式来保存数据到磁盘。</p>
+
+<p><strong>1. 数据类型</strong></p>
+
+<p>作为Key-value型数据库，Redis也提供了键(Key)和键值(Value)的映射关系。但是，除了常规的数值或字符串，Redis的键值还可以是以下形式之一：</p>
+
+<ul>
+  <li>Lists (列表)</li>
+  <li>Sets (集合)</li>
+  <li>Sorted sets (有序集合)</li>
+  <li>Hashes (哈希表)
+		
+		<a href="/blog/20150418/redis-install.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/memcached/'>memcached</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/xmemecached.html" itemprop="url">使用xmemcached客户端</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Xmemcached是基于java nio实现的高性能可扩展的memcached客户端。它的主要特点：</p>
+
+<ol>
+  <li>高性能，稳定可靠，已经在众多公司的众多项目里得到应用。</li>
+  <li>功能完备：客户端分布式、权重、最新最完整的协议支持。</li>
+  <li>可扩展，易于集成</li>
+  <li>可动态增删memached节点</li>
+  <li>客户端操作统计</li>
+  <li>NIO连接池</li>
+</ol>
+
+<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：
+		
+		<a href="/blog/20150418/xmemecached.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/memcached/'>memcached</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/memcached-install.html" itemprop="url">Linux上安装memcached</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>一 准备安装文件</strong></p>
+
+<p>下载memcached与libevent的安装文件：</p>
+
+<p>memcached下载地址：<a href="http://memcached.googlecode.com/files/memcached-1.4.15.tar.gz">memcached-1.4.15.tar.gz</a></p>
+
+<p>libevent下载地址：<a href="https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz">libevent-2.0.21-stable.tar.gz</a></p>
+
+<p><strong>二 具体安装步骤</strong></p>
+
+<ol>
+  <li>由于memcached依赖于libevent，因此需要安装libevent。由于linux系统可能默认已经安装libevent，执行命令：</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">rpm -qa|grep libevent </span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>查看系统是否带有该安装软件，如果有执行命令:</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># 由于系统自带的版本旧，忽略依赖删除
+</span><span class="line">rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>安装libevent命令：
+		
+		<a href="/blog/20150418/memcached-install.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">

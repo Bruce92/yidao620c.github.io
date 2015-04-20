@@ -105,17 +105,21 @@
 
 <p>安装pika</p>
 
-<p>使用pip安装的时候可能会报错：
-<code>importerror no module named pkg_resources</code></p>
+<p>使用pip安装的时候可能会报错：</p>
+
+<p><code>importerror no module named pkg_resources</code></p>
 
 <p>请用下面命令解决这个问题：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><code>$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</code></p>
+<p>然后还可能出现：</p>
 
-<p>然后还可能出现：<code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
+<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
 
-<p>这时候先把pip卸载掉，执行： <code>sudo yum remove python-pip</code></p>
-
+<p>这时候先把pip卸载掉，执行：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
 
 <p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面<!--more--></p>

@@ -9,7 +9,9 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 rabbitmq 使用python开发RabbitMQ应用 参考了RabbitMQ网站上提供的英文版本入门指南: http://www.rabbitmq.com/getstarted.html 测试环境：CentOS 6.2 1，测试环境准备 安装python（ &hellip;">
+	<meta name="description" content="2015-04-20 xpath Xpath入门笔记 Wiki XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言。
+XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力。
+起初XPath的提出的初衷是将其作为一个通用的、 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -113,6 +115,166 @@
 		<div class="tags">
 
 
+	<a class='category' href='/blog/categories/xpath/'>xpath</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/xpath-introduce.html" itemprop="url">Xpath入门笔记</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="wiki">Wiki</h3>
+
+<p>XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言。
+XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力。
+起初XPath的提出的初衷是将其作为一个通用的、介于XPointer与XSL间的语法模型。
+但是XPath很快的被开发者采用来当作小型查询语言。</p>
+
+<p>W3C网址： <a href="http://www.w3schools.com/XPath/">http://www.w3schools.com/XPath/</a></p>
+
+<h3 id="section">表示法</h3>
+
+<p>最常见的XPath表达式是路径表达式（XPath这一名称的另一来源）。</p>
+
+<p>路径表达式是从一个XML节点（当前的上下文节点）到另一个节点、或一组节点的书面步骤顺序。
+这些步骤以“／”字符分开，每一步有三个构成成分：
+		
+		<a href="/blog/20150420/xpath-introduce.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/yaml/'>yaml</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/yaml-introduce.html" itemprop="url">Yaml入门笔记</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>Wiki：</strong></p>
+
+<p>YAML（IPA: /ˈjæməl/，尾音类似camel骆驼）是一个可读性高，用来表达资料序列的格式。
+YAML参考了其他多种语言，包括：XML、C语言、Python、Perl以及电子邮件格式RFC2822。
+Clark Evans在2001年在首次发表了这种语言[1] ，
+另外Ingy döt Net与Oren Ben-Kiki也是这语言的共同设计者。
+目前已经有数种编程语言或脚本语言支援（或者说解析）这种语言。</p>
+
+<p>YAML是”YAML Ain’t a Markup Language”（YAML不是一种置标语言）的递回缩写。
+在开发的这种语言时，YAML 的意思其实是：”Yet Another Markup Language”（仍是一种置标语言），
+但为了强调这种语言以数据做为中心，而不是以置标语言为重点，而用返璞词重新命名。</p>
+
+<p>最新版本为1.2，官方说明地址： <a href="http://www.yaml.org/spec/1.2/spec.html">http://www.yaml.org/spec/1.2/spec.html</a></p>
+
+<p>使用方式：作为配置文件，数据交换格式，序列化对象存储，测试数据文件，</p>
+
+<p>一个简单的示例：
+		
+		<a href="/blog/20150420/yaml-introduce.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/fastjson/'>fastjson</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/fastjson-date.html" itemprop="url">fastjson对Date的处理</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>fastjson对日期的序列化方式：</strong></p>
+
+<p>一种方法是通过注解</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>另一种是通过SerializeConfig：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
+</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
+</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>json字符串中使用单引号：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+		
+		<a href="/blog/20150420/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
 	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
 
 
@@ -133,17 +295,21 @@
 
 <p>安装pika</p>
 
-<p>使用pip安装的时候可能会报错：
-<code>importerror no module named pkg_resources</code></p>
+<p>使用pip安装的时候可能会报错：</p>
+
+<p><code>importerror no module named pkg_resources</code></p>
 
 <p>请用下面命令解决这个问题：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><code>$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</code></p>
+<p>然后还可能出现：</p>
 
-<p>然后还可能出现：<code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
+<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
 
-<p>这时候先把pip卸载掉，执行： <code>sudo yum remove python-pip</code></p>
-
+<p>这时候先把pip卸载掉，执行：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
 
 <p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面
@@ -288,161 +454,6 @@ k如果大于lgn,则比归并排序复杂度大了。
 <p>利用回溯法解决这个问题：
 		
 		<a href="/blog/20150418/eight-queens.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/redis/'>redis</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/redis-install.html" itemprop="url">Redis入门与安装</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="redis">一 Redis介绍</h2>
-
-<p>Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</p>
-
-<p>Redis能运行在大多数POSIX(Linux, *BSD, OS X 和Solaris等)系统上，官方没有支持Windows的版本。目前最新的版本是2.2.11，这个版本主要是修复了一个2.2.7版本中遍历方式优化带来的一个bug。</p>
-
-<p>和普通的Key-Value结构不同，Redis的Key支持灵活的数据结构，除了strings，还有hashes、lists、 sets 和sorted sets等结构。正是这些灵活的数据结构，丰富了Redis的应用场景，能满足更多业务上的灵活存储需求。</p>
-
-<p>Redis的数据都保存在内存中，而且底层实现上是自己写了epoll event loop部分，而没有采用开源的libevent等通用框架，所以读写效率很高。
-为了实现数据的持久化，Redis支持定期刷新(可通过配置实现)或写日志的方式来保存数据到磁盘。</p>
-
-<p><strong>1. 数据类型</strong></p>
-
-<p>作为Key-value型数据库，Redis也提供了键(Key)和键值(Value)的映射关系。但是，除了常规的数值或字符串，Redis的键值还可以是以下形式之一：</p>
-
-<ul>
-  <li>Lists (列表)</li>
-  <li>Sets (集合)</li>
-  <li>Sorted sets (有序集合)</li>
-  <li>Hashes (哈希表)
-		
-		<a href="/blog/20150418/redis-install.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/memcached/'>memcached</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/xmemecached.html" itemprop="url">使用xmemcached客户端</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Xmemcached是基于java nio实现的高性能可扩展的memcached客户端。它的主要特点：</p>
-
-<ol>
-  <li>高性能，稳定可靠，已经在众多公司的众多项目里得到应用。</li>
-  <li>功能完备：客户端分布式、权重、最新最完整的协议支持。</li>
-  <li>可扩展，易于集成</li>
-  <li>可动态增删memached节点</li>
-  <li>客户端操作统计</li>
-  <li>NIO连接池</li>
-</ol>
-
-<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：
-		
-		<a href="/blog/20150418/xmemecached.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/memcached/'>memcached</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/memcached-install.html" itemprop="url">Linux上安装memcached</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>一 准备安装文件</strong></p>
-
-<p>下载memcached与libevent的安装文件：</p>
-
-<p>memcached下载地址：<a href="http://memcached.googlecode.com/files/memcached-1.4.15.tar.gz">memcached-1.4.15.tar.gz</a></p>
-
-<p>libevent下载地址：<a href="https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz">libevent-2.0.21-stable.tar.gz</a></p>
-
-<p><strong>二 具体安装步骤</strong></p>
-
-<ol>
-  <li>由于memcached依赖于libevent，因此需要安装libevent。由于linux系统可能默认已经安装libevent，执行命令：</li>
-</ol>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">rpm -qa|grep libevent </span></code></pre></td></tr></table></div></figure></notextile></div>
-<ol>
-  <li>查看系统是否带有该安装软件，如果有执行命令:</li>
-</ol>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"># 由于系统自带的版本旧，忽略依赖删除
-</span><span class="line">rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ol>
-  <li>安装libevent命令：
-		
-		<a href="/blog/20150418/memcached-install.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

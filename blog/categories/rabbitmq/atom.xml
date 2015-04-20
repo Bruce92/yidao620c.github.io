@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：rabbitmq | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/rabbitmq/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-20T12:02:31+08:00</updated>
+  <updated>2015-04-20T15:32:50+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -30,18 +30,24 @@
 
 <p>安装pika</p>
 
-<p>使用pip安装的时候可能会报错：
-<code>importerror no module named pkg_resources</code></p>
+<p>使用pip安装的时候可能会报错：</p>
 
-<p>请用下面命令解决这个问题：</p>
+<p><code>importerror no module named pkg_resources</code></p>
 
-<p><code>$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</code></p>
+<p>请用下面命令解决这个问题：
+<code>
+$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python
+</code></p>
 
-<p>然后还可能出现：<code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
+<p>然后还可能出现：</p>
 
-<p>这时候先把pip卸载掉，执行： <code>sudo yum remove python-pip</code></p>
+<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
 
-<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
+<p>这时候先把pip卸载掉，执行：
+<code>
+sudo yum remove python-pip
+</code>
+然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
 
 <p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面<!--more--></p>
 
