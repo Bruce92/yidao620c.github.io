@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://yidao620c.github.io/blog/20150420/lvs-keepalived.html</loc>
+    <lastmod>2015-04-20T16:40:04+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/20150420/mosquitto-install.html</loc>
+    <lastmod>2015-04-20T16:33:07+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://yidao620c.github.io/blog/20150420/java8-lambda.html</loc>
     <lastmod>2015-04-20T15:42:11+08:00</lastmod>
   </url>
@@ -115,6 +123,18 @@
     <loc>http://yidao620c.github.io/blog/categories/xpath/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/java/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/java8/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/mqtt/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/mosquitto/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/lvs/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/keepalived/</loc>
   </url>
 </urlset>

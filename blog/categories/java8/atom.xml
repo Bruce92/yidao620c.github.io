@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[分类目录：java | 笨跑的一刀]]></title>
-  <link href="http://yidao620c.github.io/blog/categories/java/atom.xml" rel="self"/>
+  <title><![CDATA[分类目录：java8 | 笨跑的一刀]]></title>
+  <link href="http://yidao620c.github.io/blog/categories/java8/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-20T16:22:36+08:00</updated>
+  <updated>2015-04-20T17:21:44+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -226,26 +226,21 @@ boolean accept(File pathname);
 正常的Lambda表达式用法：
 <code>java
 FileFilter x = File f -&gt; f.canRead();
-</code>
-通过方法引用，可以简化为：
+</code></p>
+
+<p>通过方法引用，可以简化为：
 <code>java
 FileFilter x = File::canRead;
-</code>
-方法引用语法格式有以下三种：</p>
+</code></p>
+
+<p>方法引用语法格式有以下三种：</p>
 
 <pre><code>objectName::instanceMethod
 ClassName::staticMethod
 ClassName::instanceMethod
 </code></pre>
 
-<table>
-  <tbody>
-    <tr>
-      <td>前两种方式类似，等同于把lambda表达式的参数直接当成instanceMethod</td>
-      <td>staticMethod的参数来调用。</td>
-    </tr>
-  </tbody>
-</table>
+<p>前两种方式类似，等同于把lambda表达式的参数直接当成instanceMethod|staticMethod的参数来调用。</p>
 
 <p>比如 <code>System.out::println</code> 等同于 <code>x-&gt;System.out.println(x);</code>
 <code>Math::max</code>等同于<code>(x, y)-&gt;Math.max(x,y)</code>。</p>

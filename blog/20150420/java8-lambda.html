@@ -342,10 +342,12 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">FileFilter</span> <span class="n">x</span> <span class="o">=</span> <span class="n">File</span> <span class="n">f</span> <span class="o">-&gt;</span> <span class="n">f</span><span class="o">.</span><span class="na">canRead</span><span class="o">();</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <p>通过方法引用，可以简化为：</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">FileFilter</span> <span class="n">x</span> <span class="o">=</span> <span class="nl">File:</span><span class="o">:</span><span class="n">canRead</span><span class="o">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <p>方法引用语法格式有以下三种：</p>
 
 <pre><code>objectName::instanceMethod
@@ -353,14 +355,7 @@ ClassName::staticMethod
 ClassName::instanceMethod
 </code></pre>
 
-<table>
-  <tbody>
-    <tr>
-      <td>前两种方式类似，等同于把lambda表达式的参数直接当成instanceMethod</td>
-      <td>staticMethod的参数来调用。</td>
-    </tr>
-  </tbody>
-</table>
+<p>前两种方式类似，等同于把lambda表达式的参数直接当成instanceMethod|staticMethod的参数来调用。</p>
 
 <p>比如 <code>System.out::println</code> 等同于 <code>x-&gt;System.out.println(x);</code>
 <code>Math::max</code>等同于<code>(x, y)-&gt;Math.max(x,y)</code>。</p>

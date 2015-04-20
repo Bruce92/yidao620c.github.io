@@ -1,0 +1,581 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>mqtt消息中间件mosquitto的安装和配置 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="Mqtt消息中间件mosquitto的安装和配置 Wiki
+Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。 MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议， &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150420/mosquitto-install.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy!</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Mqtt消息中间件mosquitto的安装和配置</h1>
+	<div class="entry-content" itemprop="articleBody"><h3 id="wiki">Wiki</h3>
+<p>Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。</p>
+
+<p>MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，
+适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。</p>
+
+<p>值得一提的是mqtt提供三种不同质量的消息服务：</p>
+
+<ul>
+  <li>“至多一次”：消息发布完全依赖底层 TCP/IP 网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。</li>
+  <li>“至少一次”：确保消息到达，但消息重复可能会发生。</li>
+  <li>“只有一次”：确保消息到达一次。这一级别可用于如下情况，在计费系统中，消息重复或丢失会导致不正确的结果。</li>
+</ul>
+
+<h3 id="httpmosquittoorgdownload">安装：(参考官网 <a href="http://mosquitto.org/download/">http://mosquitto.org/download/</a>)</h3>
+
+<p>服务器操作系统为CentOS6.4，使用最简单的yum安装</p>
+
+<p>1，先加入yum源：</p>
+
+<p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：<!--more--></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">[home_oojah_mqtt]
+</span><span class="line">name=mqtt (CentOS_CentOS-6)
+</span><span class="line">type=rpm-md
+</span><span class="line">baseurl=http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-6/
+</span><span class="line">gpgcheck=1
+</span><span class="line">gpgkey=http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-6/repodata/repomd.xml.key
+</span><span class="line">enabled=1</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>2，开始安装</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo yum search all mosquitto
+</span><span class="line">sudo yum install mosquitto mosquitto-clients libmosquitto-devel libmosquittopp-devel python-mosquitto
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3，配置</p>
+
+<p>安装完成之后，所有配置文件会被放置于/etc/mosquitto/目录下，
+其中最重要的就是Mosquitto的配置文件，即mosquitto.conf，以下是详细的配置参数说明。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+<span class="line-number">65</span>
+<span class="line-number">66</span>
+<span class="line-number">67</span>
+<span class="line-number">68</span>
+<span class="line-number">69</span>
+<span class="line-number">70</span>
+<span class="line-number">71</span>
+<span class="line-number">72</span>
+<span class="line-number">73</span>
+<span class="line-number">74</span>
+<span class="line-number">75</span>
+<span class="line-number">76</span>
+<span class="line-number">77</span>
+<span class="line-number">78</span>
+<span class="line-number">79</span>
+<span class="line-number">80</span>
+<span class="line-number">81</span>
+<span class="line-number">82</span>
+<span class="line-number">83</span>
+<span class="line-number">84</span>
+<span class="line-number">85</span>
+<span class="line-number">86</span>
+<span class="line-number">87</span>
+<span class="line-number">88</span>
+<span class="line-number">89</span>
+<span class="line-number">90</span>
+<span class="line-number">91</span>
+<span class="line-number">92</span>
+<span class="line-number">93</span>
+<span class="line-number">94</span>
+<span class="line-number">95</span>
+<span class="line-number">96</span>
+<span class="line-number">97</span>
+<span class="line-number">98</span>
+<span class="line-number">99</span>
+<span class="line-number">100</span>
+<span class="line-number">101</span>
+<span class="line-number">102</span>
+<span class="line-number">103</span>
+<span class="line-number">104</span>
+<span class="line-number">105</span>
+<span class="line-number">106</span>
+<span class="line-number">107</span>
+<span class="line-number">108</span>
+<span class="line-number">109</span>
+<span class="line-number">110</span>
+<span class="line-number">111</span>
+<span class="line-number">112</span>
+<span class="line-number">113</span>
+<span class="line-number">114</span>
+<span class="line-number">115</span>
+<span class="line-number">116</span>
+<span class="line-number">117</span>
+<span class="line-number">118</span>
+<span class="line-number">119</span>
+<span class="line-number">120</span>
+<span class="line-number">121</span>
+<span class="line-number">122</span>
+<span class="line-number">123</span>
+<span class="line-number">124</span>
+<span class="line-number">125</span>
+<span class="line-number">126</span>
+<span class="line-number">127</span>
+<span class="line-number">128</span>
+<span class="line-number">129</span>
+<span class="line-number">130</span>
+<span class="line-number">131</span>
+<span class="line-number">132</span>
+<span class="line-number">133</span>
+<span class="line-number">134</span>
+<span class="line-number">135</span>
+<span class="line-number">136</span>
+<span class="line-number">137</span>
+<span class="line-number">138</span>
+<span class="line-number">139</span>
+<span class="line-number">140</span>
+<span class="line-number">141</span>
+<span class="line-number">142</span>
+<span class="line-number">143</span>
+<span class="line-number">144</span>
+<span class="line-number">145</span>
+<span class="line-number">146</span>
+<span class="line-number">147</span>
+<span class="line-number">148</span>
+<span class="line-number">149</span>
+<span class="line-number">150</span>
+<span class="line-number">151</span>
+<span class="line-number">152</span>
+<span class="line-number">153</span>
+<span class="line-number">154</span>
+<span class="line-number">155</span>
+<span class="line-number">156</span>
+<span class="line-number">157</span>
+<span class="line-number">158</span>
+<span class="line-number">159</span>
+<span class="line-number">160</span>
+<span class="line-number">161</span>
+<span class="line-number">162</span>
+<span class="line-number">163</span>
+<span class="line-number">164</span>
+<span class="line-number">165</span>
+<span class="line-number">166</span>
+<span class="line-number">167</span>
+<span class="line-number">168</span>
+<span class="line-number">169</span>
+<span class="line-number">170</span>
+<span class="line-number">171</span>
+<span class="line-number">172</span>
+<span class="line-number">173</span>
+<span class="line-number">174</span>
+<span class="line-number">175</span>
+<span class="line-number">176</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line"><span class="c"># General configuration</span>
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 客户端心跳的间隔时间</span>
+</span><span class="line"><span class="c">#retry_interval 20</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 系统状态的刷新时间</span>
+</span><span class="line"><span class="c">#sys_interval 10</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 系统资源的回收时间，0表示尽快处理</span>
+</span><span class="line"><span class="c">#store_clean_interval 10</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 服务进程的PID</span>
+</span><span class="line"><span class="c">#pid_file /var/run/mosquitto.pid</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 服务进程的系统用户</span>
+</span><span class="line"><span class="c">#user mosquitto</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 客户端心跳消息的最大并发数</span>
+</span><span class="line"><span class="c">#max_inflight_messages 10</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 客户端心跳消息缓存队列</span>
+</span><span class="line"><span class="c">#max_queued_messages 100</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 用于设置客户端长连接的过期时间，默认永不过期</span>
+</span><span class="line"><span class="c">#persistent_client_expiration</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line"><span class="c"># Default listener</span>
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 服务绑定的IP地址</span>
+</span><span class="line"><span class="c">#bind_address</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 服务绑定的端口号</span>
+</span><span class="line"><span class="c">#port 1883</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 允许的最大连接数，-1表示没有限制</span>
+</span><span class="line"><span class="c">#max_connections -1</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># cafile：CA证书文件</span>
+</span><span class="line"><span class="c"># capath：CA证书目录</span>
+</span><span class="line"><span class="c"># certfile：PEM证书文件</span>
+</span><span class="line"><span class="c"># keyfile：PEM密钥文件</span>
+</span><span class="line"><span class="c">#cafile</span>
+</span><span class="line"><span class="c">#capath</span>
+</span><span class="line"><span class="c">#certfile</span>
+</span><span class="line"><span class="c">#keyfile</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 必须提供证书以保证数据安全性</span>
+</span><span class="line"><span class="c">#require_certificate false</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 若require_certificate值为true，use_identity_as_username也必须为true</span>
+</span><span class="line"><span class="c">#use_identity_as_username false</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 启用PSK（Pre-shared-key）支持</span>
+</span><span class="line"><span class="c">#psk_hint</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># SSL/TSL加密算法，可以使用“openssl ciphers”命令获取</span>
+</span><span class="line"><span class="c"># as the output of that command.</span>
+</span><span class="line"><span class="c">#ciphers</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line"><span class="c"># Persistence</span>
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 消息自动保存的间隔时间</span>
+</span><span class="line"><span class="c">#autosave_interval 1800</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 消息自动保存功能的开关</span>
+</span><span class="line"><span class="c">#autosave_on_changes false</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 持久化功能的开关</span>
+</span><span class="line">persistence <span class="nb">true</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 持久化DB文件</span>
+</span><span class="line"><span class="c">#persistence_file mosquitto.db</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 持久化DB文件目录</span>
+</span><span class="line"><span class="c">#persistence_location /var/lib/mosquitto/</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line"><span class="c"># Logging</span>
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 4种日志模式：stdout、stderr、syslog、topic</span>
+</span><span class="line"><span class="c"># none 则表示不记日志，此配置可以提升些许性能</span>
+</span><span class="line">log_dest none
+</span><span class="line">
+</span><span class="line"><span class="c"># 选择日志的级别（可设置多项）</span>
+</span><span class="line"><span class="c">#log_type error</span>
+</span><span class="line"><span class="c">#log_type warning</span>
+</span><span class="line"><span class="c">#log_type notice</span>
+</span><span class="line"><span class="c">#log_type information</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 是否记录客户端连接信息</span>
+</span><span class="line"><span class="c">#connection_messages true</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 是否记录日志时间</span>
+</span><span class="line"><span class="c">#log_timestamp true</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line"><span class="c"># Security</span>
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 客户端ID的前缀限制，可用于保证安全性</span>
+</span><span class="line"><span class="c">#clientid_prefixes</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 允许匿名用户</span>
+</span><span class="line"><span class="c">#allow_anonymous true</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 用户/密码文件，默认格式：username:password</span>
+</span><span class="line"><span class="c">#password_file</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># PSK格式密码文件，默认格式：identity:key</span>
+</span><span class="line"><span class="c">#psk_file</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># pattern write sensor/%u/data</span>
+</span><span class="line"><span class="c"># ACL权限配置，常用语法如下：</span>
+</span><span class="line"><span class="c"># 用户限制：user &lt;username&gt;</span>
+</span><span class="line"><span class="c"># 话题限制：topic [read|write] &lt;topic&gt;</span>
+</span><span class="line"><span class="c"># 正则限制：pattern write sensor/%u/data</span>
+</span><span class="line"><span class="c">#acl_file</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line"><span class="c"># Bridges</span>
+</span><span class="line"><span class="c"># =================================================================</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 允许服务之间使用“桥接”模式（可用于分布式部署）</span>
+</span><span class="line"><span class="c">#connection &lt;name&gt;</span>
+</span><span class="line"><span class="c">#address &lt;host&gt;[:&lt;port&gt;]</span>
+</span><span class="line"><span class="c">#topic &lt;topic&gt; [[[out | in | both] qos-level] local-prefix remote-prefix]</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 设置桥接的客户端ID</span>
+</span><span class="line"><span class="c">#clientid</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 桥接断开时，是否清除远程服务器中的消息</span>
+</span><span class="line"><span class="c">#cleansession false</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 是否发布桥接的状态信息</span>
+</span><span class="line"><span class="c">#notifications true</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 设置桥接模式下，消息将会发布到的话题地址</span>
+</span><span class="line"><span class="c"># $SYS/broker/connection/&lt;clientid&gt;/state</span>
+</span><span class="line"><span class="c">#notification_topic</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 设置桥接的keepalive数值</span>
+</span><span class="line"><span class="c">#keepalive_interval 60</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 桥接模式，目前有三种：automatic、lazy、once</span>
+</span><span class="line"><span class="c">#start_type automatic</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 桥接模式automatic的超时时间</span>
+</span><span class="line"><span class="c">#restart_timeout 30</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 桥接模式lazy的超时时间</span>
+</span><span class="line"><span class="c">#idle_timeout 60</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 桥接客户端的用户名</span>
+</span><span class="line"><span class="c">#username</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 桥接客户端的密码</span>
+</span><span class="line"><span class="c">#password</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># bridge_cafile：桥接客户端的CA证书文件</span>
+</span><span class="line"><span class="c"># bridge_capath：桥接客户端的CA证书目录</span>
+</span><span class="line"><span class="c"># bridge_certfile：桥接客户端的PEM证书文件</span>
+</span><span class="line"><span class="c"># bridge_keyfile：桥接客户端的PEM密钥文件</span>
+</span><span class="line"><span class="c">#bridge_cafile</span>
+</span><span class="line"><span class="c">#bridge_capath</span>
+</span><span class="line"><span class="c">#bridge_certfile</span>
+</span><span class="line"><span class="c">#bridge_keyfile</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># 自己的配置可以放到以下目录中</span>
+</span><span class="line">include_dir /etc/mosquitto/conf.d
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>4，启动服务，两种方式</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">mosquitto -c /etc/mosquitto/mosquitto.conf -d
+</span><span class="line">sudo /etc/init.d/mosquitto start
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<hr />
+
+<h3 id="section">演示部分：</h3>
+<p>前面已经开启了服务，如果没有请参考前面步骤。</p>
+
+<p>一、开启另一个终端窗口，运行订阅程序mosquitto_sub:</p>
+
+<p><em>注意</em>：</p>
+
+<p>消息推送的发布和订阅要有主题，选项[-t] 主题，即：mosquitto -t 主题</p>
+
+<p>如需指定用户名称则加选项[-i] 用户名，即：mosquitto_sub -t 主题 -i 订阅端</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">mosquitto_sub -t mqtt
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>二、开启另一个终端窗口，运行发布程序mosquitto_pub:</p>
+
+<p>指定消息推送的主题，发布端用户名和消息：</p>
+
+<p><code>mosquitto_pub -t 主题 -i 发布端 -h 主机 -m 你好</code></p>
+
+<p>*注意：如果消息中间有空格则消息要用引号括起来。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">mosquitto_pub -t 主题 -i 发布端 -h host -m <span class="s1">&#39;我是发布端，你好。&#39;</span>
+</span><span class="line">mosquitto_pub -h localhost -t mqtt -m <span class="s2">&quot;hello world.&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这时候前面那个订阅窗口就可以收到”hello world”的消息了。</p>
+
+<p>演示成功！！！</p>
+
+</div>
+
+</article>
+
+  <section id="comment">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150420/mosquitto-install" data-title="mqtt消息中间件mosquitto的安装和配置" data-url="http://yidao620c.github.io/blog/20150420/mosquitto-install.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    熊能
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>
