@@ -19,16 +19,22 @@ categories: rabbitmq
 安装pika
 
 使用pip安装的时候可能会报错：
+
 `importerror no module named pkg_resources`
 
 请用下面命令解决这个问题：
+```
+$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python
+```
 
-`$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python`
+然后还可能出现：
 
-然后还可能出现：`pkg_resources.distributionnotfound pip==1.4.1`
+`pkg_resources.distributionnotfound pip==1.4.1`
 
-这时候先把pip卸载掉，执行： `sudo yum remove python-pip`
-
+这时候先把pip卸载掉，执行：
+```
+sudo yum remove python-pip
+```
 然后去下载最新的get-pip.py文件，执行`python get-pip.py`安装
 
 在`/etc/profile`里面将`/usr/local/python27/bin`加入PATH最前面<!--more-->
