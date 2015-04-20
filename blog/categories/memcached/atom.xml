@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：memcached | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/memcached/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-19T17:29:26+08:00</updated>
+  <updated>2015-04-20T12:02:31+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -29,7 +29,7 @@
   <li>NIO连接池</li>
 </ol>
 
-<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：<!-- more -->
+<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：<!--more-->
 &#8220;` java
 package xmemcache;</p>
 
@@ -228,7 +228,7 @@ rpm -qa|grep libevent
 rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps
 </code></li>
   <li>
-    <p>安装libevent命令：<!-- more -->
+    <p>安装libevent命令：<!--more-->
 <code>
 tar zxvf libevent-2.0.21-stable.tar.gz
 cd libevent-2.0.21-stable

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://yidao620c.github.io/blog/20150420/rabbitmq-python-client.html</loc>
+    <lastmod>2015-04-20T11:21:34+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/20150420/rabbitmq-server.html</loc>
+    <lastmod>2015-04-20T10:55:13+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/20150420/merge-sort.html</loc>
+    <lastmod>2015-04-20T10:47:35+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://yidao620c.github.io/blog/20150418/eight-queens.html</loc>
     <lastmod>2015-04-18T17:11:42+08:00</lastmod>
   </url>
@@ -33,13 +45,13 @@
     <lastmod>2015-04-06T21:08:25+08:00</lastmod>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/archives/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/</loc>
+    <loc>http://yidao620c.github.io/blog/archives/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/about/</loc>
@@ -54,7 +66,10 @@
     <loc>http://yidao620c.github.io/blog/categories/linux/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/algorithm/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/sort/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/search/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/blog/categories/recursive/</loc>
@@ -69,9 +84,9 @@
     <loc>http://yidao620c.github.io/blog/categories/redis/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/backtracking/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/eight-queens/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/eight-queens/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/rabbitmq/</loc>
   </url>
 </urlset>

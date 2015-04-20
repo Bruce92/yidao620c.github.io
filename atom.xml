@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-19T17:29:26+08:00</updated>
+  <updated>2015-04-20T12:02:31+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -14,13 +14,818 @@
 
   
   <entry>
+    <title type="html"><![CDATA[使用python开发RabbitMQ应用]]></title>
+    <link href="http://yidao620c.github.io/blog/20150420/rabbitmq-python-client.html"/>
+    <updated>2015-04-20T11:21:34+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150420/rabbitmq-python-client</id>
+    <content type="html"><![CDATA[<p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
+
+<p>测试环境：CentOS 6.2</p>
+
+<p><strong>1，测试环境准备</strong></p>
+
+<p>安装python（一般系统都自带了python）</p>
+
+<p>安装RabbitMQ server可以参考前面的文章。</p>
+
+<p>安装pika</p>
+
+<p>使用pip安装的时候可能会报错：
+<code>importerror no module named pkg_resources</code></p>
+
+<p>请用下面命令解决这个问题：</p>
+
+<p><code>$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</code></p>
+
+<p>然后还可能出现：<code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
+
+<p>这时候先把pip卸载掉，执行： <code>sudo yum remove python-pip</code></p>
+
+<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
+
+<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面<!--more--></p>
+
+<p>把rabbitmq server启动一下和准备好测试目录rabbitmq_app：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ /usr/local/rabbitmq/sbin/rabbitmq-server -detached
+</span><span class="line">$ cd ~
+</span><span class="line">$ mkdir -p test /rabbitmq_app
+</span><span class="line">$ cd test /rabbitmq_app
+</span><span class="line">$ mkdir tut1 tut2 tut3 tut4 tut5 tut6</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>2，实例一：来个hello world程序</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ cd tut1
+</span><span class="line">$ vim send.py (代码如下)
+</span><span class="line">$ vim receive.py (代码如下)</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>首先是消息发送程序: send.py</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">:</span>
+</span><span class="line">     <span class="k">print</span> <span class="s">&#39;message is empty!&#39;</span>
+</span><span class="line">     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&quot;[x] sent: &#39;&quot;</span> <span class="o">+</span> <span class="n">message</span> <span class="o">+</span> <span class="s">&quot;&#39;</span><span class="se">\n</span><span class="s">&quot;</span>
+</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>跑一下send.py发送一个消息</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">send</span><span class="o">.</span><span class="n">py</span> <span class="err">‘</span><span class="n">Hello</span> <span class="n">World</span><span class="err">!’</span>
+</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">send</span><span class="o">.</span><span class="n">py</span> <span class="err">‘你好刀哥’</span>
+</span><span class="line"><span class="err">$</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">rabbitmq</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">rabbitmqctl</span> <span class="n">list_queues</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>结果如下面：</p>
+
+<pre><code>Listing queues …
+hello 2
+… done .
+</code></pre>
+
+<p>如果你也看到hello队列里面有一个消息的话，就证明可以发消息了。</p>
+
+<p>然后写一个接收消息脚本：receive.py</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span> <span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&#39;[*] Waiting for messages. To exit press CTRL+C&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class="line">     <span class="k">print</span> <span class="n">body</span>
+</span><span class="line">
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span> <span class="p">,</span> <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>其中第12行的 no_ack=True 表示消费完了这个消息以后不主动把完成状态通知rabbitmq。</p>
+
+<p>然后开另外一个shell，执行一下receive.py</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">receive</span><span class="o">.</span><span class="n">py</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>结果：</p>
+
+<pre><code>[*] Waiting for messages. To exit press CTRL+C
+Hello World!
+你好刀哥
+</code></pre>
+
+<p><strong>3，实例二：工作队列（work queue / task queue）</strong></p>
+
+<p>一般应用于把比较耗时的任务从主线任务分离出来。比如一个http页面请求，
+里面需要发送带大附件的邮件、或者是要处理一张头像图片等。这类型工作队列的处理端一般有多个worker进程，
+分担队列里面的任务。这就有点负载均衡的策略在里面了。
+尽量做到每个进程的工作量比较平均，而且是完成了一个任务才接 第二个任务。看看我们的实现吧。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">cd</span> <span class="n">tut2</span>
+</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
+</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">worker</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>首先是消息发送程序: manager.py</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class="line"><span class="n">parameters</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">)</span>
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">,</span> <span class="n">durable</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:])</span> <span class="ow">or</span> <span class="s">&quot;Hello World!&quot;</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">routing_key</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">,</span>
+</span><span class="line">                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">properties</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span>
+</span><span class="line">                          <span class="n">delivery_mode</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">,</span> <span class="c"># make message persistent</span>
+</span><span class="line">                       <span class="p">))</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&quot; [x] Sent </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,)</span>
+</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>其中第8行的 durable=True 声明了队列需要持久化，第14行的 delivery_mode = 2 声明了队列的消息需要持久化。</p>
+
+<p>然后写一个接收消息脚本：worker.py</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">time</span>
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">,</span> <span class="n">durable</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&#39; [*] Waiting for messages. To exit press CTRL+C&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] Received </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">body</span><span class="p">,)</span>
+</span><span class="line">     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span> <span class="n">body</span><span class="o">.</span><span class="n">count</span><span class="p">(</span> <span class="s">&#39;.&#39;</span> <span class="p">)</span> <span class="p">)</span>
+</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] Done&quot;</span>
+</span><span class="line">     <span class="n">ch</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">delivery_tag</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_qos</span><span class="p">(</span><span class="n">prefetch_count</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">)</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">)</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>其中第15行的 basic_ack 是执行完任务通知rabbitmq，
+第17行的basic_qos是告诉rabbitmq只有当worker完成了任务以后才分派1条新的消息，实现公平分派。</p>
+
+<p>测试方法，开3个bash，2个跑worker，1个跑manager：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task1</span><span class="o">.</span>
+</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task2</span><span class="o">..</span>
+</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task3</span><span class="err">…</span>
+</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task4</span><span class="err">…</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>点号数量决定worker工作的时间( 其实是睡觉时间，呵呵 time.sleep(body.count(‘.’)) )。
+而在worker那边，可以看到每个worker都处理了两个任务。
+这种分配机制就是所谓的循环调度（Round-robin dispatching）</p>
+
+<p><strong>4，实例三：发布和订阅</strong></p>
+
+<p>发布订阅模式，简单来说就像是广播，一个消息发布出来以后，所有订阅者都能听到，
+至于接收到这个信息以后大家做什么就看具体个人了。</p>
+
+<p>啊！怎么忽然冒出个X，是什么玩意！这个X就是所谓的exchange，简单来说就是消息的管家，
+由他决定接收到的信息是放特定的队列，还是所有队列，还是直接丢弃。</p>
+
+<p>其实在前两个实例里面，已经用到了exchange （channel.basic_publish(exchange=”,…），
+这个exchange的名字为空，外号无名（人若无名，便可专心练剑~）。他会把你的消息都转达给routing_key指明的队列。
+当我们声明了exchange以后，我们需要为queue和exchange建立联系，这时候，就要用到绑定（binding）了。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">cd</span> <span class="n">tut3</span>
+</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">emitlog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
+</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">recelog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>日志生产者</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>emitlog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class="line">
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;fanout&#39;</span> <span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:])</span> <span class="ow">or</span> <span class="s">&quot;info: Hello World!&quot;</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                       <span class="n">routing_key</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&quot; [x] Sent </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,)</span>
+</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后是日志消费者</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line">
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;fanout&#39;</span> <span class="p">)</span>
+</span><span class="line"><span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                    <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&#39; [*] Waiting for logs. To exit press CTRL+C&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">body</span><span class="p">,)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>测试：</p>
+
+<p>和前一个实例差不多。开3个bash，2个跑recelog，1个跑emitlog。
+查看recelog是否都收到emitlog发送的消息。代码里面用 了一个fanout(意思是成扇形展开)类型的exchange，
+只要和exchange绑定的queue都能收到一份消息的 copy，routing_key会被忽略掉。</p>
+
+<p><strong>5，路由模式 （选择接收信息）</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">cd</span> <span class="n">tut4</span>
+</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">emitlog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
+</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">recelog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>生产者</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>emitlog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class="line">
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span> <span class="p">)</span>
+</span><span class="line"><span class="n">severity</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">]</span> <span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s">&#39;info&#39;</span>
+</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">2</span> <span class="p">:])</span> <span class="ow">or</span> <span class="s">&#39;Hello World!&#39;</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                       <span class="n">routing_key</span> <span class="o">=</span> <span class="n">severity</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&quot; [x] Sent </span><span class="si">%r</span><span class="s">:</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">severity</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这里声明exchange时类型定义为direct（直接匹配），就是说只有当一个信息的routing_key和队列的binding_key一 致时，
+信息才会被放入到这个队列。消息发布给exchange时必须带上routing_key。其实在消息生产端，队列这个概念是透明的。</p>
+
+<p>消费者</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class="line">
+</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
+</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span> <span class="p">)</span>
+</span><span class="line"><span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+</span><span class="line"><span class="n">severities</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:]</span>
+</span><span class="line"><span class="k">if</span> <span class="ow">not</span> <span class="n">severities</span><span class="p">:</span>
+</span><span class="line">     <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: </span><span class="si">%s</span><span class="s"> [info] [warning] [error]&quot;</span> <span class="o">%</span> \
+</span><span class="line">                          <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">0</span> <span class="p">],)</span>
+</span><span class="line">     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span> <span class="mi">1</span> <span class="p">)</span>
+</span><span class="line"><span class="k">for</span> <span class="n">severity</span> <span class="ow">in</span> <span class="n">severities</span><span class="p">:</span>
+</span><span class="line">     <span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
+</span><span class="line">                        <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
+</span><span class="line">                        <span class="n">routing_key</span> <span class="o">=</span> <span class="n">severity</span><span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="s">&#39; [*] Waiting for logs. To exit press CTRL+C&#39;</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] </span><span class="si">%r</span><span class="s">:</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">routing_key</span><span class="p">,</span> <span class="n">body</span><span class="p">,)</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
+</span><span class="line">                       <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这里首先定义exchange，和消息发送端是一样的。然后定义队列，队列是自动命名，
+并且只要进程终止，队列就会终止。然后把队列和 exchange绑定，绑定时的routing_key是用户输入的，
+如果输入多个key，就做多次的绑定。注意这里的队列还是一个。如果你需要建立两个 队列，就得跑两次这个python脚本。</p>
+
+<p><strong>6，topic和rpc</strong></p>
+
+<p>官方tutorial还有两个高级一点的实例，topic和rpc，这里就不作说明了，留着大家学学英文吧 :)</p>
+
+<p>RabbitMQ提供了很多消息队列客户端代码，比如python，java，c等等，大家可以根据产品或项目的实际情况选择。关键是原理必须搞懂。</p>
+
+<p><strong>其他资源：</strong></p>
+
+<p>中文入门篇：<a href="http://adamlu.net/dev/2011/09/rabbitmq-get-started/">http://adamlu.net/dev/2011/09/rabbitmq-get-started/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CentOS6.4安装rabbitmq-server]]></title>
+    <link href="http://yidao620c.github.io/blog/20150420/rabbitmq-server.html"/>
+    <updated>2015-04-20T10:55:13+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150420/rabbitmq-server</id>
+    <content type="html"><![CDATA[<h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
+<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
+
+<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
+</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>3,解压tar文件</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>4,编辑Setup.dist</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
+</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>找到<!--more--></p>
+
+<pre><code>#SSL=/usr/local/ssl
+#_ssl _ssl.c \
+#       -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
+#       -L$(SSL)/lib -lssl -lcrypto
+......
+#zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz
+</code></pre>
+
+<p>把注释去掉后开始执行安装</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">./configure --prefix=/usr/local/python27 --with-zlib=/usr/include
+</span><span class="line">make &amp;&amp; make install</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>5、建立软连接，使系统默认的python指向python27</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">mv /usr/bin/python /usr/bin/python2.6.6.old
+</span><span class="line">ln -s /usr/local/python27/bin/python2.7 /usr/bin/python</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>已经安装完成python的安装或升级的全部操作了，我们再来看一下现在的python的版本：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">python -V
+</span><span class="line">Python 2.7.5</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>虽然现在python已经安装完成，但是使用yum命令会有问题——yum不能正常工作。</p>
+
+<p>这是因为yum默认使用的python版本是2.6.6，到哪是现在的python版本是2.7.5，
+故会出现上述问题，只需要该一下yum的默认python配置版本就行了：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">vi /usr/bin/yum</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>将文件头部的<code>#!/usr/bin/python</code> 改为<code>#!/usr/bin/python2.6</code></p>
+
+<h3 id="centos-64erlang">在 CentOS 6.4上安装Erlang</h3>
+<p>在本节中，我们将来学习如何在CentOS 6.4上安装erlang，具体的Erlang版本是R16B02。</p>
+
+<p>在安装之前，需要先要安装一些其他的软件，否则在安装中间会出现一些由于没有其依赖的软件模块而失败。</p>
+
+<p><strong>1、首先要先安装GCC GCC-C++ Openssl等以来模块：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum -y install make gcc gcc-c++ kernel-devel m4 ncurses-devel openssl-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>2、再安装ncurses模块</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum -y install ncurses-devel
+</span><span class="line">yum install ncurses-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>3、下载Erang源代码文件文件，并对其付权限和解压文件：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">wget http://www.erlang.org/download/otp_src_R16B02.tar.gz
+</span><span class="line">chmod +x otp_src_R16B02.tar.gz
+</span><span class="line">tar -xzvf otp_src_R16B02.tar.gz
+</span><span class="line">mv otp_src_R16B02 erlang_R16B #重命名解压厚的文件</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>4、下面是安装erlang的重头戏，依次执行以下操作：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd erlang_R16B/
+</span><span class="line">#不用java编译，故去掉java避免错误
+</span><span class="line">./configure --prefix=/usr/local/erlang --with-ssl --enable-threads --enable-smp-support --enable-kernel-poll --enable-hipe --without-javac
+</span><span class="line">make &amp;&amp; make install #编译后安装</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>5、配置erlang环境：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">vi /etc/profile
+</span><span class="line">ERL_HOME=/usr/local/erlang
+</span><span class="line">export PATH=$PATH:$ERL_HOME/bin</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>好了，现在erlang的已经配置好了，现在我们来测试一下是否安装成功,在控制台输入命令erl，
+如果在erlang shell里出现下图所示就说明安装成功了：
+此处省略截图了…</p>
+
+<h3 id="centosrabbitmq-server-315">在CentOS上安装rabbitmq-server-3.1.5</h3>
+<p>在本节中我们来看一下如何在CentOS上安装RabbitMQ。
+我们使用的rabbitmq的版本是rabbitmq-server-3.1.5.tar.gz，CentOS的版本是CentOS 6.4。</p>
+
+<p>在安装rabbitmq之前需要先安装python和erlang，
+这两部分的安装过程请参看在CentOS 6.4上安装python和在 CentOS 6.4上安装Erlang，这里不再赘述。</p>
+
+<p>安装rabbitmq的具体步骤如下：</p>
+
+<p><strong>1、下载rabbitmq-server-3.1.5.tar.gz文件，并解压之：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd /usr/local
+</span><span class="line">wget http://www.rabbitmq.com/releases/rabbitmq-server/v3.1.5/rabbitmq-server-3.1.5.tar.gz
+</span><span class="line">chmod +x rabbitmq-server-3.1.5.tar.gz
+</span><span class="line">tar -xzvf rabbitmq-server-3.1.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>2、在编译rabbitmq源码之前先要安装其需要依赖包：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum -y install xmlto</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>否则会编译不通过：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">/bin/sh: line 1: xmlto: command not found</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>3、开始编译源代码：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd rabbitmq-server-3.1.5
+</span><span class="line">make
+</span><span class="line">#将rabbitmq编译到/opt/mq/rabbitmq目录
+</span><span class="line">make install TARGET_DIR=/opt/mq/rabbitmq SBIN_DIR=/opt/mq/rabbitmq/sbin MAN_DIR=/opt/mq/rabbitmq/man</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>4、安装web插件管理界面</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd /opt/mq/rabbitmq/sbin
+</span><span class="line">mkdir /etc/rabbitmq/
+</span><span class="line">rabbitmq-plugins enable rabbitmq_management</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>5、好了，到这里rabbitmq已经配置好了，可以启动了：</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">./rabbitmq-server start &amp;</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>我运行的时候报错了，ERROR: epmd error for host “springzoo”: timeout (timed out)</p>
+
+<p>更改下/etc/hosts:</p>
+
+<pre><code>127.0.0.1   localhost springzoo
+::1         localhost springzoo
+</code></pre>
+
+<p>接下来我们查看下端口</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">ps aux | grep rabbitmq #查看端口，默认就是5672
+</span><span class="line">netstat -tnlp | grep 5672</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>应该是下面的结果</p>
+
+<pre><code>tcp        0      0 0.0.0.0:15672               0.0.0.0:*                   LISTEN      30435/beam.smp
+tcp        0      0 0.0.0.0:55672               0.0.0.0:*                   LISTEN      30435/beam.smp
+tcp        0      0 :::5672                     :::*                        LISTEN      30435/beam.smp
+</code></pre>
+
+<p>如果看到下面的信息就表明已经启动成功了！
+省略截图….</p>
+
+<p>最好我们就可以在浏览器上输入http://127.0.0.1:15672/登录管理界面了</p>
+
+<p>使用登录的名户名和密码默认都算guest，登录后的页面如下：</p>
+
+<p>截图再次省略…</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[归并排序中对小数组采用插入排序]]></title>
+    <link href="http://yidao620c.github.io/blog/20150420/merge-sort.html"/>
+    <updated>2015-04-20T10:47:35+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150420/merge-sort</id>
+    <content type="html"><![CDATA[<p>纯归并排序的复杂度为O(nlgn)，而纯插入排序的时间复杂度为O(n^2)。数据量很大的时候采用归并排序。</p>
+
+<p>但是在n较小的时候插入排序可能运行的会更快点。因此在归并排序中当子问题变得足够小时，
+采用插入排序来使得递归的叶子变粗可以加快排序速度。那么这个足够小到底怎么去衡量呢？ 请看下面：</p>
+
+<p>这么几个我不证明了，比较简单：</p>
+
+<ol>
+  <li>插入排序最坏情况下可以在O(nk)时间内排序每个长度为k的n/k个子列表
+*. 在最坏情况下可在O(nlg(n/k))的时间内合并这些子表
+*. 修订后的算法的最坏情况运行时间复杂度是O(nk + nlg(n/k))</li>
+</ol>
+
+<p>那么，O(nk+nlg(n/k))=O(nlgn).只能最大是k=O(lgn).等式左边中第一项是高阶项。
+k如果大于lgn,则比归并排序复杂度大了。
+左边可以写成nk+nlgn-nlgk，k等于lgn时，就是2nlgn-nlglgn.忽略恒定系数，则与归并排序是一样的。
+最后结论： k &lt; lg(n)的时候，使用插入排序。<!--more--></p>
+
+<p>首先是插入排序的实现，这个比较简单：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">insertSort</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+</span><span class="line">    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)):</span>
+</span><span class="line">        <span class="n">key</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+</span><span class="line">        <span class="c"># insert arrays[j] into the sorted seq[0...j-1]</span>
+</span><span class="line">        <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class="line">        <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">key</span><span class="p">:</span>
+</span><span class="line">            <span class="n">seq</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span><span class="line">            <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span class="line">        <span class="n">seq</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后是利用了插入排序的归并排序算法：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+</span><span class="line">
+</span><span class="line"><span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Xiong Neng&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">mergeSort</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+</span><span class="line">    <span class="n">mergeSortRange</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">mergeOrderedSeq</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+</span><span class="line">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="sd">    seq: 待排序序列</span>
+</span><span class="line"><span class="sd">    left &lt;= middle &lt;= right</span>
+</span><span class="line"><span class="sd">    子数组seq[left..middle]和seq[middle+1..right]都是排好序的</span>
+</span><span class="line"><span class="sd">    该排序的时间复杂度为O(n)</span>
+</span><span class="line"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span class="line">    <span class="n">tempSeq</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class="line">    <span class="n">i</span> <span class="o">=</span> <span class="n">left</span>
+</span><span class="line">    <span class="n">j</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span class="line">    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">middle</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">:</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">seq</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+</span><span class="line">            <span class="n">tempSeq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span><span class="line">            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class="line">        <span class="k">else</span><span class="p">:</span>
+</span><span class="line">            <span class="n">tempSeq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+</span><span class="line">            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">middle</span><span class="p">:</span>
+</span><span class="line">        <span class="n">tempSeq</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+</span><span class="line">    <span class="k">else</span><span class="p">:</span>
+</span><span class="line">        <span class="n">tempSeq</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+</span><span class="line">    <span class="n">seq</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempSeq</span><span class="p">[:]</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">mergeSortRange</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+</span><span class="line">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="sd">    归并排序一个序列的子序列</span>
+</span><span class="line"><span class="sd">    start: 子序列的start下标</span>
+</span><span class="line"><span class="sd">    end: 子序列的end下标</span>
+</span><span class="line"><span class="sd">    threshold: 待排序长度低于这个值，就采用插入排序</span>
+</span><span class="line"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+</span><span class="line">        <span class="n">tempSeq</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span class="line">        <span class="n">insertSort</span><span class="p">(</span><span class="n">tempSeq</span><span class="p">)</span>
+</span><span class="line">        <span class="n">seq</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempSeq</span><span class="p">[:]</span>
+</span><span class="line">    <span class="k">elif</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>  <span class="c"># 如果start &gt;= end就终止递归调用</span>
+</span><span class="line">        <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span class="line">        <span class="n">mergeSortRange</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>  <span class="c"># 排好左边的一半</span>
+</span><span class="line">        <span class="n">mergeSortRange</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>  <span class="c"># 再排好右边的一半</span>
+</span><span class="line">        <span class="n">mergeOrderedSeq</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>  <span class="c"># 最后合并排序结果</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span class="line">    <span class="n">test</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+</span><span class="line">    <span class="n">mergeSort</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+</span><span class="line">    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>比较清楚，应该不需要再多解释了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[回溯法解决八皇后问题]]></title>
     <link href="http://yidao620c.github.io/blog/20150418/eight-queens.html"/>
     <updated>2015-04-18T17:11:42+08:00</updated>
     <id>http://yidao620c.github.io/blog/20150418/eight-queens</id>
     <content type="html"><![CDATA[<p>八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。八皇后问题可以推广为更一般的n皇后摆放问题：这时棋盘的大小变为n×n，而皇后个数也变成n。当且仅当n = 1或n ≥ 4时问题有解 — 摘自<a href="http://zh.wikipedia.org/wiki/%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98">八皇后问题wiki</a></p>
 
-<p>利用回溯法解决这个问题：<!-- more --></p>
+<p>利用回溯法解决这个问题：<!--more--></p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
@@ -131,7 +936,7 @@
   <li>Lists (列表)</li>
   <li>Sets (集合)</li>
   <li>Sorted sets (有序集合)</li>
-  <li>Hashes (哈希表)<!-- more --></li>
+  <li>Hashes (哈希表)<!--more--></li>
 </ul>
 
 <p>键值的数据类型决定了该键值支持的操作。Redis支持诸如列表、集合或有序集合的交集、并集、查集等高级原子操作;同时，如果键值的类型是普通数字，Redis则提供自增等原子操作。</p>
@@ -465,7 +1270,7 @@ redis会把所接收到的每一次写操作请求都追加到appendonly.aof文�
   <li>NIO连接池</li>
 </ol>
 
-<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：<!-- more --></p>
+<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：<!--more--></p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
@@ -833,7 +1638,7 @@ redis会把所接收到的每一次写操作请求都追加到appendonly.aof文�
 </pre></td><td class="code"><pre><code class=""><span class="line"># 由于系统自带的版本旧，忽略依赖删除
 </span><span class="line">rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps</span></code></pre></td></tr></table></div></figure></notextile></div>
 <ol>
-  <li>安装libevent命令：<!-- more --></li>
+  <li>安装libevent命令：<!--more--></li>
 </ol>
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>

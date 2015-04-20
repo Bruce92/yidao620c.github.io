@@ -9,7 +9,7 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-18 backtracking, eight-queens 回溯法解决八皇后问题 八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。 &hellip;">
+	<meta name="description" content="2015-04-20 rabbitmq 使用python开发RabbitMQ应用 参考了RabbitMQ网站上提供的英文版本入门指南: http://www.rabbitmq.com/getstarted.html 测试环境：CentOS 6.2 1，测试环境准备 安装python（ &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -47,7 +47,7 @@
 </hgroup>
 <nav id="main-nav"><ul class="main">
     <li><a href="/">Home</a></li>
-	<li><a href="/blog/categories">分类目录</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
 	<li><a href="/blog/archives">文章列表</a></li>
     <li><a href="/opensource/">开源项目</a></li>
     <li><a href="/about">About</a></li>
@@ -109,11 +109,173 @@
   
 
 
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-python-client.html" itemprop="url">使用python开发RabbitMQ应用</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
+
+<p>测试环境：CentOS 6.2</p>
+
+<p><strong>1，测试环境准备</strong></p>
+
+<p>安装python（一般系统都自带了python）</p>
+
+<p>安装RabbitMQ server可以参考前面的文章。</p>
+
+<p>安装pika</p>
+
+<p>使用pip安装的时候可能会报错：
+<code>importerror no module named pkg_resources</code></p>
+
+<p>请用下面命令解决这个问题：</p>
+
+<p><code>$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</code></p>
+
+<p>然后还可能出现：<code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
+
+<p>这时候先把pip卸载掉，执行： <code>sudo yum remove python-pip</code></p>
+
+<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
+
+<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面
+		
+		<a href="/blog/20150420/rabbitmq-python-client.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-server.html" itemprop="url">CentOS6.4安装rabbitmq-server</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
+<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
+
+<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
+</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>3,解压tar文件</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>4,编辑Setup.dist</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
+</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>找到
+		
+		<a href="/blog/20150420/rabbitmq-server.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/sort/'>sort</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/merge-sort.html" itemprop="url">归并排序中对小数组采用插入排序</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>纯归并排序的复杂度为O(nlgn)，而纯插入排序的时间复杂度为O(n^2)。数据量很大的时候采用归并排序。</p>
+
+<p>但是在n较小的时候插入排序可能运行的会更快点。因此在归并排序中当子问题变得足够小时，
+采用插入排序来使得递归的叶子变粗可以加快排序速度。那么这个足够小到底怎么去衡量呢？ 请看下面：</p>
+
+<p>这么几个我不证明了，比较简单：</p>
+
+<ol>
+  <li>插入排序最坏情况下可以在O(nk)时间内排序每个长度为k的n/k个子列表
+*. 在最坏情况下可在O(nlg(n/k))的时间内合并这些子表
+*. 修订后的算法的最坏情况运行时间复杂度是O(nk + nlg(n/k))</li>
+</ol>
+
+<p>那么，O(nk+nlg(n/k))=O(nlgn).只能最大是k=O(lgn).等式左边中第一项是高阶项。
+k如果大于lgn,则比归并排序复杂度大了。
+左边可以写成nk+nlgn-nlgk，k等于lgn时，就是2nlgn-nlglgn.忽略恒定系数，则与归并排序是一样的。
+最后结论： k &lt; lg(n)的时候，使用插入排序。
+		
+		<a href="/blog/20150420/merge-sort.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 2015-04-18</div>
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/backtracking/'>backtracking</a>, <a class='category' href='/blog/categories/eight-queens/'>eight-queens</a>
+	<a class='category' href='/blog/categories/eight-queens/'>eight-queens</a>
 
 
 </div>
@@ -281,284 +443,6 @@
   <li>安装libevent命令：
 		
 		<a href="/blog/20150418/memcached-install.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/puzzle/'>puzzle</a>, <a class='category' href='/blog/categories/recursive/'>recursive</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/concurrent-recursive.html" itemprop="url">利用递归算法并行化解决谜题框架</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>我们将谜题定义为：包含一个初始位置，一个目标位置，以及用于判断是否是有效移动的规则集。</p>
-
-<p>规则集包含两部分：计算从指定位置开始的所有合法移动，以及每次移动的结果位置。</p>
-
-<p>下面先给出表示谜题的抽象类，其中的类型参数P和M表示位置类和移动类。根据这个接口，我们可以写一个简单的串行求解程序，该程序将在谜题空间Puzzle Space中查找，直到找到一个解答或者找遍了整个空间都没有发现答案。注：一个移动M代表一步</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/** 表示 搬箱子 之类谜题的抽象类*/</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Puzzle</span><span class="o">&lt;</span><span class="n">P</span><span class="o">,</span> <span class="n">M</span><span class="o">&gt;</span> <span class="o">{</span>
-</span><span class="line">    <span class="n">P</span> <span class="nf">initialPosition</span><span class="o">();</span>
-</span><span class="line">
-</span><span class="line">    <span class="kt">boolean</span> <span class="nf">isGoal</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">Set</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="nf">legalMoves</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">P</span> <span class="nf">move</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">,</span> <span class="n">M</span> <span class="n">move</span><span class="o">);</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>下面的PuzzleNode代表通过一系列的移动到达的一个位置，其中保存了到达该位置的移动以及前一个Node。只要沿着PuzzleNode链接逐步回溯，就可以重新构建出达到当前位置的移动序列。
-		
-		<a href="/blog/20150418/concurrent-recursive.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/algorithm/'>algorithm</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/sort-search.html" itemprop="url">快速排序和二分查找</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">快速排序算法和二分搜索算法：</h3>
-
-<p>算法主要分为排序算法、搜索算法、图算法。图算法我用得不多，没有发言权，本文就不说了。</p>
-
-<p>排序算法中最快的是快速排序算法，搜索算法中最快的是二分搜索算法。我也最喜欢这2 个算法。
-因为它们是使用递归实现的，代码简洁清晰，效率又非常高。</p>
-
-<p>根据我的理解，算法的本质就是数学。根据输入和设定的目标，采用有限的步骤实现输出。通常，使用计算机实现的算法，都会用到循环，这样才能发挥计算机高速运算的优势。</p>
-
-<p>循环和递归是等效的，这已经被科学家所证明。数学上没有循环，只有递归的概念，因此使用递归代替循环表示算法有很多好处：</p>
-
-<ol>
-  <li>递归的代码要比循环简洁很多，也优雅很多。</li>
-  <li>递归的代码可以用数学方式建模，可以从数学角度验证其正确性。</li>
-</ol>
-
-<p>很多函数式语言甚至没有循环的概念和关键字，强迫你使用递归来实现循环。如，ErLang 。
-递归也有一些缺点，递归使用栈来保存函数地址和参数、返回值，而栈是有一定大小的，过多的递归调用可能会造成栈溢出。但是，递归算法会容易转变为循环。我更欣赏递归的简洁，除非真的出现栈溢出的问题，我是不会使用循环的。</p>
-
-<p><br />
-<strong>二分搜索算法</strong></p>
-
-<p>理论：</p>
-
-<p>二分搜索算法用于针对已排序的集合进行搜索。</p>
-
-<p>它的原理是：</p>
-
-<ol>
-  <li>找到排序数组的中间元素，如果它匹配目标值，那么就返回它在数组中的索引。</li>
-  <li>如果没有找到，那么判断中间值比目标值大还是小，
-如果中间值比目标值大，那么就对第一个元素到middle-1 的元素递归这个过程。
-如果中间值比目标值小，那么就对middle+1 到最后一个元素。</li>
-  <li>如果结束的索引小于开始的索引，返回-1 ，表示没有找到。</li>
-  <li>如果子集合有2 个元素，那么各自比较。因为Java 的整数除法会舍弃小数，如果数组只有2 个元素，那么middle 值一直都是第一个元素。</li>
-</ol>
-
-<p>经过上述的递归过程，最终将返回匹配元素的索引，或者是-1 ，表示找不到。
-		
-		<a href="/blog/20150418/sort-search.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-13</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/linux/'>linux</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150413/centos-yum.html" itemprop="url">Centos6更新yum源</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h4 id="section">先备份</h4>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo<span class="o">{</span>,.bak<span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h4 id="centos-baserepo">修改CentOS-Base.repo</h4>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># CentOS-Base.repo</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line"><span class="c"># The mirror system uses the connecting IP address of the client and the</span>
-</span><span class="line"><span class="c"># update status of each mirror to pick mirrors that are updated to and</span>
-</span><span class="line"><span class="c"># geographically close to the client. You should use this for CentOS updates</span>
-</span><span class="line"><span class="c"># unless you are manually picking other mirrors.</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line"><span class="c"># If the mirrorlist= does not work for you, as a fall back you can try the </span>
-</span><span class="line"><span class="c"># remarked out baseurl= line instead.</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line">
-</span><span class="line"><span class="o">[</span>base<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Base
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/os/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#released updates </span>
-</span><span class="line"><span class="o">[</span>updates<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Updates
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/updates/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#additional packages that may be useful</span>
-</span><span class="line"><span class="o">[</span>extras<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Extras
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/extras/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#additional packages that extend functionality of existing packages</span>
-</span><span class="line"><span class="o">[</span>centosplus<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Plus
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/centosplus/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">enabled</span><span class="o">=</span>0
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#contrib - packages by Centos Users</span>
-</span><span class="line"><span class="o">[</span>contrib<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Contrib
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=contrib</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/contrib/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">enabled</span><span class="o">=</span>0
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>接下来我们来更新下yum：
-		
-		<a href="/blog/20150413/centos-yum.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

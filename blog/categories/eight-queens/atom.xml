@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：eight-queens | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/eight-queens/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-19T17:29:26+08:00</updated>
+  <updated>2015-04-20T12:02:31+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -20,7 +20,7 @@
     <id>http://yidao620c.github.io/blog/20150418/eight-queens</id>
     <content type="html"><![CDATA[<p>八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。八皇后问题可以推广为更一般的n皇后摆放问题：这时棋盘的大小变为n×n，而皇后个数也变成n。当且仅当n = 1或n ≥ 4时问题有解 — 摘自<a href="http://zh.wikipedia.org/wiki/%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98">八皇后问题wiki</a></p>
 
-<p>利用回溯法解决这个问题：<!-- more -->
+<p>利用回溯法解决这个问题：<!--more-->
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
