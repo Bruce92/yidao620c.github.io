@@ -1,0 +1,440 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（4）- 三部曲 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="Django1.7开发博客（4）- 三部曲 什么是三部曲？
+其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。 这三部曲就是： 定义urls映射 定义views 定义templates 什么是URL？
+URL就算一个WEB地址，你在浏览器输入这个地址， &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150420/simpleblog-04.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy!</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Django1.7开发博客（4）- 三部曲</h1>
+	<div class="entry-content" itemprop="articleBody"><h3 id="section">什么是三部曲？</h3>
+<p>其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。</p>
+
+<p>这三部曲就是：</p>
+
+<ol>
+  <li>定义urls映射</li>
+  <li>定义views</li>
+  <li>定义templates</li>
+</ol>
+
+<h3 id="url">什么是URL？</h3>
+<p>URL就算一个WEB地址，你在浏览器输入这个地址，然后浏览器返回相应的网页给你。
+比如http://djangogirls.com是一个URL，而127.0.0.1:8000同样也是个URL，默认就是http协议的。</p>
+
+<h3 id="djangourl">Django中的URL工作原理</h3>
+<p>我们打开mysite/urls.py文件，会发现类似下面这样：<!--more--></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line">
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class="line"><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="c"># Examples:</span>
+</span><span class="line">    <span class="c"># url(r&#39;^$&#39;, &#39;mysite.views.home&#39;, name=&#39;home&#39;),</span>
+</span><span class="line">    <span class="c"># url(r&#39;^blog/&#39;, include(&#39;blog.urls&#39;)),</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>上面的两行注释先不要管，这个以后再用到。
+django默认已经为我们添加了admin的URL配置。
+当django碰到以admin/开头的URL的时候会去admin.site.urls里面去寻找对应的匹配。
+所有和admin相关的urls配置都写在一个文件中，这样就便于管理了。</p>
+
+<h3 id="section-1">正则表达式</h3>
+<p>你可以看到上面的url用到了正则表达式，比如’^admin/’、’^$’等等，
+django是通过正则式来匹配URL的。关于正则式这里不想展开太多。可以参考相关数据和教程。</p>
+
+<h3 id="django-url">第一个django url配置</h3>
+<p>现在我们要将http://127.0.0.1:8000/这个首页地址映射到一个显示最新文章列表的页面上面去。一般的博客首页基本都是这样的。</p>
+
+<p>为了保持mysite/urls.py配置文件的简介，我们最好将博客的url配置放到单独的文件中。在mysite/urls.py中去将它引进来即可。</p>
+
+<p>那么你的mysite/urls.py文件现在类似于这样了：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line">
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class="line"><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="blogurls">blog.urls</h3>
+<p>创建文件blog/urls.py，然后加入下列内容</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_list</span><span class="p">),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>现在我们将r’^$’的url映射到视图views.post_list。</p>
+
+<p>不过你要是现在就访问首页http://127.0.0.1:8000/的话会报错的。</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj006.jpg" alt="" /></p>
+
+<p>为啥，因为你的视图views.post_list现在没有实现啊，找不到这个方法！</p>
+
+<p>那么接下来我们就来讲解view的实现了。</p>
+
+<h3 id="view">什么是view？</h3>
+<p>view也叫视图，在django中它存放了实际的业务逻辑。这个跟我们通常所说的MVC中的view是不一样的。</p>
+
+<p><strong>django的MTV模式</strong></p>
+
+<p>这里我稍微解释下django的结构，一般我们称之为MTV模式：</p>
+
+<ol>
+  <li>M 代表模型（Model），即数据存取层。该层处理与数据相关的所有事务：如何存取、如何确认有效性、包含哪些行为以及数据之间的关系等。</li>
+  <li>T 代表模板(Template)，即表现层。该层处理与表现相关的决定：如何在页面或其他类型文档中进行显示。</li>
+  <li>V 代表视图（View），即业务逻辑层。该层包含存取模型及调取恰当模板的相关逻辑。你可以把它看作模型与模板之间的桥梁。</li>
+</ol>
+
+<p>那么通常意义的控制器Controller去哪里了呢，细心的童鞋应该会猜到了，那就是我们上一节所讲的urls.py配置文件。</p>
+
+<p>一句话总结：URLconf+MTV构成了django的总体架构。</p>
+
+<p><strong>blog/views.py</strong></p>
+
+<p>这个文件初始内容是这样的：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Create your views here.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>添加一个最简单的视图：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_list.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>我们定义了一个方法post_list，它的参数是request，使用render函数返回一个html模板blog/post_list.html。</p>
+
+<p>接下来我们访问下首页，OMG，又出错了：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj007.jpg" alt="" /></p>
+
+<p>这次报的错是模板blog/post_list.html找不到。这个是显而易见的，因为我们根本还没有定义这个html模板。</p>
+
+<p>别着急，继续沿着教程往下看就行…</p>
+
+<h3 id="section-2">什么是模板？</h3>
+<p>一个模板就是一个使用固定格式呈现动态内容的可重用的文件。
+比如你可以使用一个模板来写邮件，每封邮件可能有不同的内容，寄给不同的人，但是它们的格式是一样的。</p>
+
+<p>Django中的模板使用HTML文件，至于神马是HTML，这个去参考下W3C或者自行google下，
+不过如果做web开发的人不懂HTML，请不要告诉别人我认识你。^_^</p>
+
+<p>** 第一个模板 **</p>
+
+<p>创建一个模板就是创建一个HTML文件。模板文件存储在blog/templates/blog目录下面，
+首先在blog目录下创建templates目录，然后再在templates目录下创建blog目录，至于为啥要这么做，
+先不用管，django里面很多目录都是约定好的，这个就跟maven是一样的，约定高于配置。
+所以你先照着做就是了。目录结构如下：</p>
+
+<pre><code>blog
+└───templates
+    └───blog
+</code></pre>
+
+<p>然后在blog/templates/blog目录下创建一个post_list.html文件，现在里面还没有内容。</p>
+
+<p>这时候再次访问首页，效果如下：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj008.jpg" alt="" /></p>
+
+<p>一片空白，但没有报错了。</p>
+
+<p>在post_list.html中添加点东西：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line">    <span class="nt">&lt;p&gt;</span>Hi there!<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">    <span class="nt">&lt;p&gt;</span>It works!<span class="nt">&lt;/p&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>再次访问http://192.168.203.95:8000/：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj009.jpg" alt="" /></p>
+
+<h3 id="section-3">动态模板</h3>
+<p>不过目前为止我们还只能显示静态的网页。怎样将文章列表在首页显示出来呢？</p>
+
+<p>我们已经有了模型Post，有了模板post_list.html，怎样使得模型数据在模板中显示出来呢，
+这个就是视图的功能了，实际上，django中的视图的作用就是连接模型和模板的桥梁。
+在视图中，通过QuerySet将数据库中的数据检索出来，然后传递给模板，模板负责显示出来。</p>
+
+<p>首先打开blog/views.py，它目前的内容是这样的：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_list.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这时候我们将Post模型导入进来</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>注意我们还是用到了相对导入，这是python3的强大功能。</p>
+
+<h3 id="queryset">QuerySet</h3>
+<p>是时候请出QuerySet了，在模型和ORM小节我们已经介绍过。</p>
+
+<p>现在我们想要将数据库中的文章都检索出来并且按照发布日期逆序排序，使得最新的文章放前面。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class="line">    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">published_date__isnull</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-published_date&#39;</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_list.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;posts&#39;</span><span class="p">:</span> <span class="n">posts</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>注意render函数中最后一个参数{‘posts’: posts}，这个就是用来给模板传递数据的。</p>
+
+<h3 id="section-4">模板标签</h3>
+<p>HTML页面只识别HTML标签，那么怎样让生成动态的内容呢？答案就是使用django自带的模板标签，
+包括了判断、循环、管道等语法。我们已经获取了文章的列表了，那么可以使用for循环来生成相应的HTML页面：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span> <span class="n">Blog</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span> <span class="n">Blog</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">published</span><span class="p">:</span> <span class="p"></span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">&gt;</span><span class="p"></span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p"></span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>在<code>{% for %}</code> 和<code>{% endfor %}</code>之间会循环每个post，然后每次生成一段</p>
+
+<p>现在再次访问首页，效果如下：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj010.jpg" alt="" /></p>
+
+<h3 id="section-5">别忘了一件事</h3>
+<p>别忘了把它push到heroku上面去。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
+</span><span class="line"><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s">&#39;动态文章列表首页&#39;</span>
+</span><span class="line"><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>恭喜你，目前为止基本的全程已经贯通了。打开admin后添加几篇文章，
+记得填上发布日期，再刷新下首页，看会不会显示出来。</p>
+
+<p>好了，这时候你可以出门左拐去小卖部给自己买点棒棒糖奖励下自己了！</p>
+
+<p>不过我们的教程还没完，怎样让页面变得漂亮呢？请看下一节。</p>
+
+</div>
+
+</article>
+
+  <section id="comment">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150420/simpleblog-04" data-title="Django1.7开发博客（4）- 三部曲" data-url="http://yidao620c.github.io/blog/20150420/simpleblog-04.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    熊能
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>
