@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：lvs | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/lvs/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-20T17:21:44+08:00</updated>
+  <updated>2015-04-20T17:40:59+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -34,7 +34,7 @@
 
 <p><strong>2、什么是KeepAlived?</strong></p>
 
-<p>Keepalived原理与实战精讲： http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</p>
+<p>Keepalived原理与实战精讲： <a href="http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/">http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</a></p>
 
 <p><strong>3、什么是CentOS?</strong></p>
 
@@ -112,9 +112,11 @@ yum -y install ipvsadm
 
 <h4 id="section-2">2) 防火墙</h4>
 
-<p>为了测试方便，我们直接关闭防火墙，在实际使用中开启需要的端口即可
-（具体配置可参考：<a href="http://www.cnblogs.com/rockee/archive/2012/05/17/2506671.html">http://www.cnblogs.com/rockee/archive/2012/05/17/2506671.html</a>）
-<code>
+<p>为了测试方便，我们直接关闭防火墙，在实际使用中开启需要的端口即可。</p>
+
+<p>具体配置可参考：<a href="http://www.cnblogs.com/rockee/archive/2012/05/17/2506671.html">http://www.cnblogs.com/rockee/archive/2012/05/17/2506671.html</a></p>
+
+<p><code>
 service iptables stop
 </code></p>
 

@@ -9,8 +9,11 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 keepalived, lvs CentOS6.5上LVS和KeepAlived搭建高可用负载均衡集群 一、理论知识（原理）
-我们不仅要知其然，而且要知其所以然，所以先给大家准备一些理论知识课，这样对以后的应用将会事半功倍。 1、什么是LVS？ &hellip;">
+	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（1）- 入门篇 开篇
+笔者用过django一段时间了，是时候做点笔记了。不过官网文档稍微有点复杂，对新手而言很困难，
+而网上的一些教程很多都过时了。
+最近看到一个外文的教程非常不错，
+网址是：http:// &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +117,53 @@
 		<div class="tags">
 
 
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-01.html" itemprop="url">Django1.7开发博客（1）- 入门篇</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">开篇</h3>
+<p>笔者用过django一段时间了，是时候做点笔记了。不过官网文档稍微有点复杂，对新手而言很困难，
+而网上的一些教程很多都过时了。
+最近看到一个外文的教程非常不错，
+网址是：<a href="http://tutorial.djangogirls.org/">http://tutorial.djangogirls.org/</a>，
+这个是基于最新的django1.7写的，通俗易懂，非常适合新手入门。
+那么我自己参考这个整理了一下这个教程，同时还将源码上传到GitHub上去了。
+希望对于大家有帮助。教程中如果有不足之处希望大家不吝赐教 ^_^</p>
+
+<p>参考教程：<a href="http://tutorial.djangogirls.org/">http://tutorial.djangogirls.org/</a></p>
+
+<p>GitHub项目地址：<a href="https://github.com/yidao620c/simpleblog">https://github.com/yidao620c/simpleblog</a></p>
+
+<p>Heroku演示地址：<a href="https://yidaoblog.herokuapp.com/">https://yidaoblog.herokuapp.com/</a>
+		
+		<a href="/blog/20150420/simpleblog-01.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
 	<a class='category' href='/blog/categories/keepalived/'>keepalived</a>, <a class='category' href='/blog/categories/lvs/'>lvs</a>
 
 
@@ -138,7 +188,7 @@
 
 <p><strong>2、什么是KeepAlived?</strong></p>
 
-<p>Keepalived原理与实战精讲： http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</p>
+<p>Keepalived原理与实战精讲： <a href="http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/">http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</a></p>
 
 <p><strong>3、什么是CentOS?</strong></p>
 
@@ -452,69 +502,6 @@ Clark Evans在2001年在首次发表了这种语言[1] ，
 
 		
 		<a href="/blog/20150420/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-python-client.html" itemprop="url">使用python开发RabbitMQ应用</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
-
-<p>测试环境：CentOS 6.2</p>
-
-<p><strong>1，测试环境准备</strong></p>
-
-<p>安装python（一般系统都自带了python）</p>
-
-<p>安装RabbitMQ server可以参考前面的文章。</p>
-
-<p>安装pika</p>
-
-<p>使用pip安装的时候可能会报错：</p>
-
-<p><code>importerror no module named pkg_resources</code></p>
-
-<p>请用下面命令解决这个问题：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>然后还可能出现：</p>
-
-<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
-
-<p>这时候先把pip卸载掉，执行：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
-
-<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面
-		
-		<a href="/blog/20150420/rabbitmq-python-client.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>
