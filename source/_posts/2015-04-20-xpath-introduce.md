@@ -64,7 +64,16 @@ child::A/descendant-or-self::B/child::node()[1]
 
 ### XPath轴
 轴可定义相对于当前节点的节点集。
-
+<style type="text/css">
+table {
+    border-collapse: collapse;
+    border: none;
+}
+td {
+    border: solid #000 1px;
+    padding: 5px;
+}
+</style>
 <table>
     <tr><td>ancestor</td><td>选取当前节点的所有先辈（父、祖父等）。</td></tr>
     <tr><td>ancestor-or-self</td><td>选取当前节点的所有先辈（父、祖父等）以及当前节点本身。</td></tr>
