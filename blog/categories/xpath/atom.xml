@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：xpath | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/xpath/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-20T15:32:50+08:00</updated>
+  <updated>2015-04-20T16:22:36+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -82,6 +82,16 @@ child::A/descendant-or-self::B/child::node()[1]
 
 <h3 id="xpath">XPath轴</h3>
 <p>轴可定义相对于当前节点的节点集。</p>
+<style type="text/css">
+table {
+    border-collapse: collapse;
+    border: none;
+}
+td {
+    border: solid #000 1px;
+    padding: 5px;
+}
+</style>
 
 <table>
     <tr><td>ancestor</td><td>选取当前节点的所有先辈（父、祖父等）。</td></tr>
