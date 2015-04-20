@@ -20,7 +20,7 @@ categories: lvs keepalived
 
 **2、什么是KeepAlived?**
 
-Keepalived原理与实战精讲： http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/
+Keepalived原理与实战精讲： <http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/>
 
 **3、什么是CentOS?**
 
@@ -97,8 +97,10 @@ yum -y install ipvsadm
 
 #### 2) 防火墙
 
-为了测试方便，我们直接关闭防火墙，在实际使用中开启需要的端口即可
-（具体配置可参考：<http://www.cnblogs.com/rockee/archive/2012/05/17/2506671.html>）
+为了测试方便，我们直接关闭防火墙，在实际使用中开启需要的端口即可。
+
+具体配置可参考：<http://www.cnblogs.com/rockee/archive/2012/05/17/2506671.html>
+
 ```
 service iptables stop
 ```
