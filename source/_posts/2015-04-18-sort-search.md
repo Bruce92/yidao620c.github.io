@@ -3,7 +3,7 @@ layout: post
 title: "快速排序和二分查找"
 date: 2015-04-18 12:48:25 +0800
 comments: true
-categories: algorithm
+categories: sort search
 ---
 
 ### 快速排序算法和二分搜索算法：

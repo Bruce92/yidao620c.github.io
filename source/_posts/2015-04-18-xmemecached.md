@@ -15,7 +15,7 @@ Xmemcached是基于java nio实现的高性能可扩展的memcached客户端。�
 1. 客户端操作统计
 1. NIO连接池
 
-等等，更多信息请见wiki文档。废话不多讲，先上代码：<!-- more -->
+等等，更多信息请见wiki文档。废话不多讲，先上代码：<!--more-->
 ``` java
 package xmemcache;
  

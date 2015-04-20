@@ -25,7 +25,7 @@ rpm -qa|grep libevent
 # 由于系统自带的版本旧，忽略依赖删除
 rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps
 ```
-1. 安装libevent命令：<!-- more -->
+1. 安装libevent命令：<!--more-->
 ```
 tar zxvf libevent-2.0.21-stable.tar.gz
 cd libevent-2.0.21-stable
