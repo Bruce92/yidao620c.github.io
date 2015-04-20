@@ -3,7 +3,7 @@ layout: post
 title: "Java8中的lambda表达式"
 date: 2015-04-20 15:42:11 +0800
 comments: true
-categories: java
+categories: java8
 ---
 
 2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
@@ -207,17 +207,19 @@ boolean accept(File pathname);
 ``` java
 FileFilter x = File f -> f.canRead();
 ```
+
 通过方法引用，可以简化为：
 ``` java
 FileFilter x = File::canRead;
 ```
+
 方法引用语法格式有以下三种：
 
     objectName::instanceMethod
     ClassName::staticMethod
     ClassName::instanceMethod
 
-前两种方式类似，等同于把lambda表达式的参数直接当成instanceMethod|staticMethod的参数来调用。
+前两种方式类似，等同于把lambda表达式的参数直接当成instanceMethod\|staticMethod的参数来调用。
 
 比如 `System.out::println` 等同于 `x->System.out.println(x);`
 `Math::max`等同于`(x, y)->Math.max(x,y)`。
