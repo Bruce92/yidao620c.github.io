@@ -44,7 +44,7 @@ URL就算一个WEB地址，你在浏览器输入这个地址， &hellip;">
 <hgroup>
   <h1><a href="/">笨跑的一刀</a></h1>
   
-    <h2>Code is sexy, like Amy!</h2>
+    <h2>Code is sexy, like Amy</h2>
   
 </hgroup>
 <nav id="main-nav"><ul class="main">
@@ -352,23 +352,17 @@ django是通过正则式来匹配URL的。关于正则式这里不想展开太�
 <span class="line-number">15</span>
 <span class="line-number">16</span>
 <span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span> <span class="n">Blog</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">        <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span> <span class="n">Blog</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span> <span class="o">%</span><span class="p">}</span>
-</span><span class="line">    <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">published</span><span class="p">:</span> <span class="p"></span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class="line">            <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">&gt;</span><span class="p"></span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class="line">            <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p"></span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
-</span><span class="line"><span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>Django Girls Blog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>在<code>{% for %}</code> 和<code>{% endfor %}</code>之间会循环每个post，然后每次生成一段</p>
@@ -383,9 +377,9 @@ django是通过正则式来匹配URL的。关于正则式这里不想展开太�
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
-</span><span class="line"><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s">&#39;动态文章列表首页&#39;</span>
-</span><span class="line"><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">git add .
+</span><span class="line">git commit -m &#39;动态文章列表首页&#39;
+</span><span class="line">git push origin master
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>恭喜你，目前为止基本的全程已经贯通了。打开admin后添加几篇文章，

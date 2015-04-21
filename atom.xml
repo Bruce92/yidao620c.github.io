@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-20T19:59:07+08:00</updated>
+  <updated>2015-04-21T13:57:17+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -12,6 +12,491 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（6）- 模板继承]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-06.html"/>
+    <updated>2015-04-21T11:44:21+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-06</id>
+    <content type="html"><![CDATA[<h3 id="section">什么是模板继承？</h3>
+<p>就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
+通过这种方式你就需要在每个页面复制粘贴同样的代码了。
+如果你想改变页面某个公共部分，你不需要每个页面的去修改，只需要修改一个模板就行了，
+这样最大化复用，减少了冗余，也减少了出错的几率，而且你敲的代码也少了。</p>
+
+<h3 id="base">创建一个base模板</h3>
+<p>一个base模板就是你全站所有页面都会继承的最基本的网站框架模板。我们在blog/templates/blog/中创建一个base.html模板：</p>
+
+<pre><code>blog
+└───templates
+    └───blog
+            base.html
+            post_list.html
+</code></pre>
+
+<p>打开base.html，然后将post_list.html的所有内容都复制过来，现在它的内容如下：<!--more--></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;title&gt;</span>Django Girls Blog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                {% for post in posts %}
+</span><span class="line">                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">                {% endfor %}
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>在base.html中，将…块替换成下面的：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="ni">&amp;#123;</span>% block content %}
+</span><span class="line">            <span class="ni">&amp;#123;</span>% endblock %}
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>我们其实就是将<code>{% for post in posts %}{% endfor %}</code>
+替换成了<code>&amp;#123;% block content %}&amp;#123;% endblock %}</code>。
+在base.html中我们创建了一个名字为content的block，其他页面可以通过继承base.html，
+替换这个content块来生成新的页面，页面其他内容保持不变。</p>
+
+<p>保存后，再修改post_list.html页面，只保留的内容：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% for post in posts %}
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">{% endfor %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后添加这句到post_list.html页面的最开始部分：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这句话的意思就是该模板继承自blog/base.html模板</p>
+
+<p>还有一步就是要将刚刚的内容放到{% block content %}和
+{% endblock content %}之间，这时候整个页面是这样的：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
+</span><span class="line"><span class="ni">&amp;#123;</span>% block content %}
+</span><span class="line">{% for post in posts %}
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">{% endfor %}
+</span><span class="line"><span class="ni">&amp;#123;</span>% endblock content %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>保存后刷新页面，看下是不是能正常工作：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj016.jpg" alt="" /></p>
+
+<p>一切都OK…</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（5）- 页面美化]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-05.html"/>
+    <updated>2015-04-21T10:23:50+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-05</id>
+    <content type="html"><![CDATA[<h3 id="css">什么是css？</h3>
+<p>css是一种用来描述某种标记语言写的web站点的样式语言。
+这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： <a href="http://www.codecademy.com/tracks/web">Codeacademy HTML &amp; CSS course</a></p>
+
+<p>不想从头开始写，因为我们有现成的css框架，没必要重复造轮子。</p>
+
+<h3 id="bootstrap">使用Bootstrap</h3>
+<p>目前最流行的css框架非bootstrap莫属了，官网地址：<a href="http://getbootstrap.com/">http://getbootstrap.com/</a></p>
+
+<p>只需要在你的html模板页面的开始部分添加下面几句就行了</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>你的工程里面不需要引入任何的文件，因为这里直接引用了bootstrap公共的css和js文件。<!--more--></p>
+
+<p>再次打开模板文件，效果如下：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj011.jpg" alt="" /></p>
+
+<p>是不是感觉变美观了。^_^</p>
+
+<h3 id="django">django静态文件</h3>
+<p>这里我还将讲解下django中的静态文件。静态文件就是css、js、图片、视频等等那些内容不会改变的文件，不管任何时候，对于任何用户都是一样的。</p>
+
+<p>css就是一种静态文件，为了自定义css，我们必须先再django中配置，你只需要配置一次就可以了。那让我们马上开始吧！</p>
+
+<h3 id="django-1">django中配置静态文件</h3>
+<p>首先我们需要创建一个目录来存储静态文件，在manage.py的同级目录中创建一个static文件夹</p>
+
+<pre><code>mysite
+├─── static
+└─── manage.py
+</code></pre>
+
+<p>打开配置文件mysite/settings.py，在最后面添加如下配置：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&quot;static&quot;</span><span class="p">),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>它告知django应该在哪个位置去查找静态文件。</p>
+
+<h3 id="css-1">第一个CSS文件</h3>
+<p>现在我们开始创建自己的css文件了，首先在static目录中新建一个css目录，然后在里面创建一个blog.css文件。目录结构如下</p>
+
+<pre><code>static
+└─── css
+     └───blog.css
+</code></pre>
+
+<p>打开文件static/css/blog.css后，添加如下内容</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nt">h1</span> <span class="nt">a</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#FCA205</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>h1 a是CSS选择器，上面的意思是在h1标签下的链接a的文字颜色会是#FCA205，其实就是橘黄色，颜色都是用十六进制表示的。</p>
+
+<p>接下来我们要让模板加载静态css文件，打开blog/templates/blog/post_list.html，在最开始部分加入：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">staticfiles</span> <span class="o">%</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后在bootstrap引用的后面添加下面这句</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>最后，整个模板文件类似这样：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line">    <span class="nt">&lt;head&gt;</span>
+</span><span class="line">        <span class="nt">&lt;title&gt;</span>Django Girls blog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;body&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div&gt;</span>
+</span><span class="line">            <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line">        {% for post in posts %}
+</span><span class="line">            <span class="nt">&lt;div&gt;</span>
+</span><span class="line">                <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">                <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        {% endfor %}
+</span><span class="line">    <span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>OK，保存并刷新后看看效果</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj012.jpg" alt="" /></p>
+
+<p>我想要文字左边的边距大一点，这样会好看些。那么在blog.css中添加如下内容：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nt">body</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">padding-left</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>刷新页面后效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj013.jpg" alt="" /></p>
+
+<p>我还想自定义文字标题的字体，在post_list.html模板的中添加如下一句</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这句会引入Google的一个字体Lobster，然后修改blog.css中的h1 a的样式如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nt">h1</span> <span class="nt">a</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#FCA205</span><span class="p">;</span>
+</span><span class="line">    <span class="k">font-family</span><span class="o">:</span> <span class="s1">&#39;Lobster&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>刷新后的效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj014.jpg" alt="" /></p>
+
+<h3 id="cssclass">CSS中的class</h3>
+<p>在CSS中有一个class的概念，它可以让你只改变HTML中某一部分的样式而不会影响到其他部分。</p>
+
+<p>这里我们将区别标题头和文章本身的样式。</p>
+
+<p>在post_list.html中添加如下的标题段：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>文章列表段修改如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            {% for post in posts %}
+</span><span class="line">                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">            {% endfor %}
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>blog.css样式修改如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nc">.page-header</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">background-color</span><span class="o">:</span> <span class="m">#ff9400</span><span class="p">;</span>
+</span><span class="line">    <span class="k">margin-top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class="line">    <span class="k">padding</span><span class="o">:</span> <span class="m">20px</span> <span class="m">20px</span> <span class="m">20px</span> <span class="m">40px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.page-header</span> <span class="nt">h1</span><span class="o">,</span> <span class="nc">.page-header</span> <span class="nt">h1</span> <span class="nt">a</span><span class="o">,</span> <span class="nc">.page-header</span> <span class="nt">h1</span> <span class="nt">a</span><span class="nd">:visited</span><span class="o">,</span> <span class="nc">.page-header</span> <span class="nt">h1</span> <span class="nt">a</span><span class="nd">:active</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+</span><span class="line">    <span class="k">font-size</span><span class="o">:</span> <span class="m">36pt</span><span class="p">;</span>
+</span><span class="line">    <span class="k">text-decoration</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.content</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">margin-left</span><span class="o">:</span> <span class="m">40px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span><span class="o">,</span> <span class="nt">h4</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">font-family</span><span class="o">:</span> <span class="s1">&#39;Lobster&#39;</span><span class="o">,</span> <span class="k">cursive</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.date</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#828282</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.save</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.post-form</span> <span class="nt">textarea</span><span class="o">,</span> <span class="nc">.post-form</span> <span class="nt">input</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.top-menu</span><span class="o">,</span> <span class="nc">.top-menu</span><span class="nd">:hover</span><span class="o">,</span> <span class="nc">.top-menu</span><span class="nd">:visited</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+</span><span class="line">    <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class="line">    <span class="k">font-size</span><span class="o">:</span> <span class="m">26pt</span><span class="p">;</span>
+</span><span class="line">    <span class="k">margin-right</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.post</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">70px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.post</span> <span class="nt">h1</span> <span class="nt">a</span><span class="o">,</span> <span class="nc">.post</span> <span class="nt">h1</span> <span class="nt">a</span><span class="nd">:visited</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#000000</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>保存这些文件后，刷新页面，看看，是不是很酷了：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj015.jpg" alt="" /></p>
+
+<p>已经比较美观了。上面的css应该看起来不会那么难，可以自己试着去修改它，没关系的，反正出错了可以撤销。最好多练习才行。</p>
+
+<p>下一节我将介绍django中模板的继承机制！</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（4）- 三部曲]]></title>
@@ -275,23 +760,17 @@ django是通过正则式来匹配URL的。关于正则式这里不想展开太�
 <span class="line-number">15</span>
 <span class="line-number">16</span>
 <span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span> <span class="n">Blog</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">        <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span> <span class="n">Blog</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span> <span class="o">%</span><span class="p">}</span>
-</span><span class="line">    <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">published</span><span class="p">:</span> <span class="p"></span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class="line">            <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">&gt;</span><span class="p"></span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class="line">            <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p"></span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
-</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
-</span><span class="line"><span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
-</span><span class="line"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>Django Girls Blog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>在<code>{% for %}</code> 和<code>{% endfor %}</code>之间会循环每个post，然后每次生成一段</p>
@@ -306,9 +785,9 @@ django是通过正则式来匹配URL的。关于正则式这里不想展开太�
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
-</span><span class="line"><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s">&#39;动态文章列表首页&#39;</span>
-</span><span class="line"><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">git add .
+</span><span class="line">git commit -m &#39;动态文章列表首页&#39;
+</span><span class="line">git push origin master
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>恭喜你，目前为止基本的全程已经贯通了。打开admin后添加几篇文章，
@@ -5554,400 +6033,6 @@ redis会把所接收到的每一次写操作请求都追加到appendonly.aof文�
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>另外，还可以将ValueLatch设置为限时的，将getValue使用await的限时版实现，那么就可以指定多少时间内搜索结果，搜不到就超时中断。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[快速排序和二分查找]]></title>
-    <link href="http://yidao620c.github.io/blog/20150418/sort-search.html"/>
-    <updated>2015-04-18T12:48:25+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150418/sort-search</id>
-    <content type="html"><![CDATA[<h3 id="section">快速排序算法和二分搜索算法：</h3>
-
-<p>算法主要分为排序算法、搜索算法、图算法。图算法我用得不多，没有发言权，本文就不说了。</p>
-
-<p>排序算法中最快的是快速排序算法，搜索算法中最快的是二分搜索算法。我也最喜欢这2 个算法。
-因为它们是使用递归实现的，代码简洁清晰，效率又非常高。</p>
-
-<p>根据我的理解，算法的本质就是数学。根据输入和设定的目标，采用有限的步骤实现输出。通常，使用计算机实现的算法，都会用到循环，这样才能发挥计算机高速运算的优势。</p>
-
-<p>循环和递归是等效的，这已经被科学家所证明。数学上没有循环，只有递归的概念，因此使用递归代替循环表示算法有很多好处：</p>
-
-<ol>
-  <li>递归的代码要比循环简洁很多，也优雅很多。</li>
-  <li>递归的代码可以用数学方式建模，可以从数学角度验证其正确性。</li>
-</ol>
-
-<p>很多函数式语言甚至没有循环的概念和关键字，强迫你使用递归来实现循环。如，ErLang 。
-递归也有一些缺点，递归使用栈来保存函数地址和参数、返回值，而栈是有一定大小的，过多的递归调用可能会造成栈溢出。但是，递归算法会容易转变为循环。我更欣赏递归的简洁，除非真的出现栈溢出的问题，我是不会使用循环的。</p>
-
-<p><br />
-<strong>二分搜索算法</strong></p>
-
-<p>理论：</p>
-
-<p>二分搜索算法用于针对已排序的集合进行搜索。</p>
-
-<p>它的原理是：</p>
-
-<ol>
-  <li>找到排序数组的中间元素，如果它匹配目标值，那么就返回它在数组中的索引。</li>
-  <li>如果没有找到，那么判断中间值比目标值大还是小，
-如果中间值比目标值大，那么就对第一个元素到middle-1 的元素递归这个过程。
-如果中间值比目标值小，那么就对middle+1 到最后一个元素。</li>
-  <li>如果结束的索引小于开始的索引，返回-1 ，表示没有找到。</li>
-  <li>如果子集合有2 个元素，那么各自比较。因为Java 的整数除法会舍弃小数，如果数组只有2 个元素，那么middle 值一直都是第一个元素。</li>
-</ol>
-
-<p>经过上述的递归过程，最终将返回匹配元素的索引，或者是-1 ，表示找不到。<!--more--></p>
-
-<p>二分搜索算法之所以速度快，是因为它每次可以把数组切分成两半，每次递归调用都能去除一半数据，而不用匹配每一个数据。下面是代码，逻辑清楚，代码简单。</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/**</span>
-</span><span class="line"><span class="cm"> * @param array</span>
-</span><span class="line"><span class="cm"> * @param start</span>
-</span><span class="line"><span class="cm"> * @param end</span>
-</span><span class="line"><span class="cm"> *            这是最后一个元素的索引，第一次调用应该是array.length - 1</span>
-</span><span class="line"><span class="cm"> * @param value</span>
-</span><span class="line"><span class="cm"> * @return</span>
-</span><span class="line"><span class="cm"> */</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">    <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
-</span><span class="line">    <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">start</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">    <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">==</span> <span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">return</span> <span class="n">start</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">return</span> <span class="n">end</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">middle</span><span class="o">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">middle</span><span class="o">;</span>
-</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">array</span><span class="o">[</span><span class="n">middle</span><span class="o">])</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">end</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">array</span><span class="o">[</span><span class="n">middle</span><span class="o">])</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">start</span><span class="o">,</span> <span class="n">middle</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>上述代码稍加改变，就可以排序任意类型。如使用泛型，然后加上对Comparable 接口的实现即可。</p>
-
-<p><br />
-<strong>快速排序算法</strong></p>
-
-<p>二分搜索算法确实非常快，但是它只能用于已排序数组。如果数组未排序呢，该怎么办呢？简单，先用快速排序算法进行排序，然后再用二分搜索进行搜索。</p>
-
-<p>先排序再搜索，要比匹配每一个元素快得多。搜索引擎，数据库索引也都使用了对数据集合的排序技术，这样搜索数据才会快速。</p>
-
-<p>最慢，也是最容易想到的排序算法是插入排序算法：</p>
-
-<ol>
-  <li>遍历数组，找出最小的元素，把它放到第一个元素。</li>
-  <li>循环查找未排序的数组，直到整个数组排序。</li>
-</ol>
-
-<p>这需要2 个嵌套的循环，意味着它的效率是O(n^2);</p>
-
-<p>之所以插入排序的效率如此之地，是因为要找出整个数组中最小的数据，需要遍历整个数组的元素。</p>
-
-<p>而插入排序聪明就聪明在它不查找整个数组最小、次小… 的元素，而是每次仅仅把小于某个元素的值移到一边，通过迭代最终自动实现排序。这就大大节约了排序所需的计算步骤。</p>
-
-<p><strong>快速排序算法理论：</strong></p>
-
-<ol>
-  <li>如果S 中的元素个数是0 或者1 ，那么返回。</li>
-  <li>选取S 中的任一元素v ，称为中心点。</li>
-  <li>将S 集合中的元素分为2 个部分：L={ 小于pivot 的元素+ pivot } 和R={ 大于或者等于pivot 的元素} 。</li>
-  <li>返回L 和R 。</li>
-</ol>
-
-<p>我们使用Java 使用的是就地排序的方式，因此不需要返回值。
-因为Java 是一种可以修改变量的语言，用函数式语言的术语来说，就是有“副作用”。我们利用这个副作用直接修改作为参数的Array ，不需要返回值</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/**</span>
-</span><span class="line"><span class="cm"> * 快速排序，有副作用 从小到大</span>
-</span><span class="line"><span class="cm"> *</span>
-</span><span class="line"><span class="cm"> * @param array</span>
-</span><span class="line"><span class="cm"> * @param start</span>
-</span><span class="line"><span class="cm"> * @param end</span>
-</span><span class="line"><span class="cm"> *            这是最后一个元素的索引，第一次调用应该是array.length - 1</span>
-</span><span class="line"><span class="cm"> */</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">quickSort</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">    <span class="c1">// 有可能造成start&gt;end 因为递归调用时j+1 ，可能引起j 比end 还大1 。 </span>
-</span><span class="line">            <span class="c1">// 另外如果数组是空的，或者输入错误也会出现这种情况</span>
-</span><span class="line">    <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">&lt;=</span> <span class="n">start</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">return</span><span class="o">;</span>
-</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class="line">        <span class="c1">// 取中间元素为中心点，然后移到最右边</span>
-</span><span class="line">        <span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
-</span><span class="line">        <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">];</span>
-</span><span class="line">        <span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">]</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">sign</span><span class="o">];</span>
-</span><span class="line">        <span class="n">array</span><span class="o">[</span><span class="n">sign</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
-</span><span class="line">        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span>
-</span><span class="line">        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-</span><span class="line">            <span class="c1">// 小于的元素和标记互换，等于的不能互换，否则会形成死循环</span>
-</span><span class="line">            <span class="k">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">])</span> <span class="o">{</span>
-</span><span class="line">                <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-</span><span class="line">                <span class="n">array</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
-</span><span class="line">                <span class="n">array</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
-</span><span class="line">                <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
-</span><span class="line">            <span class="o">}</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">        <span class="c1">// 把标记元素和第一个&gt;= 它的元素位置互换</span>
-</span><span class="line">                    <span class="c1">// 这样数组就分成2 个部分，一个部分比中心值小，一个部分比中心值大。</span>
-</span><span class="line">        <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
-</span><span class="line">        <span class="n">array</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">];</span>
-</span><span class="line">        <span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
-</span><span class="line">        <span class="n">quickSort</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">start</span><span class="o">,</span> <span class="n">j</span><span class="o">);</span>
-</span><span class="line">        <span class="n">quickSort</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">end</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><br />
-<strong>最后总结：</strong></p>
-
-<ul>
-  <li>Java 的Arrays 类也使用快速排序算法进行排序。但它的代码写得像天书一样。</li>
-  <li>提高快速排序算法执行效率的主要方法是对中心点进行检测，希望选中的中心点有更大的概率是整个数组的中值。</li>
-  <li>我的实现中简单的选择数组中间的值作为中心点，一般来说这样的选择效率还是不错的。</li>
-  <li>注意上面的一项实现技术，我们使用把中心数据元素移到数组最后的方式实现了数组的就地比较。这是比较常用的技术，把数据移到数组的最前面或者最后面，方便比较数据。</li>
-  <li>另外，我的Java 快速排序代码使用了“副作用”，而在纯函数式语言，如Haskell,ErLang 中是没有“副作用”的，也就是说变量不可以重新赋值。此时就需要返回值，每次都创建新的子数组。但函数式语言的数组处理功能很强，也会做很多性能优化，因此函数式语言实现快速排序代码更加简单，没有“副作用”，也更加数学化。</li>
-  <li>JDK使用二分搜索和快速排序算法实现搜索和排序，足见上述两个算法的性能优势。</li>
-</ul>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[centos6更新yum源]]></title>
-    <link href="http://yidao620c.github.io/blog/20150413/centos-yum.html"/>
-    <updated>2015-04-13T19:02:42+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150413/centos-yum</id>
-    <content type="html"><![CDATA[<h4 id="section">先备份</h4>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo<span class="o">{</span>,.bak<span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h4 id="centos-baserepo">修改CentOS-Base.repo</h4>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># CentOS-Base.repo</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line"><span class="c"># The mirror system uses the connecting IP address of the client and the</span>
-</span><span class="line"><span class="c"># update status of each mirror to pick mirrors that are updated to and</span>
-</span><span class="line"><span class="c"># geographically close to the client. You should use this for CentOS updates</span>
-</span><span class="line"><span class="c"># unless you are manually picking other mirrors.</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line"><span class="c"># If the mirrorlist= does not work for you, as a fall back you can try the </span>
-</span><span class="line"><span class="c"># remarked out baseurl= line instead.</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line"><span class="c">#</span>
-</span><span class="line">
-</span><span class="line"><span class="o">[</span>base<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Base
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/os/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#released updates </span>
-</span><span class="line"><span class="o">[</span>updates<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Updates
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/updates/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#additional packages that may be useful</span>
-</span><span class="line"><span class="o">[</span>extras<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Extras
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/extras/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#additional packages that extend functionality of existing packages</span>
-</span><span class="line"><span class="o">[</span>centosplus<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Plus
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/centosplus/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">enabled</span><span class="o">=</span>0
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span><span class="line">
-</span><span class="line"><span class="c">#contrib - packages by Centos Users</span>
-</span><span class="line"><span class="o">[</span>contrib<span class="o">]</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Contrib
-</span><span class="line"><span class="c">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=contrib</span>
-</span><span class="line"><span class="nv">baseurl</span><span class="o">=</span>http://mirrors.163.com/centos/<span class="nv">$releasever</span>/contrib/<span class="nv">$basearch</span>/
-</span><span class="line"><span class="nv">gpgcheck</span><span class="o">=</span>1
-</span><span class="line"><span class="nv">enabled</span><span class="o">=</span>0
-</span><span class="line"><span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>接下来我们来更新下yum：<!--more--></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">yum clean all
-</span><span class="line">yum makecache  <span class="c"># 将服务器上的软件包信息缓存到本地,以提高搜索安装软件的速度</span>
-</span><span class="line">yum install vim*  <span class="c"># 测试域名是否可用</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h4 id="rpmforge">附：增加RPMforge源</h4>
-<ul>
-  <li>download the rpmforge package：
-<a href="http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm">http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm</a></li>
-  <li>Install DAG’s GPG key</li>
-</ul>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>如果上面出现错误，确认下：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo rpm -K rpmforge-release-0.5.2-2.el6.rf.*.rpm
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ul>
-  <li>然后安装rpm</li>
-</ul>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo rpm -i rpmforge-release-0.5.2-2.el6.rf.*.rpm
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ul>
-  <li>试试看：</li>
-</ul>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo yum install htop
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ul>
-  <li>开始更新系统：</li>
-</ul>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo yum update
-</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 ]]></content>
   </entry>
