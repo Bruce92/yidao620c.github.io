@@ -9,10 +9,8 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（2）- 模型 什么是模型？
-django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
-发表的文章就是一个模型，需要存储在数据库中。
-这里我们使用django默认的sqlite3库， &hellip;">
+	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（3）- 部署 到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？ Heroku简介
+Heroku是一个主机托管平台， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,6 +94,53 @@ django的模型就是用于在数据库中存储的某种类型的对象。在�
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-03.html" itemprop="url">Django1.7开发博客（3）- 部署</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？</p>
+
+<h3 id="heroku">Heroku简介</h3>
+<p>Heroku是一个主机托管平台，对于访问量不是很大的小应用是免费的，正好适用于我们的这个例子。</p>
+
+<p>Heroku官网上有一篇django的教程：
+<a href="https://devcenter.heroku.com/articles/getting-started-with-django">getting started with django</a></p>
+
+<p>这里我把它复制到这里来详细讲解一下。</p>
+
+<h3 id="requirementstxt">requirements.txt文件</h3>
+<p>我们需要创建一个requirements.txt文件来告知Heroku需要在服务器上创建哪些python包。</p>
+
+<p>不过首先，Heroku需要我们在本地按照一些包。在python虚拟环境virtualenv下面执行：
+		
+		<a href="/blog/20150420/simpleblog-03.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -436,56 +481,6 @@ XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力
 这些步骤以“／”字符分开，每一步有三个构成成分：
 		
 		<a href="/blog/20150420/xpath-introduce.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/yaml/'>yaml</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/yaml-introduce.html" itemprop="url">Yaml入门笔记</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>Wiki：</strong></p>
-
-<p>YAML（IPA: /ˈjæməl/，尾音类似camel骆驼）是一个可读性高，用来表达资料序列的格式。
-YAML参考了其他多种语言，包括：XML、C语言、Python、Perl以及电子邮件格式RFC2822。
-Clark Evans在2001年在首次发表了这种语言[1] ，
-另外Ingy döt Net与Oren Ben-Kiki也是这语言的共同设计者。
-目前已经有数种编程语言或脚本语言支援（或者说解析）这种语言。</p>
-
-<p>YAML是”YAML Ain’t a Markup Language”（YAML不是一种置标语言）的递回缩写。
-在开发的这种语言时，YAML 的意思其实是：”Yet Another Markup Language”（仍是一种置标语言），
-但为了强调这种语言以数据做为中心，而不是以置标语言为重点，而用返璞词重新命名。</p>
-
-<p>最新版本为1.2，官方说明地址： <a href="http://www.yaml.org/spec/1.2/spec.html">http://www.yaml.org/spec/1.2/spec.html</a></p>
-
-<p>使用方式：作为配置文件，数据交换格式，序列化对象存储，测试数据文件，</p>
-
-<p>一个简单的示例：
-		
-		<a href="/blog/20150420/yaml-introduce.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>
