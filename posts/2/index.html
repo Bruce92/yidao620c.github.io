@@ -9,8 +9,10 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 mosquitto, mqtt Mqtt消息中间件mosquitto的安装和配置 Wiki
-Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。 MQTT（MQ Telemetry Transport）， &hellip;">
+	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（2）- 模型 什么是模型？
+django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
+发表的文章就是一个模型，需要存储在数据库中。
+这里我们使用django默认的sqlite3库， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -94,6 +96,158 @@ Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列�
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-02.html" itemprop="url">Django1.7开发博客（2）- 模型</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">什么是模型？</h3>
+<p>django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
+发表的文章就是一个模型，需要存储在数据库中。
+这里我们使用django默认的sqlite3库，对于我们的这个小系统而言已经足够了。</p>
+
+<h3 id="section-1">创建一个应用</h3>
+<p>在django中有两个概念需要弄清楚。一个是工程（project）的概念，一个是应用（application）的概念。
+它们的关系是：一个工程中包含多个应用。每个应用都是独立的，应用通过setting.py注册到工程中来就可以使用了。
+这样可以解耦合，并且好的应用也可以复用。很好的模块化设计！</p>
+
+<p>在manage.py文件所在目录，执行下面命令：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">(myvenv) [mango@centos00 mysite]$ python manage.py startapp blog</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>你会看到一个新的blog文件夹被创建，并且下面多了许多文件，目前结构如下：
+		
+		<a href="/blog/20150420/simpleblog-02.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-01.html" itemprop="url">Django1.7开发博客（1）- 入门篇</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">开篇</h3>
+<p>笔者用过django一段时间了，是时候做点笔记了。不过官网文档稍微有点复杂，对新手而言很困难，
+而网上的一些教程很多都过时了。
+最近看到一个外文的教程非常不错，
+网址是：<a href="http://tutorial.djangogirls.org/">http://tutorial.djangogirls.org/</a>，
+这个是基于最新的django1.7写的，通俗易懂，非常适合新手入门。
+那么我自己参考这个整理了一下这个教程，同时还将源码上传到GitHub上去了。
+希望对于大家有帮助。教程中如果有不足之处希望大家不吝赐教 ^_^</p>
+
+<p>参考教程：<a href="http://tutorial.djangogirls.org/">http://tutorial.djangogirls.org/</a></p>
+
+<p>GitHub项目地址：<a href="https://github.com/yidao620c/simpleblog">https://github.com/yidao620c/simpleblog</a></p>
+
+<p>Heroku演示地址：<a href="https://yidaoblog.herokuapp.com/">https://yidaoblog.herokuapp.com/</a>
+		
+		<a href="/blog/20150420/simpleblog-01.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/keepalived/'>keepalived</a>, <a class='category' href='/blog/categories/lvs/'>lvs</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/lvs-keepalived.html" itemprop="url">CentOS6.5上LVS和KeepAlived搭建高可用负载均衡集群</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="section">一、理论知识（原理）</h2>
+<p>我们不仅要知其然，而且要知其所以然，所以先给大家准备一些理论知识课，这样对以后的应用将会事半功倍。</p>
+
+<p><strong>1、什么是LVS？</strong></p>
+
+<p>请阅读作者章文嵩博士自己的研究报告，共计4部分，看完后对集群和LVS就有了初步的了解，不懂时可以翻翻。</p>
+
+<ul>
+  <li>LVS项目介绍：<a href="http://www.linuxvirtualserver.org/zh/lvs1.html">http://www.linuxvirtualserver.org/zh/lvs1.html</a></li>
+  <li>LVS集群的体系结构：<a href="http://www.linuxvirtualserver.org/zh/lvs2.html">http://www.linuxvirtualserver.org/zh/lvs2.html</a></li>
+  <li>LVS集群中的IP负载均衡技术：<a href="http://www.linuxvirtualserver.org/zh/lvs3.html">http://www.linuxvirtualserver.org/zh/lvs3.html</a></li>
+  <li>LVS集群的负载调度：<a href="http://www.linuxvirtualserver.org/zh/lvs4.html">http://www.linuxvirtualserver.org/zh/lvs4.html</a></li>
+</ul>
+
+<p><strong>2、什么是KeepAlived?</strong></p>
+
+<p>Keepalived原理与实战精讲： <a href="http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/">http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</a></p>
+
+<p><strong>3、什么是CentOS?</strong></p>
+
+<p>百度百科给出的答案：<a href="http://baike.baidu.com/link?url=X3SzN3bJWjW_PkWC6GB2MTs5KhVmxBAxnCRjs9W7-IARDiHloZ_oRWj17BEz0kY3">什么是CentOS</a></p>
+
+<p><strong>4、小结</strong></p>
+
+<p>相信读了以上的理论知识后，已经对集群的实现原理有了大概的了解，那接下来我们就开始动手吧。
+		
+		<a href="/blog/20150420/lvs-keepalived.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -332,184 +486,6 @@ Clark Evans在2001年在首次发表了这种语言[1] ，
 <p>一个简单的示例：
 		
 		<a href="/blog/20150420/yaml-introduce.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/fastjson/'>fastjson</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/fastjson-date.html" itemprop="url">fastjson对Date的处理</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>fastjson对日期的序列化方式：</strong></p>
-
-<p>一种方法是通过注解</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
-</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>另一种是通过SerializeConfig：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
-</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
-</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
-</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
-</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>json字符串中使用单引号：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-		
-		<a href="/blog/20150420/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-python-client.html" itemprop="url">使用python开发RabbitMQ应用</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
-
-<p>测试环境：CentOS 6.2</p>
-
-<p><strong>1，测试环境准备</strong></p>
-
-<p>安装python（一般系统都自带了python）</p>
-
-<p>安装RabbitMQ server可以参考前面的文章。</p>
-
-<p>安装pika</p>
-
-<p>使用pip安装的时候可能会报错：</p>
-
-<p><code>importerror no module named pkg_resources</code></p>
-
-<p>请用下面命令解决这个问题：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>然后还可能出现：</p>
-
-<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
-
-<p>这时候先把pip卸载掉，执行：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
-
-<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面
-		
-		<a href="/blog/20150420/rabbitmq-python-client.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-server.html" itemprop="url">CentOS6.4安装rabbitmq-server</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
-<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
-
-<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
-</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>3,解压tar文件</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>4,编辑Setup.dist</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
-</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>找到
-		
-		<a href="/blog/20150420/rabbitmq-server.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

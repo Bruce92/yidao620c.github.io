@@ -9,27 +9,7 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-13 linux Centos6更新yum源 先备份 1
-mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19 &hellip;">
+	<meta name="description" content="2015-04-18 memcached Linux上安装memcached 一 准备安装文件 下载memcached与libevent的安装文件： memcached下载地址：memcached-1.4.15.tar.gz libevent下载地址：libevent-2.0.21-stable &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -113,6 +93,194 @@ mv /etc/yum.repos.d/CentOS-Base.repo{,.bak} 修改CentOS-Base.repo
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/memcached/'>memcached</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/memcached-install.html" itemprop="url">Linux上安装memcached</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>一 准备安装文件</strong></p>
+
+<p>下载memcached与libevent的安装文件：</p>
+
+<p>memcached下载地址：<a href="http://memcached.googlecode.com/files/memcached-1.4.15.tar.gz">memcached-1.4.15.tar.gz</a></p>
+
+<p>libevent下载地址：<a href="https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz">libevent-2.0.21-stable.tar.gz</a></p>
+
+<p><strong>二 具体安装步骤</strong></p>
+
+<ol>
+  <li>由于memcached依赖于libevent，因此需要安装libevent。由于linux系统可能默认已经安装libevent，执行命令：</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">rpm -qa|grep libevent </span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>查看系统是否带有该安装软件，如果有执行命令:</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># 由于系统自带的版本旧，忽略依赖删除
+</span><span class="line">rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>安装libevent命令：
+		
+		<a href="/blog/20150418/memcached-install.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/puzzle/'>puzzle</a>, <a class='category' href='/blog/categories/recursive/'>recursive</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/concurrent-recursive.html" itemprop="url">利用递归算法并行化解决谜题框架</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>我们将谜题定义为：包含一个初始位置，一个目标位置，以及用于判断是否是有效移动的规则集。</p>
+
+<p>规则集包含两部分：计算从指定位置开始的所有合法移动，以及每次移动的结果位置。</p>
+
+<p>下面先给出表示谜题的抽象类，其中的类型参数P和M表示位置类和移动类。根据这个接口，我们可以写一个简单的串行求解程序，该程序将在谜题空间Puzzle Space中查找，直到找到一个解答或者找遍了整个空间都没有发现答案。注：一个移动M代表一步</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/** 表示 搬箱子 之类谜题的抽象类*/</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Puzzle</span><span class="o">&lt;</span><span class="n">P</span><span class="o">,</span> <span class="n">M</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">P</span> <span class="nf">initialPosition</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="kt">boolean</span> <span class="nf">isGoal</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">Set</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="nf">legalMoves</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">P</span> <span class="nf">move</span><span class="o">(</span><span class="n">P</span> <span class="n">position</span><span class="o">,</span> <span class="n">M</span> <span class="n">move</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>下面的PuzzleNode代表通过一系列的移动到达的一个位置，其中保存了到达该位置的移动以及前一个Node。只要沿着PuzzleNode链接逐步回溯，就可以重新构建出达到当前位置的移动序列。
+		
+		<a href="/blog/20150418/concurrent-recursive.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-18</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/search/'>search</a>, <a class='category' href='/blog/categories/sort/'>sort</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150418/sort-search.html" itemprop="url">快速排序和二分查找</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">快速排序算法和二分搜索算法：</h3>
+
+<p>算法主要分为排序算法、搜索算法、图算法。图算法我用得不多，没有发言权，本文就不说了。</p>
+
+<p>排序算法中最快的是快速排序算法，搜索算法中最快的是二分搜索算法。我也最喜欢这2 个算法。
+因为它们是使用递归实现的，代码简洁清晰，效率又非常高。</p>
+
+<p>根据我的理解，算法的本质就是数学。根据输入和设定的目标，采用有限的步骤实现输出。通常，使用计算机实现的算法，都会用到循环，这样才能发挥计算机高速运算的优势。</p>
+
+<p>循环和递归是等效的，这已经被科学家所证明。数学上没有循环，只有递归的概念，因此使用递归代替循环表示算法有很多好处：</p>
+
+<ol>
+  <li>递归的代码要比循环简洁很多，也优雅很多。</li>
+  <li>递归的代码可以用数学方式建模，可以从数学角度验证其正确性。</li>
+</ol>
+
+<p>很多函数式语言甚至没有循环的概念和关键字，强迫你使用递归来实现循环。如，ErLang 。
+递归也有一些缺点，递归使用栈来保存函数地址和参数、返回值，而栈是有一定大小的，过多的递归调用可能会造成栈溢出。但是，递归算法会容易转变为循环。我更欣赏递归的简洁，除非真的出现栈溢出的问题，我是不会使用循环的。</p>
+
+<p><br />
+<strong>二分搜索算法</strong></p>
+
+<p>理论：</p>
+
+<p>二分搜索算法用于针对已排序的集合进行搜索。</p>
+
+<p>它的原理是：</p>
+
+<ol>
+  <li>找到排序数组的中间元素，如果它匹配目标值，那么就返回它在数组中的索引。</li>
+  <li>如果没有找到，那么判断中间值比目标值大还是小，
+如果中间值比目标值大，那么就对第一个元素到middle-1 的元素递归这个过程。
+如果中间值比目标值小，那么就对middle+1 到最后一个元素。</li>
+  <li>如果结束的索引小于开始的索引，返回-1 ，表示没有找到。</li>
+  <li>如果子集合有2 个元素，那么各自比较。因为Java 的整数除法会舍弃小数，如果数组只有2 个元素，那么middle 值一直都是第一个元素。</li>
+</ol>
+
+<p>经过上述的递归过程，最终将返回匹配元素的索引，或者是-1 ，表示找不到。
+		
+		<a href="/blog/20150418/sort-search.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">

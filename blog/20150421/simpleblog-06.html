@@ -197,8 +197,8 @@
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">            <span class="ni">&amp;#123;</span>% block content %}
-</span><span class="line">            <span class="ni">&amp;#123;</span>% endblock %}
+</span><span class="line">            {% block content %}
+</span><span class="line">            {% endblock %}
 </span><span class="line">            <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">        <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
@@ -206,7 +206,7 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>我们其实就是将<code>{% for post in posts %}{% endfor %}</code>
-替换成了<code>&amp;#123;% block content %}&amp;#123;% endblock %}</code>。
+替换成了<code>{% block content %}{% endblock %}</code>。
 在base.html中我们创建了一个名字为content的block，其他页面可以通过继承base.html，
 替换这个content块来生成新的页面，页面其他内容保持不变。</p>
 
@@ -250,7 +250,7 @@
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 </pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
-</span><span class="line"><span class="ni">&amp;#123;</span>% block content %}
+</span><span class="line">{% block content %}
 </span><span class="line">{% for post in posts %}
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
@@ -258,7 +258,7 @@
 </span><span class="line">        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">{% endfor %}
-</span><span class="line"><span class="ni">&amp;#123;</span>% endblock content %}
+</span><span class="line">{% endblock content %}
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>保存后刷新页面，看下是不是能正常工作：</p>

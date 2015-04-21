@@ -1,0 +1,298 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（8）- 继续完善 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="Django1.7开发博客（8）- 继续完善 到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
+我们的博客还有很多功能需要完善，下面抛砖引玉新增几个功能，还有其他功能等你自己去发现和实现。 草稿箱
+之前我们新建文章的时候只是是保存到数据库，也就是仅仅保存了草稿， &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150421/simpleblog-08.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Django1.7开发博客（8）- 继续完善</h1>
+	<div class="entry-content" itemprop="articleBody"><p>到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
+我们的博客还有很多功能需要完善，下面抛砖引玉新增几个功能，还有其他功能等你自己去发现和实现。</p>
+
+<h2 id="section">草稿箱</h2>
+<p>之前我们新建文章的时候只是是保存到数据库，也就是仅仅保存了草稿，还没有对外发布，
+在博客首页上面是看不到的，因为published_date字段为空。这里我们需要添加一个草稿箱的链接。还是四部曲。</p>
+
+<p>第一步，添加一个链接：</p>
+
+<p>打开mysite/templates/mysite/base.html文件，在</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>的上面一行添加如下链接：<!--more--></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_draft_list&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-edit&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>第二步就是配置urls，在blog/urls.py中添加：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^drafts/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_draft_list</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_draft_list&#39;</span><span class="p">),</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>第三步在blog/views.py中添加一个view：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">post_draft_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class="line">    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">published_date__isnull</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-created_date&#39;</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_draft_list.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;posts&#39;</span><span class="p">:</span> <span class="n">posts</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>第四步添加一个template，新建blog/templates/blog/post_draft_list.html，内容如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
+</span><span class="line">{% block content %}
+</span><span class="line">    {% for post in posts %}
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;date&quot;</span><span class="nt">&gt;</span>created: {{ post.created_date|date:&#39;d-m-Y&#39; }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">            <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_detail&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">            <span class="nt">&lt;p&gt;</span>{{ post.text|truncatechars:200 }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    {% endfor %}
+</span><span class="line">{% endblock %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这个模板跟我们的post_list.html非常相似。</p>
+
+<p>刷新首页，点击那个草稿箱链接，看看效果。</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj024.jpg" alt="" /></p>
+
+<h2 id="section-1">发布功能</h2>
+<p>在文章详情页面添加一个发布的按钮，如果觉得合适的时候就能发布文章了。
+每个新功能都是四部曲，你照着这四步做就行，你会发现越来越简单。</p>
+
+<p>第一步在页面上添加一个链接或Form表单，这里我们添加一个链接。</p>
+
+<p>打开blog/template/blog/post_detail.html，将下面这段</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% if post.published_date %}
+</span><span class="line">    {{ post.published_date }}
+</span><span class="line">{% endif %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>换成下面这段：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% if post.published_date %}
+</span><span class="line">    {{ post.published_date }}
+</span><span class="line">{% else %}
+</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_publish&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>Publish<span class="nt">&lt;/a&gt;</span>
+</span><span class="line">{% endif %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这里增加了一个else语句，意思是如果没有发布日期的话就增加一个发布按钮。</p>
+
+<p>第二步添加urls配置，打开blog/urls.py：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;pk&gt;[0-9]+)/publish/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_publish</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_publish&#39;</span><span class="p">),</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>第三步视图，打开blog/views.py：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">post_publish</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+</span><span class="line">    <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+</span><span class="line">    <span class="n">post</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>第四步模板，由于这次没有引入新的模板，所以这步省略。</p>
+
+<p>刷新后看效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj025.jpg" alt="" /></p>
+
+<p>发布之后的效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj026.jpg" alt="" /></p>
+
+<p>注意观察发布前和发布后文章的发布日期那个位置的变化。并且发布后再去首页看看，文章已经可以正常显示了。</p>
+
+<h2 id="section-2">删除功能</h2>
+<p>最后当然需要一个删除功能了，还是四部曲！</p>
+
+<p>第一步是在页面上添加链接，打开blog/templates/blog/post_detail.html，在编辑按钮下面一行添加如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_remove&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-remove&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>第二步配置urls映射，打开blog/urls.py，添加如下一行：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;pk&gt;[0-9]+)/remove/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_remove</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_remove&#39;</span><span class="p">),</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>第三步添加视图view，打开blog/views.py，添加一个视图函数：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">post_remove</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+</span><span class="line">    <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+</span><span class="line">    <span class="n">post</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_list&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>第四步模板，由于这次又没有新的模板，所有这步省略。</p>
+
+<p>OK，刷新页面看效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj027.jpg" alt="" /></p>
+
+<p>删除后再去首页看，已经没有这篇文章了。</p>
+
+<p>恭喜你，你可以大声对自己喊：我太棒了。^_^</p>
+</div>
+
+</article>
+
+  <section id="comment">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150421/simpleblog-08" data-title="Django1.7开发博客（8）- 继续完善" data-url="http://yidao620c.github.io/blog/20150421/simpleblog-08.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    熊能
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

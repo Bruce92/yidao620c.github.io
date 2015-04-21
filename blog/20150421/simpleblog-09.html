@@ -1,0 +1,432 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（9）- 用户认证 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="Django1.7开发博客（9）- 用户认证 安全问题
+你应该注意到了一点，当你去新建、修改和删除文章的时候并不需要登录，
+这样的话任何浏览网站的用户都能随时修改和删除我的文章。这个可不是我想要的！ 编辑和删除的认证
+我们需要保护post_new, &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150421/simpleblog-09.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Django1.7开发博客（9）- 用户认证</h1>
+	<div class="entry-content" itemprop="articleBody"><h2 id="section">安全问题</h2>
+<p>你应该注意到了一点，当你去新建、修改和删除文章的时候并不需要登录，
+这样的话任何浏览网站的用户都能随时修改和删除我的文章。这个可不是我想要的！</p>
+
+<h2 id="section-1">编辑和删除的认证</h2>
+<p>我们需要保护post_new, post_edit和post_publish这三个视图，只有登录用户才有权去执行。
+django为我们提供了很好的帮助类，其实就是利用了python中的decorators技术。
+django中认证的装饰器位于模块django.contrib.auth.decorators中，名称叫login_required。</p>
+
+<p>编辑blog/views.py文件，在import部分添加如下的导入语句：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后在post_new, post_edit和post_publish这三个函数上添加@login_required，
+类似下面<!--more--></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="nd">@login_required</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">post_new</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class="line">    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>好的，现在你再去访问下http://localhost:8000/post/new/，看看有啥变化。</p>
+
+<p>注：如果你仍然能正常进入新建页面，那可能是你之前在admin界面登陆过。
+那么你需要先退出，访问http://localhost:8000/admin/logout/可以退出，然后你再看下效果。</p>
+
+<p>我刚刚添加的@login_required装饰器检测到你尚未登陆的时候会重定向到login页面，
+但是我现在还没有定义login的模板页面，所以这时候会是404错误页面。</p>
+
+<h2 id="section-2">用户登录</h2>
+<p>django在用户认证方面做得很好了，我们只需要去使用它就行。</p>
+
+<p>在mysite/urls.py文件中，添加下面一行</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>现在这个文件内容如下：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line">
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class="line"><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">),</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后我们再定义一个登陆页面，创建目录mysite/templates/registration，
+并在里面新建模板文件login.html，内容如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &quot;mysite/base.html&quot; %}
+</span><span class="line">
+</span><span class="line">{% block content %}
+</span><span class="line">
+</span><span class="line">    {% if form.errors %}
+</span><span class="line">    <span class="nt">&lt;p&gt;</span>Your username and password didn&#39;t match. Please try again.<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">    {% endif %}
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;{% url &#39;django.contrib.auth.views.login&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    {% csrf_token %}
+</span><span class="line">    <span class="nt">&lt;table&gt;</span>
+</span><span class="line">    <span class="nt">&lt;tr&gt;</span>
+</span><span class="line">        <span class="nt">&lt;td&gt;</span>{{ form.username.label_tag }}<span class="nt">&lt;/td&gt;</span>
+</span><span class="line">        <span class="nt">&lt;td&gt;</span>{{ form.username }}<span class="nt">&lt;/td&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/tr&gt;</span>
+</span><span class="line">    <span class="nt">&lt;tr&gt;</span>
+</span><span class="line">        <span class="nt">&lt;td&gt;</span>{{ form.password.label_tag }}<span class="nt">&lt;/td&gt;</span>
+</span><span class="line">        <span class="nt">&lt;td&gt;</span>{{ form.password }}<span class="nt">&lt;/td&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/tr&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/table&gt;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;login&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;next&quot;</span> <span class="na">value=</span><span class="s">&quot;{{ next }}&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">{% endblock %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>你可以看到我们仍然使用到了模板继承。这个时候可以定义一个mysite/templates/mysite/base.html，
+把blog/templates/blog/base.html的内容复制给它即可。</p>
+
+<p>不过我们需要在mysite/settings.py中再添加一个urls配置：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">LOGIN_REDIRECT_URL</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这样的话当用户直接访问login页面后登录成功会重定向到文章列表页面去。</p>
+
+<h2 id="section-3">改进显示</h2>
+<p>现在的确只有登录用户才能修改和删除文章，但是未登录用户却能看到这些按钮，
+这个是很不好的体验。现在如果是未登录用户的话就把这些按钮给隐藏掉。</p>
+
+<p>因此我们修改mysite/templates/mysite/base.html如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        {% if user.is_authenticated %}
+</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_new&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-plus&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_draft_list&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-edit&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">        {% else %}
+</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;django.contrib.auth.views.login&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-lock&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">        {% endif %}
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_list&#39; %}&quot;</span><span class="nt">&gt;</span>Django Girls<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            {% block content %}
+</span><span class="line">            {% endblock %}
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后修改blog/templates/blog/post_detail.html如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
+</span><span class="line">
+</span><span class="line">{% block content %}
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;date&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        {% if post.published_date %}
+</span><span class="line">            {{ post.published_date }}
+</span><span class="line">        {% else %}
+</span><span class="line">            {% if user.is_authenticated %}
+</span><span class="line">                <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_publish&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>Publish<span class="nt">&lt;/a&gt;</span>
+</span><span class="line">            {% endif %}
+</span><span class="line">        {% endif %}
+</span><span class="line">        {% if user.is_authenticated %}
+</span><span class="line">            <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_edit&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-pencil&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">            <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_remove&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-remove&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">        {% endif %}
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h1&gt;</span>{{ post.title }}<span class="nt">&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">{% endblock %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="section-4">用户注销</h2>
+<p>当用户登录后显示欢迎语句，Hello ，然后后面跟一个logout链接。还是依靠django帮我们处理logout动作。</p>
+
+<p>修改mysite/templates/mysite/base.html文件如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    {% if user.is_authenticated %}
+</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_new&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-plus&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;post_draft_list&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-edit&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;</span>Hello {{ user.username }}<span class="nt">&lt;small&gt;</span><span class="ni">&amp;nbsp;</span><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;django.contrib.auth.views.logout&#39; %}&quot;</span><span class="nt">&gt;</span>Log out<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+</span><span class="line">    {% else %}
+</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;django.contrib.auth.views.login&#39; %}&quot;</span> <span class="na">class=</span><span class="s">&quot;top-menu&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-lock&quot;</span><span class="nt">&gt;&lt;/span&gt;&lt;/a&gt;</span>
+</span><span class="line">    {% endif %}
+</span><span class="line">    <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_list&#39; %}&quot;</span><span class="nt">&gt;</span>Django Girls<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>很显然这时候logout肯定会报错。我们还得做些事情。</p>
+
+<p>对于这方面的详细文档请参考：<a href="https://docs.djangoproject.com/en/1.7/topics/auth/default/">https://docs.djangoproject.com/en/1.7/topics/auth/default/</a></p>
+
+<p>打开mysite/urls.py文件，添加一个logout配置：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line">
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class="line"><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">),</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/logout/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.logout&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;next_page&#39;</span><span class="p">:</span> <span class="s">&#39;/&#39;</span><span class="p">}),</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>如果访问网站时出现模板找不到错误，那么你就在mysite/settings.py中添加如下配置：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c"># TEMPLATE_DIRS</span>
+</span><span class="line"><span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&#39;mysite/templates&#39;</span><span class="p">),</span>
+</span><span class="line">    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&#39;blog/templates&#39;</span><span class="p">),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>好的，现在你已经可以达成如下的效果了：</p>
+
+<ol>
+  <li>需要一个用户名和密码登录系统</li>
+  <li>在添加/编辑/删除/发布文章的时候需要登录</li>
+  <li>也能注销</li>
+</ol>
+
+<p>这么说的话，这个博客系统算功能比较完善了！朋友，祝福你。</p>
+</div>
+
+</article>
+
+  <section id="comment">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150421/simpleblog-09" data-title="Django1.7开发博客（9）- 用户认证" data-url="http://yidao620c.github.io/blog/20150421/simpleblog-09.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    熊能
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

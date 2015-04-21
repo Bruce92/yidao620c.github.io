@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：django | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/django/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-21T13:57:17+08:00</updated>
+  <updated>2015-04-21T15:39:01+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -12,6 +12,838 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（9）- 用户认证]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-09.html"/>
+    <updated>2015-04-21T14:47:47+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-09</id>
+    <content type="html"><![CDATA[<h2 id="section">安全问题</h2>
+<p>你应该注意到了一点，当你去新建、修改和删除文章的时候并不需要登录，
+这样的话任何浏览网站的用户都能随时修改和删除我的文章。这个可不是我想要的！</p>
+
+<h2 id="section-1">编辑和删除的认证</h2>
+<p>我们需要保护post_new, post_edit和post_publish这三个视图，只有登录用户才有权去执行。
+django为我们提供了很好的帮助类，其实就是利用了python中的decorators技术。
+django中认证的装饰器位于模块django.contrib.auth.decorators中，名称叫login_required。</p>
+
+<p>编辑blog/views.py文件，在import部分添加如下的导入语句：
+<code>python
+from django.contrib.auth.decorators import login_required
+</code></p>
+
+<p>然后在post_new, post_edit和post_publish这三个函数上添加@login_required，
+类似下面<!--more-->
+<code>python
+@login_required
+def post_new(request):
+    [...]
+</code></p>
+
+<p>好的，现在你再去访问下http://localhost:8000/post/new/，看看有啥变化。</p>
+
+<p>注：如果你仍然能正常进入新建页面，那可能是你之前在admin界面登陆过。
+那么你需要先退出，访问http://localhost:8000/admin/logout/可以退出，然后你再看下效果。</p>
+
+<p>我刚刚添加的@login_required装饰器检测到你尚未登陆的时候会重定向到login页面，
+但是我现在还没有定义login的模板页面，所以这时候会是404错误页面。</p>
+
+<h2 id="section-2">用户登录</h2>
+<p>django在用户认证方面做得很好了，我们只需要去使用它就行。</p>
+
+<p>在mysite/urls.py文件中，添加下面一行
+<code>python
+url(r'^accounts/login/$', 'django.contrib.auth.views.login')
+</code>
+现在这个文件内容如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class='line'><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="err">‘’</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">admin</span><span class="o">/</span><span class="err">’</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">accounts</span><span class="o">/</span><span class="n">login</span><span class="o">/</span><span class="err">$’</span><span class="p">,</span> <span class="err">‘</span><span class="n">django</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">login</span><span class="err">’</span><span class="p">),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’’</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="err">‘</span><span class="n">blog</span><span class="o">.</span><span class="n">urls</span><span class="err">’</span><span class="p">)),</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>然后我们再定义一个登陆页面，创建目录mysite/templates/registration，
+并在里面新建模板文件login.html，内容如下：</p>
+
+<p></p>
+
+<p>&#8220;` html
+{% extends “mysite/base.html” %}</p>
+
+<p>{% block content %}</p>
+
+<pre><code>{% if form.errors %}
+&lt;p&gt;Your username and password didn't match. Please try again.&lt;/p&gt;
+{% endif %}
+
+&lt;form method="post" action="{% url 'django.contrib.auth.views.login' %}"&gt;
+{% csrf_token %}
+&lt;table&gt;
+&lt;tr&gt;
+    &lt;td&gt;{{ form.username.label_tag }}&lt;/td&gt;
+    &lt;td&gt;{{ form.username }}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;{{ form.password.label_tag }}&lt;/td&gt;
+    &lt;td&gt;{{ form.password }}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;input type="submit" value="login" /&gt;
+&lt;input type="hidden" name="next" value="{{ next }}" /&gt;
+&lt;/form&gt; {% endblock %} ``` 
+</code></pre>
+
+<p>你可以看到我们仍然使用到了模板继承。这个时候可以定义一个mysite/templates/mysite/base.html，
+把blog/templates/blog/base.html的内容复制给它即可。</p>
+
+<p>不过我们需要在mysite/settings.py中再添加一个urls配置：
+<code>python
+LOGIN_REDIRECT_URL = '/'
+</code>
+这样的话当用户直接访问login页面后登录成功会重定向到文章列表页面去。</p>
+
+<h2 id="section-3">改进显示</h2>
+<p>现在的确只有登录用户才能修改和删除文章，但是未登录用户却能看到这些按钮，
+这个是很不好的体验。现在如果是未登录用户的话就把这些按钮给隐藏掉。</p>
+
+<p>因此我们修改mysite/templates/mysite/base.html如下：
+</p>
+
+<p>&#8220;` html</p>
+<body>
+    <div class="page-header">
+        {% if user.is_authenticated %}
+        <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
+        {% else %}
+        <a href="{% url 'django.contrib.auth.views.login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+        {% endif %}
+        <h1><a href="{% url 'blog.views.post_list' %}">Django Girls</a></h1>
+    </div>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-8">
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+<p>&#8220;`
+</p>
+
+<p>然后修改blog/templates/blog/post_detail.html如下：
+</p>
+
+<p>&#8220;` html
+{% extends ‘blog/base.html’ %}</p>
+
+<p>{% block content %}
+    &lt;div class=&#8221;date&#8221;&gt;
+        {% if post.published_date %}
+            {{ post.published_date }}
+        {% else %}
+            {% if user.is_authenticated %}
+                <a class="btn btn-default" href="{% url 'blog.views.post_publish' pk=post.pk %}">Publish</a>
+            {% endif %}
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+        {% endif %}
+    &lt;/div&gt;
+    &lt;h1&gt;{{ post.title }}&lt;/h1&gt;
+    &lt;p&gt;{{ post.text|linebreaks }}&lt;/p&gt;
+{% endblock %}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-4&quot;</span><span class="o">&gt;</span><span class="err">用户注销</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">当用户登录后显示欢迎语句，</span><span class="n">Hello</span> <span class="err">，然后后面跟一个</span><span class="n">logout</span><span class="err">链接。还是依靠</span><span class="n">django</span><span class="err">帮我们处理</span><span class="n">logout</span><span class="err">动作。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">修改</span><span class="n">mysite</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">mysite</span><span class="o">/</span><span class="n">base</span><span class="o">.</span><span class="n">html</span><span class="err">文件如下：</span>
+</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">raw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span> <span class="n">html</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;page-header&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span> <span class="o">%</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;post_new&#39; %}&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-plus&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;post_draft_list&#39; %}&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-edit&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;</span><span class="n">Hello</span> <span class="p">{{</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="p">}}</span><span class="o">&lt;</span><span class="n">small</span><span class="o">&gt;&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.logout&#39; %}&quot;</span><span class="o">&gt;</span><span class="n">Log</span> <span class="n">out</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.login&#39; %}&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-lock&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_list&#39; %}&quot;</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+很显然这时候logout肯定会报错。我们还得做些事情。
+
+对于这方面的详细文档请参考：&lt;https://docs.djangoproject.com/en/1.7/topics/auth/default/&gt;
+
+打开mysite/urls.py文件，添加一个logout配置：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class='line'><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/logout/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.logout&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;next_page&#39;</span><span class="p">:</span> <span class="s">&#39;/&#39;</span><span class="p">}),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+如果访问网站时出现模板找不到错误，那么你就在mysite/settings.py中添加如下配置：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># TEMPLATE_DIRS</span>
+</span><span class='line'><span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&#39;mysite/templates&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&#39;blog/templates&#39;</span><span class="p">),</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+好的，现在你已经可以达成如下的效果了：
+
+1. 需要一个用户名和密码登录系统
+1. 在添加/编辑/删除/发布文章的时候需要登录
+1. 也能注销
+
+这么说的话，这个博客系统算功能比较完善了！朋友，祝福你。
+</small></p></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（8）- 继续完善]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-08.html"/>
+    <updated>2015-04-21T14:24:11+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-08</id>
+    <content type="html"><![CDATA[<p>到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
+我们的博客还有很多功能需要完善，下面抛砖引玉新增几个功能，还有其他功能等你自己去发现和实现。</p>
+
+<h2 id="section">草稿箱</h2>
+<p>之前我们新建文章的时候只是是保存到数据库，也就是仅仅保存了草稿，还没有对外发布，
+在博客首页上面是看不到的，因为published_date字段为空。这里我们需要添加一个草稿箱的链接。还是四部曲。</p>
+
+<p>第一步，添加一个链接：</p>
+
+<p>打开mysite/templates/mysite/base.html文件，在</p>
+
+<p>&#8220;` html</p>
+<h1><a href="http://yidao620c.github.io/">Django Girls Blog</a></h1>
+<p>&#8220;`
+的上面一行添加如下链接：<!--more-->
+</p>
+
+<p><code>html
+&lt;a href="{% url 'post_draft_list' %}" class="top-menu"&gt;
+&lt;span class="glyphicon glyphicon-edit"&gt;&lt;/span&gt;&lt;/a&gt;
+</code>
+</p>
+
+<p>第二步就是配置urls，在blog/urls.py中添加：
+<code>python
+url(r'^drafts/$', views.post_draft_list, name='post_draft_list'),
+</code></p>
+
+<p>第三步在blog/views.py中添加一个view：
+<code>python
+def post_draft_list(request):
+    posts = Post.objects.filter(published_date__isnull=True).order_by('-created_date')
+    return render(request, 'blog/post_draft_list.html', {'posts': posts})
+</code></p>
+
+<p>第四步添加一个template，新建blog/templates/blog/post_draft_list.html，内容如下：
+</p>
+
+<p><code>html
+{% extends 'blog/base.html' %}
+{% block content %}
+    {% for post in posts %}
+        &lt;div class="post"&gt;
+            &lt;p class="date"&gt;created: {{ post.created_date|date:'d-m-Y' }}&lt;/p&gt;
+            &lt;h1&gt;&lt;a href="{% url 'blog.views.post_detail' pk=post.pk %}"&gt;{{ post.title }}&lt;/a&gt;&lt;/h1&gt;
+            &lt;p&gt;{{ post.text|truncatechars:200 }}&lt;/p&gt;
+        &lt;/div&gt;
+    {% endfor %}
+{% endblock %}
+</code>
+</p>
+
+<p>这个模板跟我们的post_list.html非常相似。</p>
+
+<p>刷新首页，点击那个草稿箱链接，看看效果。</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj024.jpg" alt="" /></p>
+
+<h2 id="section-1">发布功能</h2>
+<p>在文章详情页面添加一个发布的按钮，如果觉得合适的时候就能发布文章了。
+每个新功能都是四部曲，你照着这四步做就行，你会发现越来越简单。</p>
+
+<p>第一步在页面上添加一个链接或Form表单，这里我们添加一个链接。</p>
+
+<p>打开blog/template/blog/post_detail.html，将下面这段
+</p>
+
+<p><code>
+{% if post.published_date %}
+    {{ post.published_date }}
+{% endif %}
+</code>
+</p>
+
+<p>换成下面这段：
+</p>
+
+<p><code>html
+{% if post.published_date %}
+    {{ post.published_date }}
+{% else %}
+    &lt;a class="btn btn-default" href="{% url 'blog.views.post_publish' pk=post.pk %}"&gt;Publish&lt;/a&gt;
+{% endif %}
+</code>
+
+这里增加了一个else语句，意思是如果没有发布日期的话就增加一个发布按钮。</p>
+
+<p>第二步添加urls配置，打开blog/urls.py：
+<code>python
+url(r'^post/(?P&lt;pk&gt;[0-9]+)/publish/$', views.post_publish, name='post_publish'),
+</code>
+第三步视图，打开blog/views.py：
+<code>python
+def post_publish(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.publish()
+    return redirect('blog.views.post_detail', pk=pk)
+</code>
+第四步模板，由于这次没有引入新的模板，所以这步省略。</p>
+
+<p>刷新后看效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj025.jpg" alt="" /></p>
+
+<p>发布之后的效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj026.jpg" alt="" /></p>
+
+<p>注意观察发布前和发布后文章的发布日期那个位置的变化。并且发布后再去首页看看，文章已经可以正常显示了。</p>
+
+<h2 id="section-2">删除功能</h2>
+<p>最后当然需要一个删除功能了，还是四部曲！</p>
+
+<p>第一步是在页面上添加链接，打开blog/templates/blog/post_detail.html，在编辑按钮下面一行添加如下：
+</p>
+
+<p><code>html
+&lt;a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"&gt;
+&lt;span class="glyphicon glyphicon-remove"&gt;&lt;/span&gt;&lt;/a&gt;
+</code>
+
+第二步配置urls映射，打开blog/urls.py，添加如下一行：
+<code>python
+url(r'^post/(?P&lt;pk&gt;[0-9]+)/remove/$', views.post_remove, name='post_remove'),
+</code>
+第三步添加视图view，打开blog/views.py，添加一个视图函数：
+<code>python
+def post_remove(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('blog.views.post_list')
+</code>
+第四步模板，由于这次又没有新的模板，所有这步省略。</p>
+
+<p>OK，刷新页面看效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj027.jpg" alt="" /></p>
+
+<p>删除后再去首页看，已经没有这篇文章了。</p>
+
+<p>恭喜你，你可以大声对自己喊：我太棒了。^_^</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（7）- 实现功能]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-07.html"/>
+    <updated>2015-04-21T14:02:56+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-07</id>
+    <content type="html"><![CDATA[<p>到目前为止我们已经完成了一个django应用的所有基础部分。
+包括url配置、视图、模型和模板。接下来开始继续完善我们的博客系统了。</p>
+
+<p>首先我们需要一个显示每篇文章的详细页面，对不？</p>
+
+<h2 id="section">文章详情</h2>
+<p>对于首页每一篇文章，我们希望点击标题后可以进入该文章的阅读页面。修改post_list.html中的标题href如下：
+</p>
+
+<p>&#8220;` html</p>
+<h1><a href="{% url 'blog.views.post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+<p>&#8220;`
+
+我来详细解释下这个{% url ‘blog.views.post_detail’ pk=post.pk %}，{% %}
+表示使用django模板标签而不是普通的HTML文字，这里我们使用了url标签来生成真正的url链接。
+blog.views.post_detail是视图的全路径。<!--more--></p>
+
+<h3 id="url">url配置</h3>
+<p>我们希望文章详细页面的链接类似这样：http://127.0.0.1:8000/post/1/</p>
+
+<p>修改blog/urls.py为下面的这样：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="err">‘’</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="err">$’</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_list</span><span class="p">),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">post</span><span class="o">/</span><span class="p">(</span><span class="err">?</span><span class="n">P</span><span class="o">&lt;</span><span class="n">pk</span><span class="o">&gt;</span><span class="p">[</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">/</span><span class="err">$</span><span class="s">&#39;, views.post_detail),</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></pk></p>
+
+<p>这个看起来有点复杂，我们来解释下：</p>
+
+<ol>
+  <li>^ 代表的是开始</li>
+  <li>post/表示URL开始必须是post/</li>
+  <li>(?P[0-9]+) – 这部分比较复杂。它表示一个命名参数pk，
+它会捕获url中的这部分然后将它赋值给pk参数传递给视图。
+[0-9]表示这部分必须是数字，+表示至少1个数字，也可以多个数字。</li>
+  <li>/ – 然后后面接/</li>
+  <li>$ – URL的结尾</li>
+</ol>
+
+<h3 id="postdetail">post_detail视图</h3>
+<p>现在去访问还会报错，因为我们还没有post_detail这个视图。现在我们开始定义它。</p>
+
+<p>修改文件blog/views.py如下：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">post_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="err">‘</span><span class="n">blog</span><span class="o">/</span><span class="n">post_detail</span><span class="o">.</span><span class="n">html</span><span class="err">’</span><span class="p">,</span> <span class="p">{</span><span class="err">‘</span><span class="n">post</span><span class="err">’</span><span class="p">:</span> <span class="n">post</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3 id="postdetail-1">post_detail模板</h3>
+<p>然后再增加模板blog/templates/blog/post_detail.html：
+</p>
+
+<p>&#8220;` html
+{% extends ‘blog/base.html’ %}</p>
+
+<p>{% block content %}
+    &lt;div class=&#8221;date&#8221;&gt;
+        {% if post.published_date %}
+            {{ post.published_date }}
+        {% endif %}
+    &lt;/div&gt;
+    &lt;h1&gt;{{ post.title }}&lt;/h1&gt;
+    &lt;p&gt;{{ post.text|linebreaks }}&lt;/p&gt;
+{% endblock %}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这次我们还是采用模板继承方式，这里我们还用到了模板标签</span><span class="k">if</span><span class="err">，这是一个条件判断的标签。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">OK</span><span class="err">，一切都已准备就绪，现在打开首页，然后点击任意一篇文章标题看下结果：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://yidaospace.qiniudn.com/dj017.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">搞定！！</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-1&quot;</span><span class="o">&gt;</span><span class="err">创建文章</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">最后一件事就是要实现文章创建和更新操作，这是博客系统最核心的功能。</span><span class="n">django</span><span class="err">自带的</span><span class="n">admin</span><span class="err">很酷，但是确很难定制和美化。</span>
+</span><span class='line'><span class="n">forms</span><span class="err">非常强大和自由，我们可以好好的利用它来实现我们需要的功能。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">forms</span><span class="err">一个很好的特性就是它既能从头定义一个表单，也能创建一个</span><span class="n">ModelForm</span><span class="err">来将表单结果保存为一个模型。</span>
+</span><span class='line'><span class="err">而这正是我们想要的功能，我们可以创建一个</span><span class="n">ModelForm</span><span class="err">来将表单转换为一个</span><span class="n">Post</span><span class="err">模型。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">表单对象的定义放在</span><span class="n">forms</span><span class="o">.</span><span class="n">py</span><span class="err">文件中。我们需要在</span><span class="n">blog</span><span class="err">文件夹中创建</span><span class="n">forms</span><span class="o">.</span><span class="n">py</span><span class="err">文件，结构如下：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">blog</span>
+</span><span class='line'>   <span class="err">└──</span> <span class="n">forms</span><span class="o">.</span><span class="n">py</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">在里面写入如下内容：</span>
+</span></code></pre></td></tr></table></div></figure> python
+from django import forms
+from .models import Post</p>
+
+<p>class PostForm(forms.ModelForm):</p>
+
+<pre><code>class Meta:
+    model = Post
+    fields = ('title', 'text',) ``` PostForm需要继承自forms.ModelForm，这样django就能实现某些神奇的效果。 在里面我们定义了元类Meta，然后指定model为Post，还有字段为title和text。 因为我们只需要对外暴露标题和内容，至于作者就是登陆用户了，而发布日期和创建日期就是提交时间。
+</code></pre>
+
+<p>下面我们要做的就是在view中使用我们的form，并在template中显示它。</p>
+
+<p>我们继续走四个步骤：页面上添加链接, 外加“三部曲”。基本上每个新功能的增加时只需要增加这四个东东就行了。</p>
+
+<h3 id="section-2">增加链接</h3>
+<p>打开blog/templates/blog/base.html，在名字为page-header的div中添加一个新增文章的链接：
+{% raw %}</p>
+
+<p><code>html
+&lt;a href="{% url 'blog.views.post_new' %}" class="top-menu"&gt;&lt;span class="glyphicon glyphicon-plus"&gt;&lt;/span&gt;&lt;/a&gt;
+</code>
+</p>
+
+<p>这时候你的base.html应该是这样的：
+</p>
+
+<p>&#8220;`
+{% load staticfiles %}</p>
+<html>
+<head>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/blog.css' %}" />
+<title>Django Girls Blog</title>
+</head>
+<body>
+    <div class="page-header">
+        <a href="{% url 'blog.views.post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        <h1><a href="http://yidao620c.github.io/">Django Girls Blog</a></h1>
+    </div>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<p>&#8220;`
+</p>
+
+<h3 id="url-1">URL</h3>
+<p>打开blog/urls.py文件，添加一条配置：
+<code>python
+url(r'^post/new/$', views.post_new, name='post_new'),
+</code>
+现在它的内容应该是这样的：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="err">‘’</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="err">$’</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_list</span><span class="p">),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">post</span><span class="o">/</span><span class="p">(</span><span class="err">?</span><span class="n">P</span><span class="o">&lt;</span><span class="n">pk</span><span class="o">&gt;</span><span class="p">[</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">/</span><span class="err">$</span><span class="s">&#39;, views.post_detail),</span>
+</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/new/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_new</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_new&#39;</span><span class="p">),</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></pk></p>
+
+<h3 id="postnew">post_new视图</h3>
+<p>打开文件blog/views.py，先引入PostForm
+<code>python
+from .forms import PostForm
+</code>
+然后增加视图：
+<code>python
+def post_new(request):
+    form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
+</code></p>
+
+<h3 id="postedithtml">post_edit.html模板</h3>
+<p>在blog/templates/blog目录新建一个post_edit.html页面，然后写入下列内容：
+</p>
+
+<p>&#8220;` html
+{% extends ‘blog/base.html’ %}</p>
+
+<p>{% block content %}
+    &lt;h1&gt;New post&lt;/h1&gt;
+    &lt;form method=&#8221;POST&#8221; class=&#8221;post-form&#8221;&gt;{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    &lt;/form&gt;
+{% endblock %}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">保存后，刷新首页，点击加号那个链接可以看到如下页面：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://yidaospace.qiniudn.com/dj018.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">但是当你写了文字后点击保存后会发现又跑到这个新建页面来了。</span>
+</span><span class='line'><span class="err">因为这个是</span><span class="n">POST</span><span class="err">提交，但是</span><span class="n">URL</span><span class="err">还是一样的，又会跑到</span><span class="n">post_new</span><span class="err">那个视图中去，</span>
+</span><span class='line'><span class="err">这个视图只做了页面跳转来到了这个新建页面。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">那么我们需要修改下</span><span class="n">post_new</span><span class="err">视图逻辑了：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">在头部先引入下面的依赖：</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">python</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">然后修改</span><span class="n">post_new</span><span class="err">视图如下：</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">python</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">post_new</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+</span><span class='line'>            <span class="n">post</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">post</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+</span><span class='line'>            <span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">post</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_edit.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">上面表示我添加完一篇文章后自动跳转到文章详情页面去，保存后效果：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://yidaospace.qiniudn.com/dj019.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-3&quot;</span><span class="o">&gt;</span><span class="err">表单验证</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">由于我们在</span><span class="n">Post</span><span class="err">模型中已经定义了</span><span class="n">title</span><span class="err">和</span><span class="n">text</span><span class="err">是必需的，</span><span class="n">django</span><span class="err">会自动帮我们做验证。</span>
+</span><span class='line'><span class="err">看下如果我们不输入</span><span class="n">title</span><span class="err">和</span><span class="n">text</span><span class="err">直接提交会怎样：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://yidaospace.qiniudn.com/dj020.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">django</span><span class="err">已经自动帮我们做了验证，是不是很酷呢？</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-4&quot;</span><span class="o">&gt;</span><span class="err">编辑文章</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">我们刚刚已经实现了新建文章的功能，那么如果是编辑修改文章呢。接下来我会快速的讲解这个流程，现在你应该是可以看得懂的了。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">首先打开</span><span class="n">blog</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">post_detail</span><span class="o">.</span><span class="n">html</span><span class="err">，添加一行：</span>
+</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">raw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;post_edit&#39; pk=post.pk %}&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-pencil&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">span</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">a</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">现在它的内容是这样的：</span>
+</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">raw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span>
+</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">extends</span> <span class="err">‘</span><span class="n">blog</span><span class="o">/</span><span class="n">base</span><span class="o">.</span><span class="n">html</span><span class="err">’</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">content</span> <span class="o">%</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">published_date</span> <span class="o">%</span><span class="p">}</span>
+</span><span class='line'>        <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">published_date</span> <span class="p">}}</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;post_edit&#39; pk=post.pk %}&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-pencil&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">div</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">h1</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;{{</span> <span class="n">post</span><span class="o">.</span><span class="n">title</span> <span class="p">}}</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">h1</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;{{</span> <span class="n">post</span><span class="o">.</span><span class="n">text</span><span class="o">|</span><span class="n">linebreaks</span> <span class="p">}}</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endblock</span> <span class="o">%</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+</p>
+
+<p>然后修改blog/urls.py文件，添加一条：
+<code>python
+url(r'^post/(?P&lt;pk&gt;[0-9]+)/edit/$', views.post_edit, name='post_edit'),
+</code></p>
+
+<p>我们会重用模板blog/templates/blog/post_edit.html，
+因此只需要修改下view就可以了，打开文件blog/views.py，将下面的内容添加到最后：
+<code>python
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('blog.views.post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/post_edit.html', {'form': form})
+</code></p>
+
+<p>这个跟post_new几乎一模一样，先通过主键查到文章：<code>post = get_object_or_404(Post, pk=pk)</code>，
+然后我们在提交和进入编辑页面的时候都将post作为instance参数传递给PostForm。</p>
+
+<p>OK，现在让我们来测试下效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj021.jpg" alt="" /></p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj022.jpg" alt="" /></p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj023.jpg" alt="" /></p>
+
+<p>完美，恭喜你！你的应用已经变得越来越酷了。</p>
+
+<p>如果你想对django的表单有更深入的了解，
+请查阅官方文档：<a href="https://docs.djangoproject.com/en/1.7/topics/forms/">https://docs.djangoproject.com/en/1.7/topics/forms/</a></p>
+
+<h2 id="section-5">还有一件事</h2>
+<p>发布到heroku上去。不要我每次提醒了吧，Enjoy it！</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（6）- 模板继承]]></title>
@@ -80,8 +912,8 @@
     <div class="content">
         <div class="row">
             <div class="col-md-8">
-            &#123;% block content %}
-            &#123;% endblock %}
+            {% block content %}
+            {% endblock %}
             </div>
         </div>
     </div>
@@ -90,7 +922,7 @@
 </p>
 
 <p>我们其实就是将<code>{% for post in posts %}{% endfor %}</code>
-替换成了<code>&amp;#123;% block content %}&amp;#123;% endblock %}</code>。
+替换成了<code>{% block content %}{% endblock %}</code>。
 在base.html中我们创建了一个名字为content的block，其他页面可以通过继承base.html，
 替换这个content块来生成新的页面，页面其他内容保持不变。</p>
 
@@ -122,7 +954,7 @@
 
 <p><code>html
 {% extends 'blog/base.html' %}
-&amp;#123;% block content %}
+{% block content %}
 {% for post in posts %}
     &lt;div class="post"&gt;
         &lt;h1&gt;&lt;a href=""&gt;{{ post.title }}&lt;/a&gt;&lt;/h1&gt;
@@ -130,7 +962,7 @@
         &lt;p&gt;{{ post.text|linebreaks }}&lt;/p&gt;
     &lt;/div&gt;
 {% endfor %}
-&amp;#123;% endblock content %}
+{% endblock content %}
 </code>
 </p>
 
@@ -372,977 +1204,6 @@ h1, h2, h3, h4 {
 
 <p>下一节我将介绍django中模板的继承机制！</p>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（4）- 三部曲]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/simpleblog-04.html"/>
-    <updated>2015-04-20T19:16:02+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/simpleblog-04</id>
-    <content type="html"><![CDATA[<h3 id="section">什么是三部曲？</h3>
-<p>其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。</p>
-
-<p>这三部曲就是：</p>
-
-<ol>
-  <li>定义urls映射</li>
-  <li>定义views</li>
-  <li>定义templates</li>
-</ol>
-
-<h3 id="url">什么是URL？</h3>
-<p>URL就算一个WEB地址，你在浏览器输入这个地址，然后浏览器返回相应的网页给你。
-比如http://djangogirls.com是一个URL，而127.0.0.1:8000同样也是个URL，默认就是http协议的。</p>
-
-<h3 id="djangourl">Django中的URL工作原理</h3>
-<p>我们打开mysite/urls.py文件，会发现类似下面这样：<!--more--></p>
-
-<p>&#8220;` python
-from django.conf.urls import patterns, include, url</p>
-
-<p>from django.contrib import admin
-admin.autodiscover()</p>
-
-<p>urlpatterns = patterns(‘’,
-    # Examples:
-    # url(r’^$’, ‘mysite.views.home’, name=’home’),
-    # url(r’^blog/’, include(‘blog.urls’)),</p>
-
-<pre><code>url(r'^admin/', include(admin.site.urls)), ) ```
-</code></pre>
-
-<p>上面的两行注释先不要管，这个以后再用到。
-django默认已经为我们添加了admin的URL配置。
-当django碰到以admin/开头的URL的时候会去admin.site.urls里面去寻找对应的匹配。
-所有和admin相关的urls配置都写在一个文件中，这样就便于管理了。</p>
-
-<h3 id="section-1">正则表达式</h3>
-<p>你可以看到上面的url用到了正则表达式，比如’^admin/’、’^$’等等，
-django是通过正则式来匹配URL的。关于正则式这里不想展开太多。可以参考相关数据和教程。</p>
-
-<h3 id="django-url">第一个django url配置</h3>
-<p>现在我们要将http://127.0.0.1:8000/这个首页地址映射到一个显示最新文章列表的页面上面去。一般的博客首页基本都是这样的。</p>
-
-<p>为了保持mysite/urls.py配置文件的简介，我们最好将博客的url配置放到单独的文件中。在mysite/urls.py中去将它引进来即可。</p>
-
-<p>那么你的mysite/urls.py文件现在类似于这样了：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
-</span><span class='line'><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="err">‘’</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">admin</span><span class="o">/</span><span class="err">’</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’’</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="err">‘</span><span class="n">blog</span><span class="o">.</span><span class="n">urls</span><span class="err">’</span><span class="p">)),</span>
-</span><span class='line'><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h3 id="blogurls">blog.urls</h3>
-<p>创建文件blog/urls.py，然后加入下列内容
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="err">‘’</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="err">$’</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_list</span><span class="p">),</span>
-</span><span class='line'><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-现在我们将r’^$’的url映射到视图views.post_list。</p>
-
-<p>不过你要是现在就访问首页http://127.0.0.1:8000/的话会报错的。</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj006.jpg" alt="" /></p>
-
-<p>为啥，因为你的视图views.post_list现在没有实现啊，找不到这个方法！</p>
-
-<p>那么接下来我们就来讲解view的实现了。</p>
-
-<h3 id="view">什么是view？</h3>
-<p>view也叫视图，在django中它存放了实际的业务逻辑。这个跟我们通常所说的MVC中的view是不一样的。</p>
-
-<p><strong>django的MTV模式</strong></p>
-
-<p>这里我稍微解释下django的结构，一般我们称之为MTV模式：</p>
-
-<ol>
-  <li>M 代表模型（Model），即数据存取层。该层处理与数据相关的所有事务：如何存取、如何确认有效性、包含哪些行为以及数据之间的关系等。</li>
-  <li>T 代表模板(Template)，即表现层。该层处理与表现相关的决定：如何在页面或其他类型文档中进行显示。</li>
-  <li>V 代表视图（View），即业务逻辑层。该层包含存取模型及调取恰当模板的相关逻辑。你可以把它看作模型与模板之间的桥梁。</li>
-</ol>
-
-<p>那么通常意义的控制器Controller去哪里了呢，细心的童鞋应该会猜到了，那就是我们上一节所讲的urls.py配置文件。</p>
-
-<p>一句话总结：URLconf+MTV构成了django的总体架构。</p>
-
-<p><strong>blog/views.py</strong></p>
-
-<p>这个文件初始内容是这样的：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;create-your-views-here&quot;</span><span class="o">&gt;</span><span class="n">Create</span> <span class="n">your</span> <span class="n">views</span> <span class="n">here</span><span class="o">.&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">添加一个最简单的视图：</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">python</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_list.html&#39;</span><span class="p">,</span> <span class="p">{})</span> <span class="sb">``</span><span class="err">`</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">我们定义了一个方法</span><span class="n">post_list</span><span class="err">，它的参数是</span><span class="n">request</span><span class="err">，使用</span><span class="n">render</span><span class="err">函数返回一个</span><span class="n">html</span><span class="err">模板</span><span class="n">blog</span><span class="o">/</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">接下来我们访问下首页，</span><span class="n">OMG</span><span class="err">，又出错了：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://yidaospace.qiniudn.com/dj007.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这次报的错是模板</span><span class="n">blog</span><span class="o">/</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">找不到。这个是显而易见的，因为我们根本还没有定义这个</span><span class="n">html</span><span class="err">模板。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">别着急，继续沿着教程往下看就行…</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-2&quot;</span><span class="o">&gt;</span><span class="err">什么是模板？</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">一个模板就是一个使用固定格式呈现动态内容的可重用的文件。</span>
-</span><span class='line'><span class="err">比如你可以使用一个模板来写邮件，每封邮件可能有不同的内容，寄给不同的人，但是它们的格式是一样的。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Django</span><span class="err">中的模板使用</span><span class="n">HTML</span><span class="err">文件，至于神马是</span><span class="n">HTML</span><span class="err">，这个去参考下</span><span class="n">W3C</span><span class="err">或者自行</span><span class="n">google</span><span class="err">下，</span>
-</span><span class='line'><span class="err">不过如果做</span><span class="n">web</span><span class="err">开发的人不懂</span><span class="n">HTML</span><span class="err">，请不要告诉别人我认识你。</span><span class="o">^</span><span class="n">_</span><span class="o">^&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;**</span> <span class="err">第一个模板</span> <span class="o">**&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">创建一个模板就是创建一个</span><span class="n">HTML</span><span class="err">文件。模板文件存储在</span><span class="n">blog</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">blog</span><span class="err">目录下面，</span>
-</span><span class='line'><span class="err">首先在</span><span class="n">blog</span><span class="err">目录下创建</span><span class="n">templates</span><span class="err">目录，然后再在</span><span class="n">templates</span><span class="err">目录下创建</span><span class="n">blog</span><span class="err">目录，至于为啥要这么做，</span>
-</span><span class='line'><span class="err">先不用管，</span><span class="n">django</span><span class="err">里面很多目录都是约定好的，这个就跟</span><span class="n">maven</span><span class="err">是一样的，约定高于配置。</span>
-</span><span class='line'><span class="err">所以你先照着做就是了。目录结构如下：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">blog</span>
-</span><span class='line'><span class="err">└───</span><span class="n">templates</span>
-</span><span class='line'>    <span class="err">└───</span><span class="n">blog</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">然后在</span><span class="n">blog</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">blog</span><span class="err">目录下创建一个</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">文件，现在里面还没有内容。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这时候再次访问首页，效果如下：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://yidaospace.qiniudn.com/dj008.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">一片空白，但没有报错了。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">在</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">中添加点东西：</span>
-</span></code></pre></td></tr></table></div></figure> html</p>
-<html>
-    <p>Hi there!</p>
-    <p>It works!</p>
-</html>
-<p>&#8220;`</p>
-
-<p>再次访问http://192.168.203.95:8000/：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj009.jpg" alt="" /></p>
-
-<h3 id="section-3">动态模板</h3>
-<p>不过目前为止我们还只能显示静态的网页。怎样将文章列表在首页显示出来呢？</p>
-
-<p>我们已经有了模型Post，有了模板post_list.html，怎样使得模型数据在模板中显示出来呢，
-这个就是视图的功能了，实际上，django中的视图的作用就是连接模型和模板的桥梁。
-在视图中，通过QuerySet将数据库中的数据检索出来，然后传递给模板，模板负责显示出来。</p>
-
-<p>首先打开blog/views.py，它目前的内容是这样的：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="err">‘</span><span class="n">blog</span><span class="o">/</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">’</span><span class="p">,</span> <span class="p">{})</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">这时候我们将</span><span class="n">Post</span><span class="err">模型导入进来</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">python</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span>
-</span></code></pre></td></tr></table></div></figure>
-注意我们还是用到了相对导入，这是python3的强大功能。</p>
-
-<h3 id="queryset">QuerySet</h3>
-<p>是时候请出QuerySet了，在模型和ORM小节我们已经介绍过。</p>
-
-<p>现在我们想要将数据库中的文章都检索出来并且按照发布日期逆序排序，使得最新的文章放前面。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">published_date__isnull</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="err">‘</span><span class="o">-</span><span class="n">published_date</span><span class="err">’</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="err">‘</span><span class="n">blog</span><span class="o">/</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">’</span><span class="p">,</span> <span class="p">{</span><span class="err">‘</span><span class="n">posts</span><span class="err">’</span><span class="p">:</span> <span class="n">posts</span><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-注意render函数中最后一个参数{‘posts’: posts}，这个就是用来给模板传递数据的。</p>
-
-<h3 id="section-4">模板标签</h3>
-<p>HTML页面只识别HTML标签，那么怎样让生成动态的内容呢？答案就是使用django自带的模板标签，
-包括了判断、循环、管道等语法。我们已经获取了文章的列表了，那么可以使用for循环来生成相应的HTML页面：</p>
-
-<p>&#8220;` html</p>
-<html>
-<head>
-    <title>Django Girls Blog</title>
-</head>
-<body>
-    <div>
-        <h1><a href="http://yidao620c.github.io/">Django Girls Blog</a></h1>
-    </div>
-    
-</body>
-</html>
-<p>&#8220;`</p>
-
-<p>在<code>{% for %}</code> 和<code>{% endfor %}</code>之间会循环每个post，然后每次生成一段</p>
-
-<p>现在再次访问首页，效果如下：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj010.jpg" alt="" /></p>
-
-<h3 id="section-5">别忘了一件事</h3>
-<p>别忘了把它push到heroku上面去。</p>
-
-<p><code>
-git add .
-git commit -m '动态文章列表首页'
-git push origin master
-</code></p>
-
-<p>恭喜你，目前为止基本的全程已经贯通了。打开admin后添加几篇文章，
-记得填上发布日期，再刷新下首页，看会不会显示出来。</p>
-
-<p>好了，这时候你可以出门左拐去小卖部给自己买点棒棒糖奖励下自己了！</p>
-
-<p>不过我们的教程还没完，怎样让页面变得漂亮呢？请看下一节。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（3）- 部署]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/simpleblog-03.html"/>
-    <updated>2015-04-20T19:03:57+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/simpleblog-03</id>
-    <content type="html"><![CDATA[<p>到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？</p>
-
-<h3 id="heroku">Heroku简介</h3>
-<p>Heroku是一个主机托管平台，对于访问量不是很大的小应用是免费的，正好适用于我们的这个例子。</p>
-
-<p>Heroku官网上有一篇django的教程：
-<a href="https://devcenter.heroku.com/articles/getting-started-with-django">getting started with django</a></p>
-
-<p>这里我把它复制到这里来详细讲解一下。</p>
-
-<h3 id="requirementstxt">requirements.txt文件</h3>
-<p>我们需要创建一个requirements.txt文件来告知Heroku需要在服务器上创建哪些python包。</p>
-
-<p>不过首先，Heroku需要我们在本地按照一些包。在python虚拟环境virtualenv下面执行：<!--more-->
-<code>
-(myvenv) [mango@centos mysite]$ pip install dj-database-url gunicorn whitenoise
-</code>
-然后，在mysite目录，也就是manage.py所在目录执行：
-<code>
-(myvenv) [mango@centos00 mysite]$ pip freeze &gt; requirements.txt
-</code>
-这条命令会新建一个requirements.txt文件，里面包含了工程的所有依赖包。</p>
-
-<p>打开这个文件，添加下面这句话：
-<code>
-psycopg2==2.5.4
-</code>
-要想在Heroku上面运行，必须加上这句。</p>
-
-<h3 id="procfile">Procfile文件</h3>
-<p>另一个需要创建的文件就是Procfile，它告知Heroku在启动网站时需要执行的命令。
-同样在manage.py所在目录，新建一个文件名为Procfile，添加如下内容：
-<code>
-web: gunicorn mysite.wsgi
-</code>
-这句话的意思就是我们将要部署一个web应用程序，并且我们通过执行 gunicorn mysite.wsgi命令来完成。</p>
-
-<p>gunicorn是一个类似django的runserver的程序，但是功能更强大。</p>
-
-<h3 id="runtimetxt">runtime.txt文件</h3>
-<p>我们需要告知Heroku运行时的python版本，这里我们指定为3.4.2。新建runtime.txt，加入
-<code>
-python-3.4.2
-</code></p>
-
-<h3 id="mysitelocalsettingspy">mysite/local_settings.py文件</h3>
-<p>由于我们本地开发使用的数据库跟服务器上部署时使用的数据库是不一样的。
-那么我们需要创建一个local_settings.py来指定本地用的数据库。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">os</span>
-</span><span class='line'><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="nb">file</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">))</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">ENGINE</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">django</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">sqlite3</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">NAME</span><span class="err">’</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="err">‘</span><span class="n">db</span><span class="o">.</span><span class="n">sqlite3</span><span class="err">’</span><span class="p">),</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h3 id="mysitesettingspy">mysite/settings.py文件</h3>
-<p>另外我们还需要修改settings.py文件，在文件结尾添加如下几行
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">dj_database_url</span>
-</span><span class='line'><span class="n">DATABASES</span><span class="p">[</span><span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="p">]</span> <span class="o">=</span>  <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">SECURE_PROXY_SSL_HEADER</span> <span class="o">=</span> <span class="p">(</span><span class="err">‘</span><span class="n">HTTP_X_FORWARDED_PROTO</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">https</span><span class="err">’</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="err">‘</span><span class="o">*</span><span class="err">’</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="err">‘</span><span class="n">staticfiles</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">然后再导入本地开发配置，也是在最后添加</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">python</span>
-</span><span class='line'><span class="k">try</span><span class="p">:</span>
-</span><span class='line'>    <span class="kn">from</span> <span class="nn">.local_settings</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span class='line'><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-</span><span class='line'>    <span class="k">pass</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h3 id="mysitewsgipy">mysite/wsgi.py文件</h3>
-<p>打开mysite/wsgi.py文件，添加如下几行到最后：
-<code>python
-from whitenoise.django import DjangoWhiteNoise
-application = DjangoWhiteNoise(application)
-</code>
-OK，工程配置修改做完了。</p>
-
-<h3 id="heroku-1">Heroku账号</h3>
-<p>首先你需要安装Heroku toolbelt，教程地址：<a href="https://toolbelt.heroku.com/">https://toolbelt.heroku.com/</a></p>
-
-<p>两句话搞定：
-<code>
-wget -qO- https://toolbelt.heroku.com/install.sh | sh
-echo 'PATH="/usr/local/heroku/bin:$PATH"' &gt;&gt; ~/.profile
-</code>
-然后申请一个账号：<a href="https://id.heroku.com/signup/www-home-top">https://id.heroku.com/signup/www-home-top</a></p>
-
-<p>登录：
-<code>
-heroku login
-</code>
-如果报bad URI错误的话，那么代理设置必须是http://192.168.203.91:3128/这样的完整形式。
-<code>
-[mango@centos00 work]$ heroku login
-Enter your Heroku credentials.
-Email: yidao620@gmail.com
-Password (typing will be hidden):
-Your Heroku account does not have a public ssh key uploaded.
-Found an SSH public key at /home/mango/.ssh/id_rsa.pub
-Would you like to upload it to Heroku? [Yn] Y
-Uploading SSH public key /home/mango/.ssh/id_rsa.pub... done
-Authentication successful.
-</code></p>
-
-<h3 id="gitignore">.gitignore文件</h3>
-<p>我们并不想将所有文件都上传到服务器上，
-比如我们本地设置local_setttings.py，数据库文件等。
-在我们工程主目录下面创建一个.gitignore文件，内容如下</p>
-
-<pre><code>myvenv
-__pycache__
-*.pyc
-staticfiles
-local_settings.py
-db.sqlite3
-</code></pre>
-
-<h3 id="heroku-2">部署到Heroku</h3>
-<p>第一步先创建一个工程
-<code>
-(myvenv) [mango@centos00 mysite]$ heroku create yidaoblog
-</code>
-返回结果</p>
-
-<pre><code>Creating yidaoblog... done, stack is cedar
-https://yidaoblog.herokuapp.com/ | git@heroku.com:yidaoblog.git
-</code></pre>
-
-<p>请记住上面的地址git@heroku.com:yidaoblog.git</p>
-
-<p>第二步初始化git本地仓库提交，并添加上面的远程仓库地址
-<code>
-[mango@centos00 mysite]$ git init
-初始化空的 Git 版本库于 /home/mango/work/djangogirls/mysite/.git/
-[mango@centos00 mysite]$ git add .
-[mango@centos00 mysite]$ git commit -m 'yidao blog by django.'
-[mango@centos00 mysite]$ git remote add origin git@heroku.com:yidaoblog.git
-</code></p>
-
-<p>第三步push工程
-<code>
-[mango@centos00 mysite]$ git push origin master
-</code></p>
-
-<p>最后得到类似下面的输出：</p>
-
-<pre><code>Successfully installed Django dj-database-url gunicorn whitenoise psycopg2
-     Cleaning up...
-
------&gt; Preparing static assets
-       Running collectstatic...
-       61 static files copied to '/app/staticfiles'.
-
------&gt; Discovering process types
-       Procfile declares types -&gt; web
-
------&gt; Compressing... done, 39.6MB
------&gt; Launching... done, v5
-       https://yidaoblog.herokuapp.com/ deployed to Heroku
-
-To git@heroku.com:yidaoblog.git
- * [new branch]      master -&gt; master
-</code></pre>
-
-<p>大功告成。</p>
-
-<h3 id="section">访问应用</h3>
-<p>让Heroku启动你的应用
-<code>
-$ heroku ps:scale web=1 --app yidaoblog
-</code>
-启动一个实例即可</p>
-
-<p>同步数据库（这一步是必须要做的，否则会报500错误）：
-<code>
-$ heroku run:detached python manage.py migrate --app yidaoblog
-</code>
-不过我运行后，只是表结构同步了，本地数据并没有同步，所以还要进行数据同步。
-试了好多教程都不尽如人意。最后一个最好的方案是本地直接使用postgresql开发，然后使用import技术。</p>
-
-<p>参考教程： <a href="https://devcenter.heroku.com/articles/heroku-postgres-import-export">https://devcenter.heroku.com/articles/heroku-postgres-import-export</a></p>
-
-<p>如果本地要使用postgresql开发的话，local_settings.py文件需要修改如下：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">os</span>
-</span><span class='line'><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="nb">file</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">))</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">ENGINE</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">django</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">postgresql_psycopg2</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">NAME</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">django</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">USER</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">postgres</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">PASSWORD</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">postgres</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">HOST</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">203.95</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>        <span class="err">‘</span><span class="n">PORT</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="mi">5432</span><span class="err">’</span><span class="p">,</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h3 id="centos6postgresql93">在CentOS6上面安装postgresql9.3</h3>
-<p><code>
-sudo yum install python-devel
-export PATH=/usr/pgsql-9.3/bin/:$PATH
-pip install psycopg2
-</code>
-出现pg_config命令找不到的时候可以先find：
-<code>
-sudo find /usr -name pg_config
-</code>
-然后添加到PATH中去：
-<code>
-export PATH=/usr/pgsql-9.3/bin/:$PATH
-</code>
-使用postgres用户登录后备份数据库：
-<code>
-su - postgres(postgres)
-pg_dump dbname &gt; /tmp/mydb.txt
-</code>
-将输出的mydb.txt放到某个静态文件服务器上，必须在公网上可访问，比如七牛存储。
-为什么我没有选择AWS S3呢？原因你肯定懂得啦，就算我有了梯子还是不行，
-弄了一下午还是没成功，快气晕了。哎…</p>
-
-<p>使用如下命令进行数据同步：
-<code>
-heroku pgbackups:restore DATABASE_URL 'http://yidaospace.qiniudn.com/mydb.txt'
-</code>
-期间需要你输入你的app名字来确认，并且还需要给你的app添加一个免费的addon：
-<code>
-heroku addons:add pgbackups
-</code>
-查看日志：
-<code>
-(myvenv) [mango@centos00 mysite]$ heroku logs
-</code>
-查看启动的实例
-<code>
-[mango@centos00 mysite]$ heroku ps
-=== web (1X): `gunicorn mysite.wsgi`
-web.1: up 2014/11/04 09:40:43 (~ 7m ago)
-</code></p>
-
-<p>打开浏览器访问吧！ Enjoy it…</p>
-
-<p>输入网址 https://yidaoblog.herokuapp.com/admin 后的界面如下：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj005.jpg" alt="" /></p>
-
-<p>停止应用的命令
-<code>
-heroku ps:scale web=0 --app yidaoblog
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（2）- 模型]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/simpleblog-02.html"/>
-    <updated>2015-04-20T18:49:57+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/simpleblog-02</id>
-    <content type="html"><![CDATA[<h3 id="section">什么是模型？</h3>
-<p>django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
-发表的文章就是一个模型，需要存储在数据库中。
-这里我们使用django默认的sqlite3库，对于我们的这个小系统而言已经足够了。</p>
-
-<h3 id="section-1">创建一个应用</h3>
-<p>在django中有两个概念需要弄清楚。一个是工程（project）的概念，一个是应用（application）的概念。
-它们的关系是：一个工程中包含多个应用。每个应用都是独立的，应用通过setting.py注册到工程中来就可以使用了。
-这样可以解耦合，并且好的应用也可以复用。很好的模块化设计！</p>
-
-<p>在manage.py文件所在目录，执行下面命令：
-<code>
-(myvenv) [mango@centos00 mysite]$ python manage.py startapp blog
-</code>
-你会看到一个新的blog文件夹被创建，并且下面多了许多文件，目前结构如下：<!--more--></p>
-
-<pre><code>mysite
-├── mysite
-|       __init__.py
-|       settings.py
-|       urls.py
-|       wsgi.py
-├── manage.py
-└── blog
-    ├── migrations
-    |       __init__.py
-    ├── __init__.py
-    ├── admin.py
-    ├── models.py
-    ├── tests.py
-    └── views.py
-</code></pre>
-
-<p>然后在setting.py中注册这个应用</p>
-
-<p><code>python
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'blog',
-)
-</code></p>
-
-<h3 id="section-2">创建一个博客文章的模型</h3>
-<p>在blog/models.py中定义所有的模型，用vim打开后添加下面的内容
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-</span><span class='line'>    <span class="n">created_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">published_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">published_date</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="sb">``</span><span class="err">`</span> <span class="err">我们定义了作者，标题，文章内容，创建时间，发布时间等。还添加了一个</span><span class="n">publish</span><span class="err">方法用于保存发布。</span> <span class="err">每个字段都需要定义它的类型，这里的几个类型解释如下：</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">CharField</span><span class="err">：普通的文本</span>
-</span><span class='line'><span class="n">TextField</span><span class="err">：长文本</span>
-</span><span class='line'><span class="n">DateTimeField</span><span class="err">：日期时间类型</span>
-</span><span class='line'><span class="n">ForeignKey</span><span class="err">：外键类型</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">详细的字段类型说明请参考官方文档：</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;https://docs.djangoproject.com/en/1.7/ref/models/fields/#field-types&quot;</span><span class="o">&gt;</span><span class="n">field</span><span class="o">-</span><span class="n">types</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="err">在数据库中为模型生成表结构：</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">每次我们新建了一个模型后，需要在数据库中添加对应的表。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">第一步是先让</span><span class="n">django</span><span class="err">感知到我们刚刚已经创建了一个新的模型：</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">blog</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">输出如下：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Migrations</span> <span class="k">for</span> <span class="s">&#39;blog&#39;</span><span class="p">:</span>
-</span><span class='line'>  <span class="mo">0001</span><span class="n">_initial</span><span class="o">.</span><span class="n">py</span><span class="p">:</span>
-</span><span class='line'>    <span class="o">-</span> <span class="n">Create</span> <span class="n">model</span> <span class="n">Post</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这时候</span><span class="n">django</span><span class="err">已经为我们准备好了数据库更新的</span><span class="n">sql</span><span class="err">文件。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">第二步是让</span><span class="n">django</span><span class="err">帮我们执行这些文件：</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="n">blog</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">输出如下：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Operations</span> <span class="n">to</span> <span class="n">perform</span><span class="p">:</span>
-</span><span class='line'>  <span class="n">Apply</span> <span class="nb">all</span> <span class="n">migrations</span><span class="p">:</span> <span class="n">blog</span>
-</span><span class='line'><span class="n">Running</span> <span class="n">migrations</span><span class="p">:</span>
-</span><span class='line'>  <span class="n">Applying</span> <span class="n">blog</span><span class="o">.</span><span class="mo">0001</span><span class="n">_initial</span><span class="o">...</span> <span class="n">OK</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">OK</span><span class="err">，这时候数据库中已经有</span><span class="n">post</span><span class="err">这张表了。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;orm&quot;</span><span class="o">&gt;</span><span class="err">对象关系映射</span><span class="n">ORM</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">下面我们看看</span><span class="n">django</span><span class="err">的</span><span class="n">ORM</span><span class="err">是怎样和数据库打交道的。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">首先解释下</span><span class="n">QuerySet</span><span class="err">，它是某个模型的对象列表，用来从数据库中读取数据，过滤和排序等等。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;djangodjango-shell&quot;</span><span class="o">&gt;</span><span class="n">Django</span><span class="err">控制台</span><span class="n">Django</span> <span class="n">Shell</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">执行以下命令可以打开</span><span class="n">django</span><span class="err">的控制台</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">shell</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">查询所有的博客文章</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Post</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-</span><span class='line'><span class="p">[]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这时候肯定是空的，因为我们还没有任何数据。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">下面我们去新建几篇文章</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">先要创建一个用户，因为</span><span class="n">Post</span><span class="err">里面有</span><span class="n">User</span><span class="err">外键</span>
-</span></code></pre></td></tr></table></div></figure>
-»&gt; from django.contrib.auth.models import User
-»&gt; User.objects.create(username=’ola’)</p>
-<user: ola="">
-&gt;&gt;&gt; User.objects.all()
-[<user: ola="">]
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="err">然后添加文章：</span>
-</span></code></pre></td></tr></table></div></figure>
-&gt;&gt;&gt; user = User.objects.get(username=&#8217;ola&#8217;)
-&gt;&gt;&gt; Post.objects.create(author = user, title = &#8216;Sample title&#8217;, text = &#8216;Test&#8217;)
-<post: sample="" title="">
-&gt;&gt;&gt; Post.objects.all()
-[<post: sample="" title="">]
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">**</span><span class="err">文章过滤</span><span class="o">**</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">先像前面那样再添加几篇文章，此处省略七十二个字…</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure>
-&gt;&gt;&gt; Post.objects.filter(author=user)
-[<post: sample="" title="">, <post: cool="" day="" aha="">, <post: lilei="" and="" hanmeimei="">, <post: happy="" boy="">]
-&gt;&gt;&gt; Post.objects.filter(title__contains=&#8217;LiLei&#8217;)
-[<post: lilei="" and="" hanmeimei="">]
-&gt;&gt;&gt; Post.objects.filter(published_date__isnull=False)
-[]
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="err">最后的输出表示所有的文章</span><span class="n">published_date</span><span class="err">都是空的。我想改变这个情况。可以这样做</span>
-</span></code></pre></td></tr></table></div></figure>
-&gt;&gt;&gt; post = Post.objects.get(id=1)
-&gt;&gt;&gt; post.publish()
-&gt;&gt;&gt; Post.objects.filter(published_date__isnull=False)
-[<post: sample="" title="">]
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="o">**</span><span class="err">结果排序</span><span class="o">**</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">还可以根据某个或某几个字段来排序检索结果</span>
-</span></code></pre></td></tr></table></div></figure>
-&gt;&gt;&gt; Post.objects.order_by(&#8216;created_date&#8217;)
-[<post: sample="" title="">, <post: cool="" day="" aha="">, <post: lilei="" and="" hanmeimei="">, <post: happy="" boy="">]
-&gt;&gt;&gt; Post.objects.order_by(&#8216;-created_date&#8217;)
-[<post: happy="" boy="">, <post: lilei="" and="" hanmeimei="">, <post: cool="" day="" aha="">, <post: sample="" title="">]
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">OK</span><span class="err">，目前为止你应该对</span><span class="n">django</span><span class="err">的</span><span class="n">ORM</span><span class="err">有了大体的了解了。</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">请用</span><span class="nb">exit</span><span class="p">()</span><span class="err">退出</span><span class="n">django</span><span class="err">的控制台</span>
-</span></code></pre></td></tr></table></div></figure>
-&gt;&gt;&gt; exit()
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">### 利用django admin修改模型</span>
-</span><span class='line'><span class="err">在上面我们已经创建了</span><span class="n">Post</span><span class="err">模型并且通过</span><span class="n">django</span><span class="err">控制台来添加修改模型。</span>
-</span><span class='line'><span class="err">然后我们使用</span><span class="n">django</span><span class="err">自带的</span><span class="n">web</span><span class="err">管理界面</span><span class="n">admin</span><span class="err">来在页面上修改模型数据。</span>
-</span><span class='line'>
-</span><span class='line'><span class="c">### 模型注册</span>
-</span><span class='line'><span class="err">首先我们需要在</span><span class="n">admin</span><span class="err">中注册对应的模型，打开</span><span class="n">blog</span><span class="o">/</span><span class="n">admin</span><span class="o">.</span><span class="n">py</span><span class="err">文件，修改如下</span>
-</span></code></pre></td></tr></table></div></figure> python
-from django.contrib import admin
-from .models import Post
-
-admin.site.register(Post)
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="err">注意上面的</span><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span><span class="err">，使用到了</span><span class="n">python3</span><span class="err">的相对导入。</span>
-</span><span class='line'>
-</span><span class='line'><span class="c">### 运行服务器</span>
-</span><span class='line'><span class="err">一切都这么简单，接下来我们启动服务器</span>
-</span></code></pre></td></tr></table></div></figure>
-(myvenv) [mango@centos mysite]$ python manage.py runserver 192.168.203.95:8000
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="err">打开链接：</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">203.95</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">admin</span><span class="o">/</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">看到下面的界面：</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">!</span><span class="p">[](</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">yidaospace</span><span class="o">.</span><span class="n">qiniudn</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dj002</span><span class="o">.</span><span class="n">jpg</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c">### 添加管理员</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">不过你需要一个管理员才能登录。运行</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span><span class="err">可以创建管理员账号。</span>
-</span></code></pre></td></tr></table></div></figure>
-(myvenv) [mango@centos00 mysite]$ python manage.py createsuperuser
-Username (leave blank to use &#8216;mango&#8217;): admin
-Email address: admin@gmail.com
-Password:
-Password (again):
-Superuser created successfully.
-&#8220;`
-
-我创建了一个admin/admin的账户。这时候登录
-
-![](http://yidaospace.qiniudn.com/dj003.jpg)
-
-点击Posts修改或者增加等等，确保里面至少2个又published_date，这个后面会用到。
-
-![](http://yidaospace.qiniudn.com/dj004.jpg)
-
-更多关于django admin的内容，参考官方文档：[admin](https://docs.djangoproject.com/en/1.7/ref/contrib/admin/)
-
-### 接下来呢？
-先别急嘛，坐下来喝杯咖啡先。到现在为止你已经前进了很远了。
-
-</post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></post:></user:></user:>
 ]]></content>
   </entry>
   
