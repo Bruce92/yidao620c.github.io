@@ -9,8 +9,9 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（4）- 三部曲 什么是三部曲？
-其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。 这三部曲就是： 定义urls映射 定义views 定义templates 什么是URL？ &hellip;">
+	<meta name="description" content="2015-04-21 10:23 django, simpleblog Django1.7开发博客（5）- 页面美化 什么是css？
+css是一种用来描述某种标记语言写的web站点的样式语言。
+这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： Codeacademy HTML & &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,7 +111,60 @@
   
 
 
-2015-04-20</div>
+2015-04-21 10:23</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-05.html" itemprop="url">Django1.7开发博客（5）- 页面美化</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="css">什么是css？</h3>
+<p>css是一种用来描述某种标记语言写的web站点的样式语言。
+这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： <a href="http://www.codecademy.com/tracks/web">Codeacademy HTML &amp; CSS course</a></p>
+
+<p>不想从头开始写，因为我们有现成的css框架，没必要重复造轮子。</p>
+
+<h3 id="bootstrap">使用Bootstrap</h3>
+<p>目前最流行的css框架非bootstrap莫属了，官网地址：<a href="http://getbootstrap.com/">http://getbootstrap.com/</a></p>
+
+<p>只需要在你的html模板页面的开始部分添加下面几句就行了</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>你的工程里面不需要引入任何的文件，因为这里直接引用了bootstrap公共的css和js文件。
+		
+		<a href="/blog/20150421/simpleblog-05.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20 19:16</div>
 		<div class="tags">
 
 
@@ -160,7 +214,7 @@
   
 
 
-2015-04-20</div>
+2015-04-20 19:03</div>
 		<div class="tags">
 
 
@@ -207,7 +261,7 @@
   
 
 
-2015-04-20</div>
+2015-04-20 18:49</div>
 		<div class="tags">
 
 
@@ -254,7 +308,7 @@
   
 
 
-2015-04-20</div>
+2015-04-20 17:31</div>
 		<div class="tags">
 
 
@@ -301,7 +355,7 @@
   
 
 
-2015-04-20</div>
+2015-04-20 16:40</div>
 		<div class="tags">
 
 
@@ -359,7 +413,7 @@
   
 
 
-2015-04-20</div>
+2015-04-20 16:33</div>
 		<div class="tags">
 
 
@@ -394,95 +448,6 @@
 <p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：
 		
 		<a href="/blog/20150420/mosquitto-install.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/java8/'>java8</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/java8-lambda.html" itemprop="url">Java8中的lambda表达式</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
-总共增加了55个新特性，其中最最吸引人的就是Lambdas表达式和Stream函数式编程，本文详细讲解这两个特性。</p>
-
-<p>其他特性比如日期API，泛型，反射，注解，集合框架，并发，Nashorn引擎等等这里暂时就不详细介绍了。
-具体可以参考：<a href="http://openjdk.java.net/projects/jdk8/features">http://openjdk.java.net/projects/jdk8/features</a></p>
-
-<p>昨天参加了Oracle的Java8宣讲活动，有幸目睹了Simon Ritter的风采，写个总结来分享下。</p>
-
-<p><strong>Java并发编程演变：</strong></p>
-<style type="text/css">
-.mytable {
-    border-collapse: collapse;
-    border: none;
-}
-.mytable td {
-    border: solid #000 1px;
-    padding: 5px;
-}
-</style>
-
-<table class="mytable">
-    <tbody>
-    <tr>
-    <td>版本</td>
-    <td>发布年份</td>
-    <td>并发技术</td>
-    </tr>
-    <tr>
-    <td>1.4</td>
-    <td>2002</td>
-    <td>java.lang.Thread</td>
-    </tr>
-    <tr>
-    <td>5</td>
-    <td>2004</td>
-    <td>java.util.concurrent(jsr166)</td>
-    </tr>
-    <tr>
-    <td>6</td>
-    <td>2006</td>
-    <td>Phasers, etc(jsr166)</td>
-    </tr>
-    <tr>
-    <td>7</td>
-    <td>2011</td>
-    <td>Fork/Join Framework(jsr166y)</td>
-    </tr>
-    <tr>
-    <td>8</td>
-    <td>2014</td>
-    <td>Project Lambda</td>
-    </tr>
-    </tbody>
-</table>
-
-<p>先来一个小例子见识下Java8的威力！
-		
-		<a href="/blog/20150420/java8-lambda.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>
