@@ -48,3 +48,4 @@ Thanks for coming here and wish we could be friends. I'll be appreciate if you l
 * GitHub: <https://github.com/yidao620c>
 * 公司: [广州云宏信息科技股份有限公司](http://www.winhong.com/)
 
+![](http://yidaospace.qiniudn.com/mylove.jpg)
