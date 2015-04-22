@@ -9,8 +9,8 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（3）- 部署 到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？ Heroku简介
-Heroku是一个主机托管平台， &hellip;">
+	<meta name="description" content="2015-04-20 django, simpleblog Django1.7开发博客（4）- 三部曲 什么是三部曲？
+其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。 这三部曲就是： 定义urls映射 定义views 定义templates 什么是URL？ &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -94,6 +94,56 @@ Heroku是一个主机托管平台， &hellip;">
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-04.html" itemprop="url">Django1.7开发博客（4）- 三部曲</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">什么是三部曲？</h3>
+<p>其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。</p>
+
+<p>这三部曲就是：</p>
+
+<ol>
+  <li>定义urls映射</li>
+  <li>定义views</li>
+  <li>定义templates</li>
+</ol>
+
+<h3 id="url">什么是URL？</h3>
+<p>URL就算一个WEB地址，你在浏览器输入这个地址，然后浏览器返回相应的网页给你。
+比如http://djangogirls.com是一个URL，而127.0.0.1:8000同样也是个URL，默认就是http协议的。</p>
+
+<h3 id="djangourl">Django中的URL工作原理</h3>
+<p>我们打开mysite/urls.py文件，会发现类似下面这样：
+		
+		<a href="/blog/20150420/simpleblog-04.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -433,54 +483,6 @@ Heroku是一个主机托管平台， &hellip;">
 <p>先来一个小例子见识下Java8的威力！
 		
 		<a href="/blog/20150420/java8-lambda.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/xpath/'>xpath</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/xpath-introduce.html" itemprop="url">Xpath入门笔记</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki</h3>
-
-<p>XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言。
-XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力。
-起初XPath的提出的初衷是将其作为一个通用的、介于XPointer与XSL间的语法模型。
-但是XPath很快的被开发者采用来当作小型查询语言。</p>
-
-<p>W3C网址： <a href="http://www.w3schools.com/XPath/">http://www.w3schools.com/XPath/</a></p>
-
-<h3 id="section">表示法</h3>
-
-<p>最常见的XPath表达式是路径表达式（XPath这一名称的另一来源）。</p>
-
-<p>路径表达式是从一个XML节点（当前的上下文节点）到另一个节点、或一组节点的书面步骤顺序。
-这些步骤以“／”字符分开，每一步有三个构成成分：
-		
-		<a href="/blog/20150420/xpath-introduce.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

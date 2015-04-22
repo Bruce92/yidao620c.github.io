@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：django | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/django/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-21T16:11:47+08:00</updated>
+  <updated>2015-04-22T09:35:59+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（10）- 富文本与代码高亮]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-11.html"/>
+    <updated>2015-04-21T18:27:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-11</id>
+    <content type="html"><![CDATA[<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
+其实这个我已经在前面文章提到过，可以回去再看看。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（10）- 全文搜索]]></title>
@@ -1028,135 +1039,6 @@ def post_edit(request, pk):
 <h2 id="section-5">还有一件事</h2>
 <p>发布到heroku上去。不要我每次提醒了吧，Enjoy it！</p>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（6）- 模板继承]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-06.html"/>
-    <updated>2015-04-21T11:44:21+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-06</id>
-    <content type="html"><![CDATA[<h3 id="section">什么是模板继承？</h3>
-<p>就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
-通过这种方式你就需要在每个页面复制粘贴同样的代码了。
-如果你想改变页面某个公共部分，你不需要每个页面的去修改，只需要修改一个模板就行了，
-这样最大化复用，减少了冗余，也减少了出错的几率，而且你敲的代码也少了。</p>
-
-<h3 id="base">创建一个base模板</h3>
-<p>一个base模板就是你全站所有页面都会继承的最基本的网站框架模板。我们在blog/templates/blog/中创建一个base.html模板：</p>
-
-<pre><code>blog
-└───templates
-    └───blog
-            base.html
-            post_list.html
-</code></pre>
-
-<p>打开base.html，然后将post_list.html的所有内容都复制过来，现在它的内容如下：<!--more-->
-</p>
-
-<p>&#8220;` html
-{% load staticfiles %}</p>
-<html>
-<head>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/blog.css' %}" />
-<title>Django Girls Blog</title>
-</head>
-<body>
-    <div class="page-header">
-        <h1><a href="http://yidao620c.github.io/">Django Girls Blog</a></h1>
-    </div>
-    <div class="content">
-        <div class="row">
-            <div class="col-md-8">
-                {% for post in posts %}
-                    <div class="post">
-                        <h1><a href="">{{ post.title }}</a></h1>
-                        <p>published: {{ post.published_date }}</p>
-                        <p>{{ post.text|linebreaks }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-<p>&#8220;`
-
-在base.html中，将…块替换成下面的：
-</p>
-
-<p>&#8220;` html</p>
-<body>
-    <div class="page-header">
-        <h1><a href="http://yidao620c.github.io/">Django Girls Blog</a></h1>
-    </div>
-    <div class="content">
-        <div class="row">
-            <div class="col-md-8">
-            {% block content %}
-            {% endblock %}
-            </div>
-        </div>
-    </div>
-</body>
-<p>&#8220;`
-</p>
-
-<p>我们其实就是将<code>{% for post in posts %}{% endfor %}</code>
-替换成了<code>{% block content %}{% endblock %}</code>。
-在base.html中我们创建了一个名字为content的block，其他页面可以通过继承base.html，
-替换这个content块来生成新的页面，页面其他内容保持不变。</p>
-
-<p>保存后，再修改post_list.html页面，只保留的内容：
-</p>
-
-<p><code>html
-{% for post in posts %}
-    &lt;div class="post"&gt;
-        &lt;h1&gt;&lt;a href=""&gt;{{ post.title }}&lt;/a&gt;&lt;/h1&gt;
-        &lt;p&gt;published: {{ post.published_date }}&lt;/p&gt;
-        &lt;p&gt;{{ post.text|linebreaks }}&lt;/p&gt;
-    &lt;/div&gt;
-{% endfor %}
-</code>
-
-然后添加这句到post_list.html页面的最开始部分：
-</p>
-
-<p><code>
-{% extends 'blog/base.html' %}
-</code>
-
-这句话的意思就是该模板继承自blog/base.html模板</p>
-
-<p>还有一步就是要将刚刚的内容放到{% block content %}和
-{% endblock content %}之间，这时候整个页面是这样的：
-</p>
-
-<p><code>html
-{% extends 'blog/base.html' %}
-{% block content %}
-{% for post in posts %}
-    &lt;div class="post"&gt;
-        &lt;h1&gt;&lt;a href=""&gt;{{ post.title }}&lt;/a&gt;&lt;/h1&gt;
-        &lt;p&gt;published: {{ post.published_date }}&lt;/p&gt;
-        &lt;p&gt;{{ post.text|linebreaks }}&lt;/p&gt;
-    &lt;/div&gt;
-{% endfor %}
-{% endblock content %}
-</code>
-</p>
-
-<p>保存后刷新页面，看下是不是能正常工作：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj016.jpg" alt="" /></p>
-
-<p>一切都OK…</p>
 ]]></content>
   </entry>
   
