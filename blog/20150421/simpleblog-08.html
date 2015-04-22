@@ -252,6 +252,205 @@
 
 <p>删除后再去首页看，已经没有这篇文章了。</p>
 
+<h2 id="section-3">分页功能</h2>
+<p>在首页显示文章列表时候需要分页显示，这时候可以使用django的一个插件叫pagination</p>
+
+<p>设置非常简单，简直是简单到变态。</p>
+
+<p>settings.py文件中</p>
+
+<ol>
+  <li>INSTALLED_APPS增加’pagination’项</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c"># Application definition</span>
+</span><span class="line"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;blog&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;pagination&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>MIDDLEWARE_CLASSES增加’pagination.middleware.PaginationMiddleware’</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">MIDDLEWARE_CLASSES</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.sessions.middleware.SessionMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.middleware.common.CommonMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.middleware.csrf.CsrfViewMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth.middleware.SessionAuthenticationMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.messages.middleware.MessageMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;pagination.middleware.PaginationMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>TEMPLATE_CONTEXT_PROCESSORS增加’django.core.context_processors.request’</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">TEMPLATE_CONTEXT_PROCESSORS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&quot;django.contrib.auth.context_processors.auth&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.debug&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.i18n&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.media&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.static&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.tz&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.contrib.messages.context_processors.messages&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;blog.commons.context_processors.custom_proc&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.request&quot;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>requirements.txt中增加依赖：</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">django</span><span class="o">-</span><span class="n">pagination</span><span class="o">-</span><span class="n">py3</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>修改post_list.html页面，增加autopaginate标签</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">extends</span> <span class="s">&#39;mysite/base.html&#39;</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">blog_tags</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">pagination_tags</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">content</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">list_header</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;box&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">list_header</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">autopaginate</span> <span class="n">posts</span> <span class="mi">10</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_detail&#39; pk=post.pk %}&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">title</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">published_date</span><span class="o">|</span><span class="n">date</span><span class="p">:</span><span class="s">&#39;Y年m月d日&#39;</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;comments&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">num_comment</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">num_comment</span> <span class="p">}}</span> <span class="err">条评论</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="err">没有评论</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;comments&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">click</span> <span class="p">}}</span> <span class="err">人阅读</span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;fixed&quot;</span><span class="o">&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;content&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">autoescape</span> <span class="n">off</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">text</span><span class="o">|</span><span class="n">more</span><span class="p">:</span><span class="n">post</span><span class="o">.</span><span class="n">id</span> <span class="p">}}</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">endautoescape</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;under&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;categories&quot;</span><span class="o">&gt;</span><span class="err">分类</span><span class="p">:</span> <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_list_by_category&#39; cg=post.category.name %}&quot;</span>
+</span><span class="line">                       <span class="n">rel</span><span class="o">=</span><span class="s">&quot;category tag&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span> <span class="p">}}</span>
+</span><span class="line">                    <span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;tags&quot;</span><span class="o">&gt;</span><span class="err">标签</span><span class="p">:</span> <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">tg</span> <span class="ow">in</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">all</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_list_by_tag&#39; tag=tg.name %}&quot;</span>
+</span><span class="line">                           <span class="n">rel</span><span class="o">=</span><span class="s">&quot;tag&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">tg</span><span class="o">.</span><span class="n">name</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">paginate</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">endblock</span> <span class="o">%</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>刷新下列表首页，看看分页效果。</p>
+
 <p>恭喜你，你可以大声对自己喊：我太棒了。^_^</p>
 </div>
 

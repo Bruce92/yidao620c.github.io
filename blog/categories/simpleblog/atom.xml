@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：simpleblog | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/simpleblog/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-22T09:35:59+08:00</updated>
+  <updated>2015-04-22T13:02:35+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -14,12 +14,175 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（10）- 富文本与代码高亮]]></title>
+    <title type="html"><![CDATA[Django1.7开发博客（11）- 富文本与代码高亮]]></title>
     <link href="http://yidao620c.github.io/blog/20150421/simpleblog-11.html"/>
     <updated>2015-04-21T18:27:29+08:00</updated>
     <id>http://yidao620c.github.io/blog/20150421/simpleblog-11</id>
-    <content type="html"><![CDATA[<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
+    <content type="html"><![CDATA[<h2 id="tinymce">TinyMCE介绍</h2>
+<p>TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
+功能配置灵活简单（两行代码就可以将编辑器嵌入网页中），支持AJAX。另一特点是加载速度非常快。</p>
+
+<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
 其实这个我已经在前面文章提到过，可以回去再看看。</p>
+
+<p>TinyMCE的官方网站是：<a href="http://www.tinymce.com/">http://www.tinymce.com/</a></p>
+
+<p>下载地址：<a href="http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip">http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip</a></p>
+
+<p>TinyMCE的最新版本是4.1.9，下面是官网截屏：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/tinymce.png" alt="" /></p>
+
+<p>下载下来后，我们把它解压到工程的static/目录下面，如下图所示：<!--more--></p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj101.png" alt="" /></p>
+
+<h2 id="section">安装原理</h2>
+<p>安装的原理很简单，只需要在使用编辑器的页面里引用tinymce.min.js文件并初始化就可以了。
+tinymce.min.js文件在tinymce项目里，
+tinymce.min.js会根据初始配置里的信息找到需要用编辑器的html节点。</p>
+
+<p>例如在post_edit.html页面使用编辑器，只需要在模板文件写下：</p>
+
+<p></p>
+
+<p><code>html
+{% load staticfiles %}
+{% block header %}
+    &lt;link rel="stylesheet" href="{% static 'tinymce/plugins/upload/plugin.css' %}"&gt;
+    &lt;script type="text/javascript" src="{% static 'tinymce/tinymce.min.js' %}"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        tinymce.init({
+            selector: "textarea",
+            //width: 800,
+            height: 300,
+            forced_root_block: false,
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor sh4tinymce upload",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime table contextmenu paste"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter" +
+            " alignright alignjustify | bullist numlist outdent indent | preview link image sh4tinymce"
+        });
+    &lt;/script&gt;
+{% endblock %}
+</code>
+</p>
+
+<p>这段代码的含义是 初始化 tinyMCE编辑器，selector指需要将编辑器显示在html那个标签节点，
+这里选了textareas。则表示<textareas>会变成编辑器所在的位置。</textareas></p>
+
+<p>另外，我还自定义一下编辑器的高度、插件、菜单项目等。具体详细配置请参考官方文档，写的都比较清楚。</p>
+
+<h2 id="tinymceaddmore">给TinyMCE增加一个addmore插件</h2>
+<p>需求很简单，就是每次我写文章的时候需要插入某个<code>&lt;!--more--&gt;</code>标签，
+这样可以在列表页面先只显示文章的一部分，然后碰到这个more标签就显示一个”点击阅读更多”的链接。</p>
+
+<p>第一步，在tinymce/plugins文件下新增一个addmore文件夹，然后在里面新建一个plugin.min.js文件，
+内容如下：</p>
+
+<p><code>
+tinymce.PluginManager.add("addmore", function (a) {
+    a.addCommand("InsertMoreRule", function () {
+        a.execCommand("mceInsertContent", !1, "[!--more--]")
+    }), a.addButton("addmore", {
+        icon: "addmore",
+        tooltip: "Insert More",
+        cmd: "InsertMoreRule"
+    }), a.addMenuItem("addmore", {
+        icon: "addmore",
+        text: "Insert More",
+        cmd: "InsertMoreRule",
+        context: "insert"
+    })
+});
+</code></p>
+
+<p>在post_edit.html中修改tinymce.init方法，plugins项目后面添加一个addmore：</p>
+
+<pre><code>...
+plugins: [
+    "advlist autolink lists link image charmap print preview anchor sh4tinymce upload",
+    "searchreplace visualblocks code fullscreen",
+    "insertdatetime table contextmenu paste addmore"
+],
+...
+</code></pre>
+
+<p>再看看效果，没问题了。</p>
+
+<h2 id="syntaxhighlighter">SyntaxHighlighter代码高亮</h2>
+<p>程序员写博客当然少不了代码高亮，这个功能页很容易实现。有一款插件叫SyntaxHighlighter值的推荐。</p>
+
+<p>项目主页：<a href="http://alexgorbatchev.com/SyntaxHighlighter/">http://alexgorbatchev.com/SyntaxHighlighter/</a></p>
+
+<p>下载地址：<a href="http://alexgorbatchev.com/SyntaxHighlighter/download/download.php?sh_current">http://alexgorbatchev.com/SyntaxHighlighter/download/download.php?sh_current</a></p>
+
+<p>下载下来后直接解压到static/目录下面，这个跟tinymce是一样的原理。</p>
+
+<p><strong>使用方法</strong></p>
+
+<p>只需要修改django页面的基础模板就行了，非常简单。</p>
+
+<p>打开mysite/templates/mysite/base.html页面，引入syntaxhighlighter：
+</p>
+
+<p>&#8220;` html
+{% load staticfiles %}
+{% load i18n %}</p>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}" />
+    <!-- Blog CSS-->
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'syntaxhighlighter/styles/shCoreDefault.css' %}" />
+    <script type="text/javascript" src="{% static 'syntaxhighlighter/scripts/shCore.js' %}"></script>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block header %}
+    {% endblock %}
+    <title>{% trans &#8216;Simple Blog&#8217;%}</title>
+</head>
+<body class="customize-support">
+中间省略&#8230;
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushJScript.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushBash.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushPhp.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushJava.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushSql.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushXml.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushPython.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushCss.js' %}"></script>
+<script class="javascript" src="{% static 'syntaxhighlighter/scripts/shBrushCpp.js' %}"></script>
+</body>
+</html>
+<p>&#8220;`
+</p>
+
+<p>由于我们之前已经安装过了TinyMCE，这个跟它结合起来就非常好用了，因为TinyMCE自带有选择代码语言功能。</p>
+
+<p>下面是我创建文章时，插入了一段python代码的示例：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj102.png" alt="" /></p>
+
+<p>这个是保存后的效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj103.png" alt="" /></p>
+
+<h2 id="section-1">最后一件事</h2>
+<p>别忘了部署到Heroku上面和别人分享你的成果。</p>
+
+<p>OK，到此为止，前台的各种功能已经差不多了，你能一直坚持学到这里很不错了，为你自己鼓掌吧。</p>
+
+<p>后面还有一个重头戏，就是django的后台管理，我选择了更美观更好用的xamdin，敬请期待…</p>
 
 ]]></content>
   </entry>
@@ -604,6 +767,120 @@ def post_remove(request, pk):
 <p><img src="http://yidaospace.qiniudn.com/dj027.jpg" alt="" /></p>
 
 <p>删除后再去首页看，已经没有这篇文章了。</p>
+
+<h2 id="section-3">分页功能</h2>
+<p>在首页显示文章列表时候需要分页显示，这时候可以使用django的一个插件叫pagination</p>
+
+<p>设置非常简单，简直是简单到变态。</p>
+
+<p>settings.py文件中</p>
+
+<ol>
+  <li>INSTALLED_APPS增加’pagination’项
+<code>python
+# Application definition
+INSTALLED_APPS = (
+ 'django.contrib.admin',
+ 'django.contrib.auth',
+ 'django.contrib.contenttypes',
+ 'django.contrib.sessions',
+ 'django.contrib.messages',
+ 'django.contrib.staticfiles',
+ 'blog',
+ 'pagination',
+)
+</code></li>
+  <li>MIDDLEWARE_CLASSES增加’pagination.middleware.PaginationMiddleware’
+<code>python
+MIDDLEWARE_CLASSES = (
+ 'django.contrib.sessions.middleware.SessionMiddleware',
+ 'django.middleware.common.CommonMiddleware',
+ 'django.middleware.csrf.CsrfViewMiddleware',
+ 'django.contrib.auth.middleware.AuthenticationMiddleware',
+ 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+ 'django.contrib.messages.middleware.MessageMiddleware',
+ 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+ 'pagination.middleware.PaginationMiddleware',
+)
+</code></li>
+  <li>TEMPLATE_CONTEXT_PROCESSORS增加’django.core.context_processors.request’
+<code>python
+TEMPLATE_CONTEXT_PROCESSORS = (
+ "django.contrib.auth.context_processors.auth",
+ "django.core.context_processors.debug",
+ "django.core.context_processors.i18n",
+ "django.core.context_processors.media",
+ "django.core.context_processors.static",
+ "django.core.context_processors.tz",
+ "django.contrib.messages.context_processors.messages",
+ "blog.commons.context_processors.custom_proc",
+ "django.core.context_processors.request",
+)
+</code></li>
+  <li>requirements.txt中增加依赖：
+<code>
+django-pagination-py3==1.1.1
+</code></li>
+  <li>修改post_list.html页面，增加autopaginate标签
+</li>
+</ol>
+
+<p><code>
+{% extends 'mysite/base.html' %}
+{% load blog_tags %}
+{% load pagination_tags %}
+{% block content %}
+    {% if list_header %}
+        &lt;div class="box"&gt;{{ list_header }}&lt;/div&gt;
+    {% endif %}
+    {% autopaginate posts 10 %}
+    {% for post in posts %}
+        &lt;div class="post"&gt;
+            &lt;h2&gt;&lt;a href="{% url 'blog.views.post_detail' pk=post.pk %}"&gt;{{ post.title }}&lt;/a&gt;&lt;/h2&gt;
+            &lt;div class="info"&gt;
+                &lt;span class="date"&gt;{{ post.published_date|date:'Y年m月d日' }}&lt;/span&gt;
+                &lt;span class="comments"&gt;
+                    {% if post.num_comment &gt; 0 %}
+                        {{ post.num_comment }} 条评论
+                    {% else %}
+                        没有评论
+                    {% endif %}
+                &lt;/span&gt;
+                &lt;span class="comments"&gt;
+                    {{ post.click }} 人阅读&amp;nbsp;&amp;nbsp;
+                &lt;/span&gt;
+                &lt;div class="fixed"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="content"&gt;
+                &lt;p&gt;
+                    {% autoescape off %}
+                        {{ post.text|more:post.id }}
+                    {% endautoescape %}
+                &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="under"&gt;
+                &lt;span class="categories"&gt;分类: &lt;/span&gt;
+                &lt;span&gt;
+                    &lt;a href="{% url 'blog.views.post_list_by_category' cg=post.category.name %}"
+                       rel="category tag"&gt;{{ post.category.name }}
+                    &lt;/a&gt;
+                &lt;/span&gt;
+                &lt;span class="tags"&gt;标签: &lt;/span&gt;
+                &lt;span&gt;
+                    {% for tg in post.tags.all %}
+                        &lt;a href="{% url 'blog.views.post_list_by_tag' tag=tg.name %}"
+                           rel="tag"&gt;{{ tg.name }}&lt;/a&gt;&amp;nbsp;
+                    {% endfor %}
+                &lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    {% endfor %}
+    {% paginate %}
+{% endblock %}
+</code>
+</p>
+
+<p>刷新下列表首页，看看分页效果。</p>
 
 <p>恭喜你，你可以大声对自己喊：我太棒了。^_^</p>
 ]]></content>

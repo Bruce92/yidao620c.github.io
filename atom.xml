@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-22T09:35:59+08:00</updated>
+  <updated>2015-04-22T13:02:35+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -14,12 +14,236 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（10）- 富文本与代码高亮]]></title>
+    <title type="html"><![CDATA[Django1.7开发博客（11）- 富文本与代码高亮]]></title>
     <link href="http://yidao620c.github.io/blog/20150421/simpleblog-11.html"/>
     <updated>2015-04-21T18:27:29+08:00</updated>
     <id>http://yidao620c.github.io/blog/20150421/simpleblog-11</id>
-    <content type="html"><![CDATA[<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
+    <content type="html"><![CDATA[<h2 id="tinymce">TinyMCE介绍</h2>
+<p>TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
+功能配置灵活简单（两行代码就可以将编辑器嵌入网页中），支持AJAX。另一特点是加载速度非常快。</p>
+
+<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
 其实这个我已经在前面文章提到过，可以回去再看看。</p>
+
+<p>TinyMCE的官方网站是：<a href="http://www.tinymce.com/">http://www.tinymce.com/</a></p>
+
+<p>下载地址：<a href="http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip">http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip</a></p>
+
+<p>TinyMCE的最新版本是4.1.9，下面是官网截屏：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/tinymce.png" alt="" /></p>
+
+<p>下载下来后，我们把它解压到工程的static/目录下面，如下图所示：<!--more--></p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj101.png" alt="" /></p>
+
+<h2 id="section">安装原理</h2>
+<p>安装的原理很简单，只需要在使用编辑器的页面里引用tinymce.min.js文件并初始化就可以了。
+tinymce.min.js文件在tinymce项目里，
+tinymce.min.js会根据初始配置里的信息找到需要用编辑器的html节点。</p>
+
+<p>例如在post_edit.html页面使用编辑器，只需要在模板文件写下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line">{% block header %}
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;tinymce/plugins/upload/plugin.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;tinymce/tinymce.min.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nx">tinymce</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class="line">            <span class="nx">selector</span><span class="o">:</span> <span class="s2">&quot;textarea&quot;</span><span class="p">,</span>
+</span><span class="line">            <span class="c1">//width: 800,</span>
+</span><span class="line">            <span class="nx">height</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
+</span><span class="line">            <span class="nx">forced_root_block</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class="line">            <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
+</span><span class="line">                <span class="s2">&quot;advlist autolink lists link image charmap print preview anchor sh4tinymce upload&quot;</span><span class="p">,</span>
+</span><span class="line">                <span class="s2">&quot;searchreplace visualblocks code fullscreen&quot;</span><span class="p">,</span>
+</span><span class="line">                <span class="s2">&quot;insertdatetime table contextmenu paste&quot;</span>
+</span><span class="line">            <span class="p">],</span>
+</span><span class="line">            <span class="nx">toolbar</span><span class="o">:</span> <span class="s2">&quot;insertfile undo redo | styleselect | bold italic | alignleft aligncenter&quot;</span> <span class="o">+</span>
+</span><span class="line">            <span class="s2">&quot; alignright alignjustify | bullist numlist outdent indent | preview link image sh4tinymce&quot;</span>
+</span><span class="line">        <span class="p">});</span>
+</span><span class="line">    <span class="nt">&lt;/script&gt;</span>
+</span><span class="line">{% endblock %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这段代码的含义是 初始化 tinyMCE编辑器，selector指需要将编辑器显示在html那个标签节点，
+这里选了textareas。则表示<textareas>会变成编辑器所在的位置。</textareas></p>
+
+<p>另外，我还自定义一下编辑器的高度、插件、菜单项目等。具体详细配置请参考官方文档，写的都比较清楚。</p>
+
+<h2 id="tinymceaddmore">给TinyMCE增加一个addmore插件</h2>
+<p>需求很简单，就是每次我写文章的时候需要插入某个<code>&lt;!--more--&gt;</code>标签，
+这样可以在列表页面先只显示文章的一部分，然后碰到这个more标签就显示一个”点击阅读更多”的链接。</p>
+
+<p>第一步，在tinymce/plugins文件下新增一个addmore文件夹，然后在里面新建一个plugin.min.js文件，
+内容如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">tinymce.PluginManager.add(&quot;addmore&quot;, function (a) {
+</span><span class="line">    a.addCommand(&quot;InsertMoreRule&quot;, function () {
+</span><span class="line">        a.execCommand(&quot;mceInsertContent&quot;, !1, &quot;[!--more--]&quot;)
+</span><span class="line">    }), a.addButton(&quot;addmore&quot;, {
+</span><span class="line">        icon: &quot;addmore&quot;,
+</span><span class="line">        tooltip: &quot;Insert More&quot;,
+</span><span class="line">        cmd: &quot;InsertMoreRule&quot;
+</span><span class="line">    }), a.addMenuItem(&quot;addmore&quot;, {
+</span><span class="line">        icon: &quot;addmore&quot;,
+</span><span class="line">        text: &quot;Insert More&quot;,
+</span><span class="line">        cmd: &quot;InsertMoreRule&quot;,
+</span><span class="line">        context: &quot;insert&quot;
+</span><span class="line">    })
+</span><span class="line">});
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>在post_edit.html中修改tinymce.init方法，plugins项目后面添加一个addmore：</p>
+
+<pre><code>...
+plugins: [
+    "advlist autolink lists link image charmap print preview anchor sh4tinymce upload",
+    "searchreplace visualblocks code fullscreen",
+    "insertdatetime table contextmenu paste addmore"
+],
+...
+</code></pre>
+
+<p>再看看效果，没问题了。</p>
+
+<h2 id="syntaxhighlighter">SyntaxHighlighter代码高亮</h2>
+<p>程序员写博客当然少不了代码高亮，这个功能页很容易实现。有一款插件叫SyntaxHighlighter值的推荐。</p>
+
+<p>项目主页：<a href="http://alexgorbatchev.com/SyntaxHighlighter/">http://alexgorbatchev.com/SyntaxHighlighter/</a></p>
+
+<p>下载地址：<a href="http://alexgorbatchev.com/SyntaxHighlighter/download/download.php?sh_current">http://alexgorbatchev.com/SyntaxHighlighter/download/download.php?sh_current</a></p>
+
+<p>下载下来后直接解压到static/目录下面，这个跟tinymce是一样的原理。</p>
+
+<p><strong>使用方法</strong></p>
+
+<p>只需要修改django页面的基础模板就行了，非常简单。</p>
+
+<p>打开mysite/templates/mysite/base.html页面，引入syntaxhighlighter：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line">{% load i18n %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html;charset=utf-8&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- Latest compiled and minified CSS --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/bootstrap.min.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- Optional theme --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/bootstrap-theme.min.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- Blog CSS--&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/styles/shCoreDefault.css&#39; %}&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shCore.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span><span class="nx">SyntaxHighlighter</span><span class="p">.</span><span class="nx">all</span><span class="p">();</span><span class="nt">&lt;/script&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- Latest compiled and minified JavaScript --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;{% static &#39;js/jquery-1.11.1.min.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;{% static &#39;js/base.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;{% static &#39;js/bootstrap.min.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    {% block header %}
+</span><span class="line">    {% endblock %}
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>{% trans &#39;Simple Blog&#39;%}<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;customize-support&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">中间省略...
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushJScript.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushBash.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushPhp.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushJava.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushSql.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushXml.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushPython.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushCss.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">class=</span><span class="s">&quot;javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;syntaxhighlighter/scripts/shBrushCpp.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>由于我们之前已经安装过了TinyMCE，这个跟它结合起来就非常好用了，因为TinyMCE自带有选择代码语言功能。</p>
+
+<p>下面是我创建文章时，插入了一段python代码的示例：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj102.png" alt="" /></p>
+
+<p>这个是保存后的效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj103.png" alt="" /></p>
+
+<h2 id="section-1">最后一件事</h2>
+<p>别忘了部署到Heroku上面和别人分享你的成果。</p>
+
+<p>OK，到此为止，前台的各种功能已经差不多了，你能一直坚持学到这里很不错了，为你自己鼓掌吧。</p>
+
+<p>后面还有一个重头戏，就是django的后台管理，我选择了更美观更好用的xamdin，敬请期待…</p>
 
 ]]></content>
   </entry>
@@ -749,6 +973,205 @@ django中认证的装饰器位于模块django.contrib.auth.decorators中，名�
 <p><img src="http://yidaospace.qiniudn.com/dj027.jpg" alt="" /></p>
 
 <p>删除后再去首页看，已经没有这篇文章了。</p>
+
+<h2 id="section-3">分页功能</h2>
+<p>在首页显示文章列表时候需要分页显示，这时候可以使用django的一个插件叫pagination</p>
+
+<p>设置非常简单，简直是简单到变态。</p>
+
+<p>settings.py文件中</p>
+
+<ol>
+  <li>INSTALLED_APPS增加’pagination’项</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c"># Application definition</span>
+</span><span class="line"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;blog&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;pagination&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>MIDDLEWARE_CLASSES增加’pagination.middleware.PaginationMiddleware’</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">MIDDLEWARE_CLASSES</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.sessions.middleware.SessionMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.middleware.common.CommonMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.middleware.csrf.CsrfViewMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth.middleware.SessionAuthenticationMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.messages.middleware.MessageMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;pagination.middleware.PaginationMiddleware&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>TEMPLATE_CONTEXT_PROCESSORS增加’django.core.context_processors.request’</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">TEMPLATE_CONTEXT_PROCESSORS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&quot;django.contrib.auth.context_processors.auth&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.debug&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.i18n&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.media&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.static&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.tz&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.contrib.messages.context_processors.messages&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;blog.commons.context_processors.custom_proc&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&quot;django.core.context_processors.request&quot;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>requirements.txt中增加依赖：</li>
+</ol>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">django</span><span class="o">-</span><span class="n">pagination</span><span class="o">-</span><span class="n">py3</span><span class="o">==</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ol>
+  <li>修改post_list.html页面，增加autopaginate标签</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">extends</span> <span class="s">&#39;mysite/base.html&#39;</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">blog_tags</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">pagination_tags</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">content</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">list_header</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;box&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">list_header</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">autopaginate</span> <span class="n">posts</span> <span class="mi">10</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_detail&#39; pk=post.pk %}&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">title</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">published_date</span><span class="o">|</span><span class="n">date</span><span class="p">:</span><span class="s">&#39;Y年m月d日&#39;</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;comments&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">num_comment</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">num_comment</span> <span class="p">}}</span> <span class="err">条评论</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="err">没有评论</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;comments&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">click</span> <span class="p">}}</span> <span class="err">人阅读</span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;fixed&quot;</span><span class="o">&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;content&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">autoescape</span> <span class="n">off</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">text</span><span class="o">|</span><span class="n">more</span><span class="p">:</span><span class="n">post</span><span class="o">.</span><span class="n">id</span> <span class="p">}}</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">endautoescape</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;under&quot;</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;categories&quot;</span><span class="o">&gt;</span><span class="err">分类</span><span class="p">:</span> <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_list_by_category&#39; cg=post.category.name %}&quot;</span>
+</span><span class="line">                       <span class="n">rel</span><span class="o">=</span><span class="s">&quot;category tag&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">post</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span> <span class="p">}}</span>
+</span><span class="line">                    <span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;tags&quot;</span><span class="o">&gt;</span><span class="err">标签</span><span class="p">:</span> <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">tg</span> <span class="ow">in</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">all</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                        <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_list_by_tag&#39; tag=tg.name %}&quot;</span>
+</span><span class="line">                           <span class="n">rel</span><span class="o">=</span><span class="s">&quot;tag&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">tg</span><span class="o">.</span><span class="n">name</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&amp;</span><span class="n">nbsp</span><span class="p">;</span>
+</span><span class="line">                    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">                <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">    <span class="p">{</span><span class="o">%</span> <span class="n">paginate</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">endblock</span> <span class="o">%</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>刷新下列表首页，看看分页效果。</p>
 
 <p>恭喜你，你可以大声对自己喊：我太棒了。^_^</p>
 ]]></content>
