@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-22T14:20:21+08:00</updated>
+  <updated>2015-04-23T10:54:14+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -62,6 +62,1047 @@ MM：“真人版Windows优化大师！”</p>
 
 <p>强烈要求广电总局禁播红高粱，我家今年种了几十亩高粱，本以为今年有个好收成，自从电视剧红高粱热播后，
 我家地里的高粱每天成片成片的倒，原因现在都还找不到…</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SiteMesh使用笔记]]></title>
+    <link href="http://yidao620c.github.io/blog/20150423/sitemesh.html"/>
+    <updated>2015-04-23T10:42:23+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150423/sitemesh</id>
+    <content type="html"><![CDATA[<h3 id="section">简介</h3>
+<p>SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重复编码的。</p>
+
+<p>它定义了一个过滤器，然后把页面都加上统一的头部和底部。</p>
+
+<p>在maven工程的pom.xml中加入SiteMesh依赖：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;dependency&gt;</span>
+</span><span class="line">    <span class="nt">&lt;groupId&gt;</span>opensymphony<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;artifactId&gt;</span>sitemesh<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;version&gt;</span>2.4.2<span class="nt">&lt;/version&gt;</span>
+</span><span class="line"><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-1">过滤器定义：</h3>
+<p>在web.xml中：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;filter&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-class&gt;</span>com.opensymphony.sitemesh.webapp.SiteMeshFilter<span class="nt">&lt;/filter-class&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter&gt;</span>
+</span><span class="line"><span class="nt">&lt;filter-mapping&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;url-pattern&gt;</span>*.html<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter-mapping&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="web-infdecoratorsxml--more--">WEB-INF下新建decorators.xml文件：<!--more--></h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;decorators</span> <span class="na">defaultdir=</span><span class="s">&quot;/WEB-INF/layouts/&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- 此处用来定义不需要过滤的页面 --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;excludes&gt;</span>
+</span><span class="line">        <span class="nt">&lt;pattern&gt;</span>/static/*<span class="nt">&lt;/pattern&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/excludes&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- 用来定义装饰器要过滤的页面 --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;decorator</span> <span class="na">name=</span><span class="s">&quot;default&quot;</span> <span class="na">page=</span><span class="s">&quot;default.jsp&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;pattern&gt;</span>/*<span class="nt">&lt;/pattern&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/decorator&gt;</span>
+</span><span class="line"><span class="nt">&lt;/decorators&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>不用过滤/static/目录下的文件，然后指定了装饰器：/WEB-INF/layouts/default.jsp。</p>
+
+<h3 id="defaultjsp">default.jsp模板</h3>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+</pre></td><td class="code"><pre><code class="jsp"><span class="line"><span class="k">&lt;%@</span> <span class="n">page</span> <span class="n">contentType</span><span class="o">=</span><span class="s">&quot;text/html;charset=UTF-8&quot;</span> <span class="k">%&gt;</span>
+</span><span class="line"><span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;sitemesh&quot;</span> <span class="n">uri</span><span class="o">=</span><span class="s">&quot;http://www.opensymphony.com/sitemesh/decorator&quot;</span> <span class="k">%&gt;</span>
+</span><span class="line"><span class="k">&lt;%@</span> <span class="n">taglib</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&quot;c&quot;</span> <span class="n">uri</span><span class="o">=</span><span class="s">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> <span class="k">%&gt;</span>
+</span><span class="line"><span class="nt">&lt;c:set</span> <span class="na">var=</span><span class="s">&quot;ctx&quot;</span> <span class="na">value=</span><span class="s">&quot;${pageContext.request.contextPath}&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line"><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;</span>
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>快贷发平台:<span class="nt">&lt;sitemesh:title/&gt;&lt;/title&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html;charset=utf-8&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">&quot;image/x-icon&quot;</span> <span class="na">href=</span><span class="s">&quot;${ctx}/static/images/favicon.ico&quot;</span> <span class="na">rel=</span><span class="s">&quot;shortcut icon&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;${ctx}/static/bootstrap/3.3.1/css/bootstrap.min.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;${ctx}/static/jquery-validation/1.11.1/validate.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;${ctx}/static/styles/default.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">&quot;${ctx}/static/jquery/jquery-1.9.1.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">&quot;${ctx}/static/jquery-validation/1.11.1/jquery.validate.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">&quot;${ctx}/static/jquery-validation/1.11.1/messages_bs_zh.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;sitemesh:head/&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="k">&lt;%@</span> <span class="n">include</span> <span class="n">file</span><span class="o">=</span><span class="s">&quot;/WEB-INF/layouts/header.jsp&quot;</span> <span class="k">%&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;sitemesh:body/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="k">&lt;%@</span> <span class="n">include</span> <span class="n">file</span><span class="o">=</span><span class="s">&quot;/WEB-INF/layouts/footer.jsp&quot;</span> <span class="k">%&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">&quot;${ctx}/static/bootstrap/3.3.1/js/bootstrap.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>首先引入了SiteMesh标签，自动替换为被过滤页面的title，
+把被过滤页面head里面的东西（除了title）放在这个地方，被过滤的页面body里面的内容放在这里，
+在content的上下引入了header和footer，
+我们在头部引入了js和css，就可以重用了，
+使用的过程中，几乎感受不到SiteMesh的存在，例如下面的页面：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+</pre></td><td class="code"><pre><code class="jsp"><span class="line"><span class="k">&lt;%@</span> <span class="n">page</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;java&quot;</span> <span class="n">contentType</span><span class="o">=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span>
+</span><span class="line">    <span class="n">pageEncoding</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="k">%&gt;</span>
+</span><span class="line"><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;</span>
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="c">&lt;!-- 第一个被装饰(目标)页面  --&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line"><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;title&gt;</span>被装饰（目标）页面title<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/js/hello.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h4&gt;</span>被装饰（目标）页面body标签内内容。<span class="nt">&lt;/h4&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h3&gt;</span>使用SiteMesh的好处?<span class="nt">&lt;/h3&gt;</span>
+</span><span class="line">    <span class="nt">&lt;ul&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>被装饰（目标）页面和装饰页面完全分离。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>做到真正的页面复用，一个装饰页面装饰多个被装饰（目标）页面。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>更容易实现统一的网站风格。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>还有。。。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/ul&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这就是一个普通的页面，但是被SiteMesh装饰之后，就会自动去掉 等元素，然后把相应的东西放在模板对应位置上。</p>
+
+<p>我们来看一下，被SiteMesh装饰过的页面源代码：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line"><span class="nt">&lt;title&gt;</span>QuickStart示例:被装饰（目标）页面title<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html;charset=utf-8&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Cache-Control&quot;</span> <span class="na">content=</span><span class="s">&quot;no-store&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Pragma&quot;</span> <span class="na">content=</span><span class="s">&quot;no-cache&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Expires&quot;</span> <span class="na">content=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">&quot;image/x-icon&quot;</span> <span class="na">href=</span><span class="s">&quot;/SpringMVC/static/images/favicon.ico&quot;</span> <span class="na">rel=</span><span class="s">&quot;shortcut icon&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;/SpringMVC/sc/bootstrap/2.3.0/css/bootstrap.min.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;/SpringMVC/sc/jquery-validation/1.11.0/validate.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;/SpringMVC/css/base/default.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/SpringMVC/sc/jquery/jquery-1.9.1.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/SpringMVC/sc/jquery-validation/1.11.0/jquery.validate.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/SpringMVC/sc/jquery-validation/1.11.0/messages_bs_zh.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/js/hello.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h4&gt;</span>被装饰（目标）页面body标签内内容。<span class="nt">&lt;/h4&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h3&gt;</span>使用SiteMesh的好处?<span class="nt">&lt;/h3&gt;</span>
+</span><span class="line">    <span class="nt">&lt;ul&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>被装饰（目标）页面和装饰页面完全分离。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>做到真正的页面复用，一个装饰页面装饰多个被装饰（目标）页面。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>更容易实现统一的网站风格。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">        <span class="nt">&lt;li&gt;</span>还有。。。<span class="nt">&lt;/li&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/ul&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    Copyright <span class="ni">&amp;copy;</span> 2005-2012 <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>spring.org.cn<span class="nt">&lt;/a&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;/SpringMVC/sc/bootstrap/2.3.0/js/bootstrap.min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-2">总结</h3>
+<p>SiteMesh配置简单，使用灵活，几乎不会影响我们的正常开发，作为一个默默无闻的好帮手，非常推荐使用。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用PyInstaller打包Python程序]]></title>
+    <link href="http://yidao620c.github.io/blog/20150423/pyinstaller.html"/>
+    <updated>2015-04-23T10:22:26+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150423/pyinstaller</id>
+    <content type="html"><![CDATA[<h3 id="pyinstaller">PyInstaller介绍：</h3>
+<p>PyInstaller是一个能将Python程序转换成单个可执行文件的程序，
+操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。</p>
+
+<p>环境为windows7操作系统，python2.7.8 virtual environment
+官网：<a href="https://github.com/pyinstaller/pyinstaller">https://github.com/pyinstaller/pyinstaller</a></p>
+
+<h3 id="section">详细步骤：</h3>
+<p>1. win7下面先安装这个依赖：pywin32，下载下来后切换到venv2.7，然后使用easy_install xxx.exe安装</p>
+
+<p>2. pip安装PyInstaller：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pip install pyinstaller</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3. 打包过程中可能会出现msvcp90.dll找不到的问题，
+去<a href="http://cn.dll-files.com/msvcp90.dll.html">http://cn.dll-files.com/msvcp90.dll.html</a>下载第三个zip文件，
+解压后放到C:\Windows\System32，如果是64位的还要放到C:\Windows\SysWOW64目录下。<!--more--></p>
+
+<p>4. 再次运行报MSVCR90.dll找不到，同理去<a href="http://cn.dll-files.com/MSVCR90.dll.html">http://cn.dll-files.com/MSVCR90.dll.html</a>下载MSVCR90.dll，
+放到C:\Windows\System32和C:\Windows\SysWOW64中。</p>
+
+<p>5. 将你的整个程序先复制到某个临时文件夹下面，比如D:\tmp\core-wxpython，此目录下有个main.py是执行入口</p>
+
+<p>6. 执行build命令，并添加必要的搜索路径，外加执行文件的图标：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd D:\tmp\core-wxpython
+</span><span class="line">pyinstaller -F -w -i d:\tmp\main.ico main.py</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>如果还想添加自定义的依赖库，就要加上-p参数：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pyinstaller -F -w -p D:\tmp\core-python\libs -i d:\tmp\main.ico main.py</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>参数说明：</p>
+
+<pre><code>-F 表示生成单个可执行文件
+-w 表示去掉控制台窗口，这在GUI界面时非常有用。不过如果是命令行程序的话那就把这个选项删除吧！
+-p 表示你自己自定义需要加载的类路径，一般情况下用不到
+-i 表示可执行文件的图标
+</code></pre>
+
+<p><em>注意的事情</em></p>
+
+<p>1). 检查生成的\XXX\build\pyi.win32\XXX\warnXXX.txt(XXX是你的项目名）中，
+是否缺少了必要的模块。如果有缺少的，那么去如上所述，添加必要的搜素路径，
+使得pyinstaller在运行时，可以找到对应的模块并集成进来。</p>
+
+<p>2). 此处我这里没有UPX，暂时没去折腾。估计是用UPX去压缩，压缩后所生成的exe文件的大小，会小得多。</p>
+
+<p>7. 如果发现报错：pywintypes.error: (193, ‘LoadLibraryEx’… )
+原因是添加图标后缀必须是xxx.ico才行，重新去网上下载一个ico格式的图片，再次运行就好了。</p>
+
+<p>8. 我测试了一个使用wxpython写的gui程序，源码里面引用了一张图片，
+使用wx.Image(os.path.abspath(<strong>file</strong>/me.jpg), wx.BITMAP_TYPE_JPEG)来加载，
+然后打包成exe后发现找不到图片了，报错。</p>
+
+<p>解决办法：</p>
+
+<p>第一步，在程序中将资源文件都放到一个单独的文件夹中，比如项目根目录下面的resources</p>
+
+<p>第二步，修改程序中引用这些资源文件比如图片的代码：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">resource_path</span><span class="p">(</span><span class="n">relative_path</span><span class="p">):</span>
+</span><span class="line">    <span class="sd">&quot;&quot;&quot;定义一个读取相对路径的函数&quot;&quot;&quot;</span>
+</span><span class="line">    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s">&quot;_MEIPASS&quot;</span><span class="p">):</span>
+</span><span class="line">        <span class="n">base_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_MEIPASS</span>
+</span><span class="line">    <span class="k">else</span><span class="p">:</span>
+</span><span class="line">        <span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后每次在获取图片的时候，这么引用它的目录：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">img</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">resource_path</span><span class="p">(</span><span class="s">&#39;resources/me.jpg&#39;</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">BITMAP_TYPE_JPEG</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>第三步，先运行第6步生成一个main.spec文件</p>
+
+<p>第四步，修改main.spec文件：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c"># -*- mode: python -*-</span>
+</span><span class="line"><span class="n">a</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">([</span><span class="s">&#39;main.py&#39;</span><span class="p">],</span>
+</span><span class="line">             <span class="n">pathex</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;d:</span><span class="se">\\</span><span class="s">tmp</span><span class="se">\\</span><span class="s">core-wxpython&#39;</span><span class="p">],</span>
+</span><span class="line">             <span class="n">hiddenimports</span><span class="o">=</span><span class="p">[],</span>
+</span><span class="line">             <span class="n">hookspath</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+</span><span class="line">             <span class="n">runtime_hooks</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</span><span class="line"><span class="n">pyz</span> <span class="o">=</span> <span class="n">PYZ</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">pure</span><span class="p">)</span>
+</span><span class="line"><span class="n">exe</span> <span class="o">=</span> <span class="n">EXE</span><span class="p">(</span><span class="n">pyz</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">scripts</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">binaries</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">zipfiles</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">datas</span><span class="p">,</span>
+</span><span class="line">          <span class="p">[(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">resources</span><span class="se">\\</span><span class="s">me.jpg&#39;</span><span class="p">,</span><span class="s">&#39;D:</span><span class="se">\\</span><span class="s">tmp</span><span class="se">\\</span><span class="s">core-wxpython</span><span class="se">\\</span><span class="s">resources</span><span class="se">\\</span><span class="s">me.jpg&#39;</span><span class="p">,</span><span class="s">&#39;DATA&#39;</span><span class="p">)],</span>
+</span><span class="line">          <span class="n">name</span><span class="o">=</span><span class="s">&#39;main.exe&#39;</span><span class="p">,</span>
+</span><span class="line">          <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+</span><span class="line">          <span class="n">strip</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+</span><span class="line">          <span class="n">upx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+</span><span class="line">          <span class="n">console</span><span class="o">=</span><span class="bp">True</span> <span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s">&#39;d:</span><span class="se">\\</span><span class="s">tmp</span><span class="se">\\</span><span class="s">main.ico&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>注意：我在a.datas下面添加了那行配置，具体的路径自己去修改下。</p>
+
+<p>上面是添加单个文件，如果有多个文件，可以一个个的添加。不过如果文件多了话，那么就使用下面的方法：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c"># -*- mode: python -*-</span>
+</span><span class="line"><span class="n">a</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">([</span><span class="s">&#39;main.py&#39;</span><span class="p">],</span>
+</span><span class="line">             <span class="n">pathex</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;d:</span><span class="se">\\</span><span class="s">tmp</span><span class="se">\\</span><span class="s">core-wxpython&#39;</span><span class="p">],</span>
+</span><span class="line">             <span class="n">hiddenimports</span><span class="o">=</span><span class="p">[],</span>
+</span><span class="line">             <span class="n">hookspath</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+</span><span class="line">             <span class="n">runtime_hooks</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">extra_datas</span><span class="p">(</span><span class="n">mydir</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">rec_glob</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+</span><span class="line">        <span class="kn">import</span> <span class="nn">os</span>
+</span><span class="line">        <span class="kn">import</span> <span class="nn">glob</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+</span><span class="line">                <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</span><span class="line">            <span class="n">rec_glob</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">/*&quot;</span> <span class="o">%</span> <span class="n">d</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+</span><span class="line">    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class="line">    <span class="n">rec_glob</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">/*&quot;</span> <span class="o">%</span> <span class="n">mydir</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+</span><span class="line">    <span class="n">extra_datas</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class="line">    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+</span><span class="line">        <span class="n">extra_datas</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="s">&#39;DATA&#39;</span><span class="p">))</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">return</span> <span class="n">extra_datas</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># append the &#39;resources&#39; dir</span>
+</span><span class="line"><span class="n">a</span><span class="o">.</span><span class="n">datas</span> <span class="o">+=</span> <span class="n">extra_datas</span><span class="p">(</span><span class="s">&#39;resources&#39;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">pyz</span> <span class="o">=</span> <span class="n">PYZ</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">pure</span><span class="p">)</span>
+</span><span class="line"><span class="n">exe</span> <span class="o">=</span> <span class="n">EXE</span><span class="p">(</span><span class="n">pyz</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">scripts</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">binaries</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">zipfiles</span><span class="p">,</span>
+</span><span class="line">          <span class="n">a</span><span class="o">.</span><span class="n">datas</span><span class="p">,</span>
+</span><span class="line">          <span class="n">name</span><span class="o">=</span><span class="s">&#39;main.exe&#39;</span><span class="p">,</span>
+</span><span class="line">          <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+</span><span class="line">          <span class="n">strip</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+</span><span class="line">          <span class="n">upx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+</span><span class="line">          <span class="n">console</span><span class="o">=</span><span class="bp">True</span> <span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s">&#39;d:</span><span class="se">\\</span><span class="s">tmp</span><span class="se">\\</span><span class="s">main.ico&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>它会把某个指定的文件下的所有文件递归的添加到最终的包中。省去很多事情！</p>
+
+<p>第五步，执行：pyinstaller D:\tmp\core-wxpython\main.spec</p>
+
+<p>然后就大功告成了！！！在dist目录下面有个main.exe单独的可执行文件，打开它吧。^_^</p>
+
+<p>如果在执行过程中出错，或者双击打开没任何反应。
+可以先去掉-w参数后，在控制台窗口打开这个可执行文件，会输出详细出错信息去调试。</p>
+
+<h3 id="section-1">其他问题记录</h3>
+<p>1. 找不到pkg_resources</p>
+
+<pre><code>ImportError: No module named pkg_resources
+</code></pre>
+
+<p>解决办法是在安装pycrypto之前，先安装distribute库</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">curl</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">svn</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">repos</span><span class="o">/</span><span class="n">asf</span><span class="o">/</span><span class="n">oodt</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">oodtsite</span><span class="o">.</span><span class="n">publisher</span><span class="o">/</span><span class="n">trunk</span><span class="o">/</span><span class="n">distribute_setup</span><span class="o">.</span><span class="n">py</span> <span class="o">|</span> <span class="n">python</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后再安装windows下面对应的pycrypto库</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c"># http://www.voidspace.org.uk/python/modules.shtml#pycrypto</span>
+</span><span class="line"><span class="n">easy_install</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">voidspace</span><span class="o">.</span><span class="n">org</span><span class="o">.</span><span class="n">uk</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">pycrypto26</span><span class="o">/</span><span class="n">pycrypto</span><span class="o">-</span><span class="mf">2.6</span><span class="o">.</span><span class="n">win</span><span class="o">-</span><span class="n">amd64</span><span class="o">-</span><span class="n">py2</span><span class="o">.</span><span class="mf">7.</span><span class="n">exe</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>2. 打包时加上-w选项去掉console时出错</p>
+
+<p>不要在程序中使用任何print语句，或者是你将stdout重定向到一个日志、文件或任何其他非控制台地方。</p>
+
+<p>最好的方法是利用日志功能，将输出定向到日志文件中去，在main函数开头添加如下代码：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">logging</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">tempfile</span>
+</span><span class="line"><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+</span><span class="line">                    <span class="n">filename</span><span class="o">=</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span class="line">                    <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)s</span><span class="s"> </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>用到logging的时候，需要配置日志到文件中，而不是console：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">logging</span>
+</span><span class="line"><span class="n">_LOGGING</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>3. pyinstaller用one file方式打包的程式如果有用到subprocess.Popen會有問題</p>
+
+<p>问题参考：<a href="http://www.pyinstaller.org/ticket/597">http://www.pyinstaller.org/ticket/597</a></p>
+
+<p>最後找到的方法是
+<a href="http://code.activestate.com/recipes/578300-python-subprocess-hide-console-on-windows/">http://code.activestate.com/recipes/578300-python-subprocess-hide-console-on-windows/</a></p>
+
+<p>建立一個隐藏窗口，就正常了~</p>
+
+<p>最后用pyinstaller設one folder &amp; no console打包都不跳出小窗口了</p>
+
+<p>解决办法就是自定义一个subprocess_call函数来代替subprocess的call调用，不适用Popen了：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">subprocess_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">    <span class="c"># also works for Popen. It creates a new *hidden* window,</span>
+</span><span class="line">    <span class="c"># so it will work in frozen apps (.exe).</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">IS_WIN32</span><span class="p">:</span>
+</span><span class="line">        <span class="n">_LOGGING</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;subprocess_call==IS_WIN32&#39;</span><span class="p">)</span>
+</span><span class="line">        <span class="n">startupinfo</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">STARTUPINFO</span><span class="p">()</span>
+</span><span class="line">        <span class="n">startupinfo</span><span class="o">.</span><span class="n">dwFlags</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CREATE_NEW_CONSOLE</span> <span class="o">|</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">STARTF_USESHOWWINDOW</span>
+</span><span class="line">        <span class="n">startupinfo</span><span class="o">.</span><span class="n">wShowWindow</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">SW_HIDE</span>
+</span><span class="line">        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;startupinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">startupinfo</span>
+</span><span class="line">    <span class="n">retcode</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">retcode</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>调用方法：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">exresult</span> <span class="o">=</span> <span class="n">subprocess_call</span><span class="p">(</span><span class="n">exe_command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这个方法会等命令执行完成，返回值为0表示正常结束！</p>
+
+<p>4. 打包后不能放到中文路径下执行
+解决办法是下载安装PyInstaller的中文支持库，安装后再重新执行pyinstaller打包命令：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dkw72n</span><span class="o">/</span><span class="n">pyinstaller</span><span class="o">.</span><span class="n">git</span>
+</span><span class="line"><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</span><span class="line"><span class="n">pyinstaller</span> <span class="o">-</span><span class="n">F</span> <span class="o">-</span><span class="n">w</span> <span class="o">-</span><span class="n">i</span> <span class="n">d</span><span class="p">:</span>\<span class="n">tmp</span>\<span class="n">main</span><span class="o">.</span><span class="n">ico</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[python函数装饰器详解]]></title>
+    <link href="http://yidao620c.github.io/blog/20150423/python-decorator.html"/>
+    <updated>2015-04-23T10:06:22+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150423/python-decorator</id>
+    <content type="html"><![CDATA[<h3 id="section">装饰器简介</h3>
+<p>python有着强大的表达式语法和函数特性，其中一个我的最爱便是装饰器。
+在设计模式中，装饰器能够在不使用子类的情况下动态的修改函数、方法或类的功能。</p>
+
+<p>当你需要扩展某个函数的功能却不想直接修改这个函数的时候，装饰器就可以派上用场了。
+实现装饰器模式有很多种方法，但是python通过强大的语法支持来让这个变得相当容易。</p>
+
+<p>在这篇文章中我将深入讲解Python的函数装饰器，并通过一系列的源码示例来彻底讲清楚这个东西。
+所有例子都在Python2.7下运行通过，不过只需要稍作改变就可以运行在Python3上了，
+甚至我猜测什么都不用改变都可以的，读者可以自己去试试。</p>
+
+<p>本质上来讲，装饰器是以包装器形式工作的，其实就是在执行目标函数之前或之后加入自己的逻辑，
+而不需要改变目标函数本身就可以增强它的功能，也就是说装饰了它。<!--more--></p>
+
+<h3 id="section-1">你需要知道的函数</h3>
+<p>在深入讨论之前，有一些基本的概念需要讲明清楚。
+在Python中，函数是一等公民，它们就是对象，因此我们可以使用它来做很多事。</p>
+
+<p>1.把函数赋值给某个变量：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">    <span class="k">return</span> <span class="s">&quot;hello &quot;</span><span class="o">+</span><span class="n">name</span>
+</span><span class="line">
+</span><span class="line"><span class="n">greet_someone</span> <span class="o">=</span> <span class="n">greet</span>
+</span><span class="line"><span class="k">print</span> <span class="n">greet_someone</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs: hello John</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>2.在某个函数内部定义另外一个函数：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_message</span><span class="p">():</span>
+</span><span class="line">        <span class="k">return</span> <span class="s">&quot;Hello &quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">result</span> <span class="o">=</span> <span class="n">get_message</span><span class="p">()</span><span class="o">+</span><span class="n">name</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">result</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">greet</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs: Hello John</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3.函数可以被当做参数传递给另外一个函数：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">   <span class="k">return</span> <span class="s">&quot;Hello &quot;</span> <span class="o">+</span> <span class="n">name</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">call_func</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">    <span class="n">other_name</span> <span class="o">=</span> <span class="s">&quot;John&quot;</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">other_name</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">call_func</span><span class="p">(</span><span class="n">greet</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs: Hello John</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>4.函数返回值可以是其他函数：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">compose_greet_func</span><span class="p">():</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_message</span><span class="p">():</span>
+</span><span class="line">        <span class="k">return</span> <span class="s">&quot;Hello there!&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">return</span> <span class="n">get_message</span>
+</span><span class="line">
+</span><span class="line"><span class="n">greet</span> <span class="o">=</span> <span class="n">compose_greet_func</span><span class="p">()</span>
+</span><span class="line"><span class="k">print</span> <span class="n">greet</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs: Hello there!</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>5.内部函数可以访问包含它的函数的局部变量：</p>
+
+<p>其实就是我们所说的闭包，在构建装饰器的时候这是一个非常有用的模式。
+另外还要注意，Python只允许读取外部变量而不允许修改。</p>
+
+<p>观察一下下面的代码，
+注意我们是如何通过修改上面实例代码来读取外部函数中的name参数值并返回一个新的函数的。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">compose_greet_func</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_message</span><span class="p">():</span>
+</span><span class="line">        <span class="k">return</span> <span class="s">&quot;Hello there &quot;</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&quot;!&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">return</span> <span class="n">get_message</span>
+</span><span class="line">
+</span><span class="line"><span class="n">greet</span> <span class="o">=</span> <span class="n">compose_greet_func</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line"><span class="k">print</span> <span class="n">greet</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs: Hello there John!</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-2">构造装饰器</h3>
+<p>函数装饰器就是已存在函数的一个包装器。我们把上面的这些结合起来就能构建一个装饰器了。</p>
+
+<p>下面例子中我们先构造一个函数来用p标签包装其他函数返回的一个字符串。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">   <span class="k">return</span> <span class="s">&quot;lorem ipsum, {0} dolor sit amet&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">       <span class="k">return</span> <span class="s">&quot;&lt;p&gt;{0}&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">   <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">
+</span><span class="line"><span class="n">my_get_text</span> <span class="o">=</span> <span class="n">p_decorate</span><span class="p">(</span><span class="n">get_text</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">my_get_text</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># &lt;p&gt;Outputs lorem ipsum, John dolor sit amet&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这是我们的第一个装饰器——一个增强其他函数功能并返回新函数的函数。
+为了让get_text函数被p_decorate装饰，我们只需要将get_text作为参数传给后者，
+并将结果赋值给一个变量，然后就可以对这个变量函数调用就能实现效果了。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">get_text</span> <span class="o">=</span> <span class="n">p_decorate</span><span class="p">(</span><span class="n">get_text</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs lorem ipsum, John dolor sit amet</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>主要原来的函数有一个name参数，那么我们调用的时候将这个参数传递给装饰器函数就行了。</p>
+
+<h3 id="python">Python的装饰器语法</h3>
+<p>Python通过一些语法糖让创建和使用装饰器变得相当简单。
+我们并不需要使用语句<code>get_text = p_decorator(get_text)</code>来装饰get_text。
+有一个快捷方式可以做到，它会在被装饰函数前面加一层装饰函数。装饰器的名字需要使用@前缀。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">       <span class="k">return</span> <span class="s">&quot;&lt;p&gt;{0}&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">   <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@p_decorate</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">   <span class="k">return</span> <span class="s">&quot;lorem ipsum, {0} dolor sit amet&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs &lt;p&gt;lorem ipsum, John dolor sit amet&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>现在我们再考虑下利用2个其他的函数来装饰我们的get_text函数，在其输出结果上添加一个div和strong标签。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">       <span class="k">return</span> <span class="s">&quot;&lt;p&gt;{0}&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">   <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">strong_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="s">&quot;&lt;strong&gt;{0}&lt;/strong&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">div_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="s">&quot;&lt;div&gt;{0}&lt;/div&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">func_wrapper</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>如果我们使用原来的语法，那么就得这么写：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">get_text</span> <span class="o">=</span> <span class="n">div_decorate</span><span class="p">(</span><span class="n">p_decorate</span><span class="p">(</span><span class="n">strong_decorate</span><span class="p">(</span><span class="n">get_text</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>但是在python中，你就可以这样来定义了：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="nd">@div_decorate</span>
+</span><span class="line"><span class="nd">@p_decorate</span>
+</span><span class="line"><span class="nd">@strong_decorate</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">   <span class="k">return</span> <span class="s">&quot;lorem ipsum, {0} dolor sit amet&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs &lt;div&gt;&lt;p&gt;&lt;strong&gt;lorem ipsum, John dolor sit amet&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>上面需要注意的是装饰器的顺序，如果顺序不同，输出结果也会不一样。</p>
+
+<h3 id="section-3">装饰方法</h3>
+<p>在python中，其实方法就是第一个参数为当前对象的引用的函数而已。
+我们同样能够给方法构造装饰器，只需要将self参数放到包装函数中。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">       <span class="k">return</span> <span class="s">&quot;&lt;p&gt;{0}&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+</span><span class="line">   <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;John&quot;</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">family</span> <span class="o">=</span> <span class="s">&quot;Doe&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@p_decorate</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">family</span>
+</span><span class="line">
+</span><span class="line"><span class="n">my_person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+</span><span class="line"><span class="k">print</span> <span class="n">my_person</span><span class="o">.</span><span class="n">get_fullname</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>一个更好的做法是改造我们的装饰器使他们可以作用于函数以及类方法。
+可以将*args和**kwargs作为包装器的参数，然后它就能接受任意数量的位置参数和关键字参数了。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">       <span class="k">return</span> <span class="s">&quot;&lt;p&gt;{0}&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</span><span class="line">   <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;John&quot;</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">family</span> <span class="o">=</span> <span class="s">&quot;Doe&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@p_decorate</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">family</span>
+</span><span class="line">
+</span><span class="line"><span class="n">my_person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">my_person</span><span class="o">.</span><span class="n">get_fullname</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-4">给装饰器传递参数</h3>
+<p>回顾下上面的例子，你会发现例子中的装饰器太过冗余了。
+3个装饰器(div_decorate,p_decorate, strong_decorate)拥有相同功能，只是使用了不同的标签包装而已。</p>
+
+<p>我们可以做得更好，为什么不使用一种更加通用的方式，将标签作为参数传递进来呢？</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">tags</span><span class="p">(</span><span class="n">tag_name</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">tags_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">        <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">            <span class="k">return</span> <span class="s">&quot;&lt;{0}&gt;{1}&lt;/{0}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag_name</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">tags_decorator</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@tags</span><span class="p">(</span><span class="s">&quot;p&quot;</span><span class="p">)</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">    <span class="k">return</span> <span class="s">&quot;Hello &quot;</span><span class="o">+</span><span class="n">name</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Outputs &lt;p&gt;Hello John&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-5">调试被装饰函数</h3>
+<p>最后当我们调试被装饰函数时会发现它的名字、模块和文档字符串都发生了改变。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="o">.</span><span class="n">__name__</span>
+</span><span class="line"><span class="c"># Outputs func_wrapper</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>我们期望的输出应该是get_text，get_text的__name__、<strong>doc</strong> 和 __module__已经被包装函数覆盖了。</p>
+
+<h3 id="functools">使用functools来解决</h3>
+<p>幸运的是python2.5版本以上有了一个functools包可以来解决这个问题。
+只需要简单在包装函数上标注@wrap标签即可。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">tags</span><span class="p">(</span><span class="n">tag_name</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">tags_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class="line">        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span class="line">        <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">            <span class="k">return</span> <span class="s">&quot;&lt;{0}&gt;{1}&lt;/{0}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag_name</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">func_wrapper</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">tags_decorator</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@tags</span><span class="p">(</span><span class="s">&quot;p&quot;</span><span class="p">)</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span class="line">    <span class="sd">&quot;&quot;&quot;returns some text&quot;&quot;&quot;</span>
+</span><span class="line">    <span class="k">return</span> <span class="s">&quot;Hello &quot;</span><span class="o">+</span><span class="n">name</span>
+</span><span class="line">
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="o">.</span><span class="n">__name__</span> <span class="c"># get_text</span>
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="o">.</span><span class="n">__doc__</span> <span class="c"># returns some text</span>
+</span><span class="line"><span class="k">print</span> <span class="n">get_text</span><span class="o">.</span><span class="n">__module__</span> <span class="c"># __main__</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>从结果可以看出get_text函数的属性都恢复正常了。</p>
+
+<h3 id="section-6">哪里使用装饰器</h3>
+<p>这篇文章中的例子相对来讲是比较简单的。它能给你的程序带来很大的方便。
+一般来讲，装饰器用在需要扩展某个函数行为而又不想改变这个函数本身内容的时候。</p>
+
+<p>我建议你查阅一下Python Decorator库来获取更多非常有用的装饰器。</p>
+
+<h3 id="section-7">更多阅读资源</h3>
+<p>下面是一个值得去查看的关于装饰器的其他资源列表：</p>
+
+<ul>
+  <li><a href="https://wiki.python.org/moin/PythonDecorators#What_is_a_Decorator">什么是装饰器?</a></li>
+  <li><a href="http://www.artima.com/weblogs/viewpost.jsp?thread=240808">Decorators I: Python装饰器入门</a></li>
+  <li><a href="http://www.artima.com/weblogs/viewpost.jsp?thread=240845">Python Decorators II: 装饰器参数</a></li>
+  <li><a href="http://www.artima.com/weblogs/viewpost.jsp?thread=241209">Python Decorators III: 一个基于装饰器的构建系统</a></li>
+  <li><a href="http://www.amazon.com/gp/product/B006ZHJSIM/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B006ZHJSIM&amp;linkCode=as2&amp;tag=thcosh00-20">Python装饰器指南 Matt Harrison</a></li>
+</ul>
+
+<p>到此为止Python装饰器概率已经介绍完了。我希望你能从中受益，
+如果你哈有任何的建议或问题，可以在评论中提出来。祝您编程快乐！</p>
 
 ]]></content>
   </entry>
@@ -5296,926 +6337,6 @@ women:
 <p><strong>更多资源：</strong></p>
 
 <p><a href="http://www.yaml.org/">http://www.yaml.org/</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[fastjson对Date的处理]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/fastjson-date.html"/>
-    <updated>2015-04-20T13:45:15+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/fastjson-date</id>
-    <content type="html"><![CDATA[<p><strong>fastjson对日期的序列化方式：</strong></p>
-
-<p>一种方法是通过注解</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
-</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>另一种是通过SerializeConfig：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
-</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
-</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
-</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
-</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>json字符串中使用单引号：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<!--more-->
-<p>字段显示不同的key：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-</span><span class="line">    <span class="nd">@JSONField</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;ID&quot;</span><span class="o">)</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span><span class="line">
-</span><span class="line"><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">...;</span>
-</span><span class="line"><span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">user</span><span class="o">);</span> <span class="c1">// {&quot;ID&quot;:001}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>类的反序列化 JavaBean：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// {&quot;r&quot;:255,&quot;g&quot;:0,&quot;b&quot;:0,&quot;alpha&quot;:255}</span>
-</span><span class="line"><span class="n">Color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">Color</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>数组：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// [{ ... }, { ... }]</span>
-</span><span class="line"><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">parseArray</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>泛型：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// {&quot;name&quot;:{&quot;name&quot;:&quot;ljw&quot;,age:18}}</span>
-</span><span class="line"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="n">userMap</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="k">new</span> <span class="n">TypeReference</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;&gt;()</span> <span class="o">{});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>自定义序列化代码示例:</strong></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JsonUtil</span> <span class="o">{</span>
-</span><span class="line">    <span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
-</span><span class="line">    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
-</span><span class="line">    <span class="kd">static</span> <span class="o">{</span>
-</span><span class="line">        <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="cm">/**</span>
-</span><span class="line"><span class="cm">     * 默认的处理时间</span>
-</span><span class="line"><span class="cm">     *</span>
-</span><span class="line"><span class="cm">     * @param jsonText</span>
-</span><span class="line"><span class="cm">     * @return</span>
-</span><span class="line"><span class="cm">     */</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">toJSON</span><span class="o">(</span><span class="n">Object</span> <span class="n">jsonText</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">jsonText</span><span class="o">,</span>
-</span><span class="line">                <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">WriteDateUseDateFormat</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="cm">/**</span>
-</span><span class="line"><span class="cm">     * 自定义时间格式</span>
-</span><span class="line"><span class="cm">     *</span>
-</span><span class="line"><span class="cm">     * @param jsonText</span>
-</span><span class="line"><span class="cm">     * @return</span>
-</span><span class="line"><span class="cm">     */</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">toJSON</span><span class="o">(</span><span class="n">String</span> <span class="n">dateFormat</span><span class="o">,</span> <span class="n">String</span> <span class="n">jsonText</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">jsonText</span><span class="o">,</span> <span class="n">mapping</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>自定义日期格式反序列化示例</strong></p>
-
-<p>先自定义一个日期解析类：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyDateFormatDeserializer</span> <span class="kd">extends</span> <span class="n">DateFormatDeserializer</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">        <span class="kd">private</span> <span class="n">String</span> <span class="n">myFormat</span><span class="o">;</span>
-</span><span class="line">
-</span><span class="line">        <span class="kd">public</span> <span class="nf">MyDateFormatDeserializer</span><span class="o">(</span><span class="n">String</span> <span class="n">myFormat</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">            <span class="kd">super</span><span class="o">();</span>
-</span><span class="line">            <span class="k">this</span><span class="o">.</span><span class="na">myFormat</span> <span class="o">=</span> <span class="n">myFormat</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="nd">@Override</span>
-</span><span class="line">        <span class="kd">protected</span> <span class="o">&lt;</span><span class="n">Date</span><span class="o">&gt;</span> <span class="n">Date</span> <span class="nf">cast</span><span class="o">(</span><span class="n">DefaultJSONParser</span> <span class="n">parser</span><span class="o">,</span> <span class="n">Type</span> <span class="n">clazz</span><span class="o">,</span> <span class="n">Object</span> <span class="n">fieldName</span><span class="o">,</span> <span class="n">Object</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">if</span> <span class="o">(</span><span class="n">myFormat</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-</span><span class="line">            <span class="o">}</span>
-</span><span class="line">            <span class="k">if</span> <span class="o">(</span><span class="n">val</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">                <span class="n">String</span> <span class="n">strVal</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">val</span><span class="o">;</span>
-</span><span class="line">                <span class="k">if</span> <span class="o">(</span><span class="n">strVal</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">                    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-</span><span class="line">                <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">                <span class="k">try</span> <span class="o">{</span>
-</span><span class="line">                    <span class="k">return</span> <span class="o">(</span><span class="n">Date</span><span class="o">)</span> <span class="k">new</span> <span class="nf">SimpleDateFormat</span><span class="o">(</span><span class="n">myFormat</span><span class="o">).</span><span class="na">parse</span><span class="o">((</span><span class="n">String</span><span class="o">)</span><span class="n">val</span><span class="o">);</span>
-</span><span class="line">                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ParseException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">                    <span class="k">throw</span> <span class="k">new</span> <span class="nf">JSONException</span><span class="o">(</span><span class="s">&quot;parse error&quot;</span><span class="o">);</span>
-</span><span class="line">                <span class="o">}</span>
-</span><span class="line">            <span class="o">}</span>
-</span><span class="line">            <span class="k">throw</span> <span class="k">new</span> <span class="nf">JSONException</span><span class="o">(</span><span class="s">&quot;parse error&quot;</span><span class="o">);</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>User类</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">public</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">int</span> <span class="n">height</span><span class="o">;</span>
-</span><span class="line">
-</span><span class="line">    <span class="nd">@JSONField</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;com-google-com&quot;</span><span class="o">)</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="nd">@JSONField</span><span class="o">(</span><span class="n">format</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM/dd HH:mm:ss&quot;</span><span class="o">)</span>
-</span><span class="line">    <span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>测试下：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/**</span>
-</span><span class="line"><span class="cm"> * @param args</span>
-</span><span class="line"><span class="cm"> * @throws IOException</span>
-</span><span class="line"><span class="cm"> */</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ParseException</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">String</span> <span class="n">json</span> <span class="o">=</span> <span class="s">&quot;{\&quot;name\&quot;:\&quot;22323\&quot;, \&quot;age\&quot;: 1234,&quot;</span> <span class="o">+</span>
-</span><span class="line">            <span class="s">&quot; \&quot;birthday\&quot;: \&quot;2012-12/12 12:12:12\&quot;}&quot;</span><span class="o">;</span>
-</span><span class="line">    <span class="n">Test</span> <span class="n">t</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">mapping</span><span class="o">,</span>
-</span><span class="line">            <span class="n">JSON</span><span class="o">.</span><span class="na">DEFAULT_PARSER_FEATURE</span><span class="o">,</span> <span class="k">new</span> <span class="n">Feature</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
-</span><span class="line">    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
-</span><span class="line">    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">height</span><span class="o">);</span>
-</span><span class="line">    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">t</span><span class="o">.</span><span class="na">birthday</span><span class="o">);</span>
-</span><span class="line">    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span>
-</span><span class="line">            <span class="k">new</span> <span class="nf">SimpleDateFormat</span><span class="o">(</span><span class="s">&quot;yyyy-MM/dd HH:mm:ss&quot;</span><span class="o">).</span><span class="na">parse</span><span class="o">(</span><span class="s">&quot;2012-12/12 12:12:12&quot;</span><span class="o">));</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>总结：</strong></p>
-
-<p>对于JSONField注解，好像只对序列号的格式有影响，反序列化不管这个，不知道为什么，
-只能自己写个解析类了，不过这样就更灵活了，可以在里面写很多处理逻辑，
-比如json字符串里面日期格式并不是标准格式的时候，就可以先转成标准格式再去解析了。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用python开发RabbitMQ应用]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/rabbitmq-python-client.html"/>
-    <updated>2015-04-20T11:21:34+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/rabbitmq-python-client</id>
-    <content type="html"><![CDATA[<p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
-
-<p>测试环境：CentOS 6.2</p>
-
-<p><strong>1，测试环境准备</strong></p>
-
-<p>安装python（一般系统都自带了python）</p>
-
-<p>安装RabbitMQ server可以参考前面的文章。</p>
-
-<p>安装pika</p>
-
-<p>使用pip安装的时候可能会报错：</p>
-
-<p><code>importerror no module named pkg_resources</code></p>
-
-<p>请用下面命令解决这个问题：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>然后还可能出现：</p>
-
-<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
-
-<p>这时候先把pip卸载掉，执行：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
-
-<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面<!--more--></p>
-
-<p>把rabbitmq server启动一下和准备好测试目录rabbitmq_app：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ /usr/local/rabbitmq/sbin/rabbitmq-server -detached
-</span><span class="line">$ cd ~
-</span><span class="line">$ mkdir -p test /rabbitmq_app
-</span><span class="line">$ cd test /rabbitmq_app
-</span><span class="line">$ mkdir tut1 tut2 tut3 tut4 tut5 tut6</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>2，实例一：来个hello world程序</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ cd tut1
-</span><span class="line">$ vim send.py (代码如下)
-</span><span class="line">$ vim receive.py (代码如下)</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>首先是消息发送程序: send.py</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span><span class="p">)</span>
-</span><span class="line"><span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">:</span>
-</span><span class="line">     <span class="k">print</span> <span class="s">&#39;message is empty!&#39;</span>
-</span><span class="line">     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&quot;[x] sent: &#39;&quot;</span> <span class="o">+</span> <span class="n">message</span> <span class="o">+</span> <span class="s">&quot;&#39;</span><span class="se">\n</span><span class="s">&quot;</span>
-</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>跑一下send.py发送一个消息</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">send</span><span class="o">.</span><span class="n">py</span> <span class="err">‘</span><span class="n">Hello</span> <span class="n">World</span><span class="err">!’</span>
-</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">send</span><span class="o">.</span><span class="n">py</span> <span class="err">‘你好刀哥’</span>
-</span><span class="line"><span class="err">$</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">rabbitmq</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">rabbitmqctl</span> <span class="n">list_queues</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>结果如下面：</p>
-
-<pre><code>Listing queues …
-hello 2
-… done .
-</code></pre>
-
-<p>如果你也看到hello队列里面有一个消息的话，就证明可以发消息了。</p>
-
-<p>然后写一个接收消息脚本：receive.py</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span> <span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&#39;[*] Waiting for messages. To exit press CTRL+C&#39;</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
-</span><span class="line">     <span class="k">print</span> <span class="n">body</span>
-</span><span class="line">
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;hello&#39;</span> <span class="p">,</span> <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>其中第12行的 no_ack=True 表示消费完了这个消息以后不主动把完成状态通知rabbitmq。</p>
-
-<p>然后开另外一个shell，执行一下receive.py</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">receive</span><span class="o">.</span><span class="n">py</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>结果：</p>
-
-<pre><code>[*] Waiting for messages. To exit press CTRL+C
-Hello World!
-你好刀哥
-</code></pre>
-
-<p><strong>3，实例二：工作队列（work queue / task queue）</strong></p>
-
-<p>一般应用于把比较耗时的任务从主线任务分离出来。比如一个http页面请求，
-里面需要发送带大附件的邮件、或者是要处理一张头像图片等。这类型工作队列的处理端一般有多个worker进程，
-分担队列里面的任务。这就有点负载均衡的策略在里面了。
-尽量做到每个进程的工作量比较平均，而且是完成了一个任务才接 第二个任务。看看我们的实现吧。</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">cd</span> <span class="n">tut2</span>
-</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
-</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">worker</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>首先是消息发送程序: manager.py</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class="line"><span class="n">parameters</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">)</span>
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">,</span> <span class="n">durable</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:])</span> <span class="ow">or</span> <span class="s">&quot;Hello World!&quot;</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">routing_key</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">,</span>
-</span><span class="line">                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">properties</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span>
-</span><span class="line">                          <span class="n">delivery_mode</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">,</span> <span class="c"># make message persistent</span>
-</span><span class="line">                       <span class="p">))</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&quot; [x] Sent </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,)</span>
-</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>其中第8行的 durable=True 声明了队列需要持久化，第14行的 delivery_mode = 2 声明了队列的消息需要持久化。</p>
-
-<p>然后写一个接收消息脚本：worker.py</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="c"># -*- coding: utf-8 -*-</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">time</span>
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
-</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">,</span> <span class="n">durable</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&#39; [*] Waiting for messages. To exit press CTRL+C&#39;</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
-</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] Received </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">body</span><span class="p">,)</span>
-</span><span class="line">     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span> <span class="n">body</span><span class="o">.</span><span class="n">count</span><span class="p">(</span> <span class="s">&#39;.&#39;</span> <span class="p">)</span> <span class="p">)</span>
-</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] Done&quot;</span>
-</span><span class="line">     <span class="n">ch</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">delivery_tag</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_qos</span><span class="p">(</span><span class="n">prefetch_count</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">)</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">queue</span> <span class="o">=</span> <span class="s">&#39;task_queue&#39;</span> <span class="p">)</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>其中第15行的 basic_ack 是执行完任务通知rabbitmq，
-第17行的basic_qos是告诉rabbitmq只有当worker完成了任务以后才分派1条新的消息，实现公平分派。</p>
-
-<p>测试方法，开3个bash，2个跑worker，1个跑manager：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task1</span><span class="o">.</span>
-</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task2</span><span class="o">..</span>
-</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task3</span><span class="err">…</span>
-</span><span class="line"><span class="err">$</span> <span class="n">python</span> <span class="n">manager</span><span class="o">.</span><span class="n">py</span> <span class="n">task4</span><span class="err">…</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>点号数量决定worker工作的时间( 其实是睡觉时间，呵呵 time.sleep(body.count(‘.’)) )。
-而在worker那边，可以看到每个worker都处理了两个任务。
-这种分配机制就是所谓的循环调度（Round-robin dispatching）</p>
-
-<p><strong>4，实例三：发布和订阅</strong></p>
-
-<p>发布订阅模式，简单来说就像是广播，一个消息发布出来以后，所有订阅者都能听到，
-至于接收到这个信息以后大家做什么就看具体个人了。</p>
-
-<p>啊！怎么忽然冒出个X，是什么玩意！这个X就是所谓的exchange，简单来说就是消息的管家，
-由他决定接收到的信息是放特定的队列，还是所有队列，还是直接丢弃。</p>
-
-<p>其实在前两个实例里面，已经用到了exchange （channel.basic_publish(exchange=”,…），
-这个exchange的名字为空，外号无名（人若无名，便可专心练剑~）。他会把你的消息都转达给routing_key指明的队列。
-当我们声明了exchange以后，我们需要为queue和exchange建立联系，这时候，就要用到绑定（binding）了。</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">cd</span> <span class="n">tut3</span>
-</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">emitlog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
-</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">recelog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>日志生产者</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>emitlog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class="line">
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
-</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line">
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;fanout&#39;</span> <span class="p">)</span>
-</span><span class="line">
-</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:])</span> <span class="ow">or</span> <span class="s">&quot;info: Hello World!&quot;</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                       <span class="n">routing_key</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&quot; [x] Sent </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,)</span>
-</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后是日志消费者</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line">
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
-</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;fanout&#39;</span> <span class="p">)</span>
-</span><span class="line"><span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                    <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&#39; [*] Waiting for logs. To exit press CTRL+C&#39;</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
-</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">body</span><span class="p">,)</span>
-</span><span class="line">
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>测试：</p>
-
-<p>和前一个实例差不多。开3个bash，2个跑recelog，1个跑emitlog。
-查看recelog是否都收到emitlog发送的消息。代码里面用 了一个fanout(意思是成扇形展开)类型的exchange，
-只要和exchange绑定的queue都能收到一份消息的 copy，routing_key会被忽略掉。</p>
-
-<p><strong>5，路由模式 （选择接收信息）</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="err">$</span> <span class="n">cd</span> <span class="n">tut4</span>
-</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">emitlog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
-</span><span class="line"><span class="err">$</span> <span class="n">vim</span> <span class="n">recelog</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="err">代码如下</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>生产者</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>emitlog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class="line">
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
-</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span> <span class="p">)</span>
-</span><span class="line"><span class="n">severity</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">]</span> <span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s">&#39;info&#39;</span>
-</span><span class="line"><span class="n">message</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">2</span> <span class="p">:])</span> <span class="ow">or</span> <span class="s">&#39;Hello World!&#39;</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                       <span class="n">routing_key</span> <span class="o">=</span> <span class="n">severity</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&quot; [x] Sent </span><span class="si">%r</span><span class="s">:</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">severity</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-</span><span class="line"><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>这里声明exchange时类型定义为direct（直接匹配），就是说只有当一个信息的routing_key和队列的binding_key一 致时，
-信息才会被放入到这个队列。消息发布给exchange时必须带上routing_key。其实在消息生产端，队列这个概念是透明的。</p>
-
-<p>消费者</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">pika</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class="line">
-</span><span class="line"><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
-</span><span class="line">         <span class="n">host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="p">))</span>
-</span><span class="line"><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
-</span><span class="line">
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                          <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span> <span class="p">)</span>
-</span><span class="line"><span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
-</span><span class="line"><span class="n">severities</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:]</span>
-</span><span class="line"><span class="k">if</span> <span class="ow">not</span> <span class="n">severities</span><span class="p">:</span>
-</span><span class="line">     <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: </span><span class="si">%s</span><span class="s"> [info] [warning] [error]&quot;</span> <span class="o">%</span> \
-</span><span class="line">                          <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">0</span> <span class="p">],)</span>
-</span><span class="line">     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span> <span class="mi">1</span> <span class="p">)</span>
-</span><span class="line"><span class="k">for</span> <span class="n">severity</span> <span class="ow">in</span> <span class="n">severities</span><span class="p">:</span>
-</span><span class="line">     <span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="s">&#39;direct_logs&#39;</span> <span class="p">,</span>
-</span><span class="line">                        <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
-</span><span class="line">                        <span class="n">routing_key</span> <span class="o">=</span> <span class="n">severity</span><span class="p">)</span>
-</span><span class="line"><span class="k">print</span> <span class="s">&#39; [*] Waiting for logs. To exit press CTRL+C&#39;</span>
-</span><span class="line"><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
-</span><span class="line">     <span class="k">print</span> <span class="s">&quot; [x] </span><span class="si">%r</span><span class="s">:</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">routing_key</span><span class="p">,</span> <span class="n">body</span><span class="p">,)</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
-</span><span class="line">                       <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
-</span><span class="line"><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>这里首先定义exchange，和消息发送端是一样的。然后定义队列，队列是自动命名，
-并且只要进程终止，队列就会终止。然后把队列和 exchange绑定，绑定时的routing_key是用户输入的，
-如果输入多个key，就做多次的绑定。注意这里的队列还是一个。如果你需要建立两个 队列，就得跑两次这个python脚本。</p>
-
-<p><strong>6，topic和rpc</strong></p>
-
-<p>官方tutorial还有两个高级一点的实例，topic和rpc，这里就不作说明了，留着大家学学英文吧 :)</p>
-
-<p>RabbitMQ提供了很多消息队列客户端代码，比如python，java，c等等，大家可以根据产品或项目的实际情况选择。关键是原理必须搞懂。</p>
-
-<p><strong>其他资源：</strong></p>
-
-<p>中文入门篇：<a href="http://adamlu.net/dev/2011/09/rabbitmq-get-started/">http://adamlu.net/dev/2011/09/rabbitmq-get-started/</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CentOS6.4安装rabbitmq-server]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/rabbitmq-server.html"/>
-    <updated>2015-04-20T10:55:13+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/rabbitmq-server</id>
-    <content type="html"><![CDATA[<h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
-<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
-
-<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
-</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>3,解压tar文件</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>4,编辑Setup.dist</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
-</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>找到<!--more--></p>
-
-<pre><code>#SSL=/usr/local/ssl
-#_ssl _ssl.c \
-#       -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
-#       -L$(SSL)/lib -lssl -lcrypto
-......
-#zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz
-</code></pre>
-
-<p>把注释去掉后开始执行安装</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">./configure --prefix=/usr/local/python27 --with-zlib=/usr/include
-</span><span class="line">make &amp;&amp; make install</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>5、建立软连接，使系统默认的python指向python27</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">mv /usr/bin/python /usr/bin/python2.6.6.old
-</span><span class="line">ln -s /usr/local/python27/bin/python2.7 /usr/bin/python</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>已经安装完成python的安装或升级的全部操作了，我们再来看一下现在的python的版本：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">python -V
-</span><span class="line">Python 2.7.5</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>虽然现在python已经安装完成，但是使用yum命令会有问题——yum不能正常工作。</p>
-
-<p>这是因为yum默认使用的python版本是2.6.6，到哪是现在的python版本是2.7.5，
-故会出现上述问题，只需要该一下yum的默认python配置版本就行了：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">vi /usr/bin/yum</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>将文件头部的<code>#!/usr/bin/python</code> 改为<code>#!/usr/bin/python2.6</code></p>
-
-<h3 id="centos-64erlang">在 CentOS 6.4上安装Erlang</h3>
-<p>在本节中，我们将来学习如何在CentOS 6.4上安装erlang，具体的Erlang版本是R16B02。</p>
-
-<p>在安装之前，需要先要安装一些其他的软件，否则在安装中间会出现一些由于没有其依赖的软件模块而失败。</p>
-
-<p><strong>1、首先要先安装GCC GCC-C++ Openssl等以来模块：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">yum -y install make gcc gcc-c++ kernel-devel m4 ncurses-devel openssl-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>2、再安装ncurses模块</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">yum -y install ncurses-devel
-</span><span class="line">yum install ncurses-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>3、下载Erang源代码文件文件，并对其付权限和解压文件：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">wget http://www.erlang.org/download/otp_src_R16B02.tar.gz
-</span><span class="line">chmod +x otp_src_R16B02.tar.gz
-</span><span class="line">tar -xzvf otp_src_R16B02.tar.gz
-</span><span class="line">mv otp_src_R16B02 erlang_R16B #重命名解压厚的文件</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>4、下面是安装erlang的重头戏，依次执行以下操作：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd erlang_R16B/
-</span><span class="line">#不用java编译，故去掉java避免错误
-</span><span class="line">./configure --prefix=/usr/local/erlang --with-ssl --enable-threads --enable-smp-support --enable-kernel-poll --enable-hipe --without-javac
-</span><span class="line">make &amp;&amp; make install #编译后安装</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>5、配置erlang环境：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">vi /etc/profile
-</span><span class="line">ERL_HOME=/usr/local/erlang
-</span><span class="line">export PATH=$PATH:$ERL_HOME/bin</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>好了，现在erlang的已经配置好了，现在我们来测试一下是否安装成功,在控制台输入命令erl，
-如果在erlang shell里出现下图所示就说明安装成功了：
-此处省略截图了…</p>
-
-<h3 id="centosrabbitmq-server-315">在CentOS上安装rabbitmq-server-3.1.5</h3>
-<p>在本节中我们来看一下如何在CentOS上安装RabbitMQ。
-我们使用的rabbitmq的版本是rabbitmq-server-3.1.5.tar.gz，CentOS的版本是CentOS 6.4。</p>
-
-<p>在安装rabbitmq之前需要先安装python和erlang，
-这两部分的安装过程请参看在CentOS 6.4上安装python和在 CentOS 6.4上安装Erlang，这里不再赘述。</p>
-
-<p>安装rabbitmq的具体步骤如下：</p>
-
-<p><strong>1、下载rabbitmq-server-3.1.5.tar.gz文件，并解压之：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd /usr/local
-</span><span class="line">wget http://www.rabbitmq.com/releases/rabbitmq-server/v3.1.5/rabbitmq-server-3.1.5.tar.gz
-</span><span class="line">chmod +x rabbitmq-server-3.1.5.tar.gz
-</span><span class="line">tar -xzvf rabbitmq-server-3.1.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>2、在编译rabbitmq源码之前先要安装其需要依赖包：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">yum -y install xmlto</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>否则会编译不通过：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">/bin/sh: line 1: xmlto: command not found</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>3、开始编译源代码：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd rabbitmq-server-3.1.5
-</span><span class="line">make
-</span><span class="line">#将rabbitmq编译到/opt/mq/rabbitmq目录
-</span><span class="line">make install TARGET_DIR=/opt/mq/rabbitmq SBIN_DIR=/opt/mq/rabbitmq/sbin MAN_DIR=/opt/mq/rabbitmq/man</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>4、安装web插件管理界面</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd /opt/mq/rabbitmq/sbin
-</span><span class="line">mkdir /etc/rabbitmq/
-</span><span class="line">rabbitmq-plugins enable rabbitmq_management</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>5、好了，到这里rabbitmq已经配置好了，可以启动了：</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">./rabbitmq-server start &amp;</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>我运行的时候报错了，ERROR: epmd error for host “springzoo”: timeout (timed out)</p>
-
-<p>更改下/etc/hosts:</p>
-
-<pre><code>127.0.0.1   localhost springzoo
-::1         localhost springzoo
-</code></pre>
-
-<p>接下来我们查看下端口</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">ps aux | grep rabbitmq #查看端口，默认就是5672
-</span><span class="line">netstat -tnlp | grep 5672</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>应该是下面的结果</p>
-
-<pre><code>tcp        0      0 0.0.0.0:15672               0.0.0.0:*                   LISTEN      30435/beam.smp
-tcp        0      0 0.0.0.0:55672               0.0.0.0:*                   LISTEN      30435/beam.smp
-tcp        0      0 :::5672                     :::*                        LISTEN      30435/beam.smp
-</code></pre>
-
-<p>如果看到下面的信息就表明已经启动成功了！
-省略截图….</p>
-
-<p>最好我们就可以在浏览器上输入http://127.0.0.1:15672/登录管理界面了</p>
-
-<p>使用登录的名户名和密码默认都算guest，登录后的页面如下：</p>
-
-<p>截图再次省略…</p>
-
 ]]></content>
   </entry>
   

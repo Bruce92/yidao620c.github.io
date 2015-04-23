@@ -152,6 +152,176 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
+2015-04-23 10:42</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/sitemesh/'>sitemesh</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150423/sitemesh.html" itemprop="url">SiteMesh使用笔记</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">简介</h3>
+<p>SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重复编码的。</p>
+
+<p>它定义了一个过滤器，然后把页面都加上统一的头部和底部。</p>
+
+<p>在maven工程的pom.xml中加入SiteMesh依赖：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;dependency&gt;</span>
+</span><span class="line">    <span class="nt">&lt;groupId&gt;</span>opensymphony<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;artifactId&gt;</span>sitemesh<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;version&gt;</span>2.4.2<span class="nt">&lt;/version&gt;</span>
+</span><span class="line"><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-1">过滤器定义：</h3>
+<p>在web.xml中：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;filter&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-class&gt;</span>com.opensymphony.sitemesh.webapp.SiteMeshFilter<span class="nt">&lt;/filter-class&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter&gt;</span>
+</span><span class="line"><span class="nt">&lt;filter-mapping&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;url-pattern&gt;</span>*.html<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter-mapping&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="web-infdecoratorsxml--more--">WEB-INF下新建decorators.xml文件：
+		
+		<a href="/blog/20150423/sitemesh.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-23 10:22</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/pyinstaller/'>pyinstaller</a>, <a class='category' href='/blog/categories/python/'>python</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150423/pyinstaller.html" itemprop="url">使用PyInstaller打包Python程序</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="pyinstaller">PyInstaller介绍：</h3>
+<p>PyInstaller是一个能将Python程序转换成单个可执行文件的程序，
+操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。</p>
+
+<p>环境为windows7操作系统，python2.7.8 virtual environment
+官网：<a href="https://github.com/pyinstaller/pyinstaller">https://github.com/pyinstaller/pyinstaller</a></p>
+
+<h3 id="section">详细步骤：</h3>
+<p>1. win7下面先安装这个依赖：pywin32，下载下来后切换到venv2.7，然后使用easy_install xxx.exe安装</p>
+
+<p>2. pip安装PyInstaller：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pip install pyinstaller</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3. 打包过程中可能会出现msvcp90.dll找不到的问题，
+去<a href="http://cn.dll-files.com/msvcp90.dll.html">http://cn.dll-files.com/msvcp90.dll.html</a>下载第三个zip文件，
+解压后放到C:\Windows\System32，如果是64位的还要放到C:\Windows\SysWOW64目录下。
+		
+		<a href="/blog/20150423/pyinstaller.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-23 10:06</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/decorator/'>decorator</a>, <a class='category' href='/blog/categories/python/'>python</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150423/python-decorator.html" itemprop="url">Python函数装饰器详解</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">装饰器简介</h3>
+<p>python有着强大的表达式语法和函数特性，其中一个我的最爱便是装饰器。
+在设计模式中，装饰器能够在不使用子类的情况下动态的修改函数、方法或类的功能。</p>
+
+<p>当你需要扩展某个函数的功能却不想直接修改这个函数的时候，装饰器就可以派上用场了。
+实现装饰器模式有很多种方法，但是python通过强大的语法支持来让这个变得相当容易。</p>
+
+<p>在这篇文章中我将深入讲解Python的函数装饰器，并通过一系列的源码示例来彻底讲清楚这个东西。
+所有例子都在Python2.7下运行通过，不过只需要稍作改变就可以运行在Python3上了，
+甚至我猜测什么都不用改变都可以的，读者可以自己去试试。</p>
+
+<p>本质上来讲，装饰器是以包装器形式工作的，其实就是在执行目标函数之前或之后加入自己的逻辑，
+而不需要改变目标函数本身就可以增强它的功能，也就是说装饰了它。
+		
+		<a href="/blog/20150423/python-decorator.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 2015-04-21 18:27</div>
 		<div class="tags">
 
@@ -281,152 +451,6 @@ django中认证的装饰器位于模块django.contrib.auth.decorators中，名�
 类似下面
 		
 		<a href="/blog/20150421/simpleblog-09.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 14:24</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-08.html" itemprop="url">Django1.7开发博客（8）- 继续完善</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
-我们的博客还有很多功能需要完善，下面抛砖引玉新增几个功能，还有其他功能等你自己去发现和实现。</p>
-
-<h2 id="section">草稿箱</h2>
-<p>之前我们新建文章的时候只是是保存到数据库，也就是仅仅保存了草稿，还没有对外发布，
-在博客首页上面是看不到的，因为published_date字段为空。这里我们需要添加一个草稿箱的链接。还是四部曲。</p>
-
-<p>第一步，添加一个链接：</p>
-
-<p>打开mysite/templates/mysite/base.html文件，在</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>的上面一行添加如下链接：
-		
-		<a href="/blog/20150421/simpleblog-08.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 14:02</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-07.html" itemprop="url">Django1.7开发博客（7）- 实现功能</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>到目前为止我们已经完成了一个django应用的所有基础部分。
-包括url配置、视图、模型和模板。接下来开始继续完善我们的博客系统了。</p>
-
-<p>首先我们需要一个显示每篇文章的详细页面，对不？</p>
-
-<h2 id="section">文章详情</h2>
-<p>对于首页每一篇文章，我们希望点击标题后可以进入该文章的阅读页面。修改post_list.html中的标题href如下：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_detail&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>我来详细解释下这个{% url ‘blog.views.post_detail’ pk=post.pk %}，{% %}
-表示使用django模板标签而不是普通的HTML文字，这里我们使用了url标签来生成真正的url链接。
-blog.views.post_detail是视图的全路径。
-		
-		<a href="/blog/20150421/simpleblog-07.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 11:44</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-06.html" itemprop="url">Django1.7开发博客（6）- 模板继承</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">什么是模板继承？</h3>
-<p>就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
-通过这种方式你就需要在每个页面复制粘贴同样的代码了。
-如果你想改变页面某个公共部分，你不需要每个页面的去修改，只需要修改一个模板就行了，
-这样最大化复用，减少了冗余，也减少了出错的几率，而且你敲的代码也少了。</p>
-
-<h3 id="base">创建一个base模板</h3>
-<p>一个base模板就是你全站所有页面都会继承的最基本的网站框架模板。我们在blog/templates/blog/中创建一个base.html模板：</p>
-
-<pre><code>blog
-└───templates
-    └───blog
-            base.html
-            post_list.html
-</code></pre>
-
-<p>打开base.html，然后将post_list.html的所有内容都复制过来，现在它的内容如下：
-		
-		<a href="/blog/20150421/simpleblog-06.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

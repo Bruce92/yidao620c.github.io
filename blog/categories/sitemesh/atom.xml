@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[分类目录：sitemesh | 笨跑的一刀]]></title>
+  <link href="http://yidao620c.github.io/blog/categories/sitemesh/atom.xml" rel="self"/>
+  <link href="http://yidao620c.github.io/"/>
+  <updated>2015-04-23T10:54:14+08:00</updated>
+  <id>http://yidao620c.github.io/</id>
+  <author>
+    <name><![CDATA[熊能]]></name>
+    <email><![CDATA[yidao620@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SiteMesh使用笔记]]></title>
+    <link href="http://yidao620c.github.io/blog/20150423/sitemesh.html"/>
+    <updated>2015-04-23T10:42:23+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150423/sitemesh</id>
+    <content type="html"><![CDATA[<h3 id="section">简介</h3>
+<p>SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重复编码的。</p>
+
+<p>它定义了一个过滤器，然后把页面都加上统一的头部和底部。</p>
+
+<p>在maven工程的pom.xml中加入SiteMesh依赖：</p>
+
+<p>&#8220;` xml</p>
+<dependency>
+    <groupid>opensymphony</groupid>
+    <artifactid>sitemesh</artifactid>
+    <version>2.4.2</version>
+</dependency>
+<p>&#8220;`</p>
+
+<h3 id="section-1">过滤器定义：</h3>
+<p>在web.xml中：</p>
+
+<p>&#8220;` xml</p>
+<filter>
+    <filter-name>sitemeshFilter</filter-name>
+    <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>sitemeshFilter</filter-name>
+    <url-pattern>*.html</url-pattern>
+</filter-mapping>
+<p>&#8220;`</p>
+
+<h3 id="web-infdecoratorsxml--more--">WEB-INF下新建decorators.xml文件：<!--more--></h3>
+
+<p>&#8220;` xml
+<?xml version="1.0" encoding="UTF-8"?></p>
+<decorators defaultdir="/WEB-INF/layouts/">
+    <!-- 此处用来定义不需要过滤的页面 -->
+    <excludes>
+        <pattern>/static/*</pattern>
+    </excludes>
+    <!-- 用来定义装饰器要过滤的页面 -->
+    <decorator name="default" page="default.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>
+<p>&#8220;`
+不用过滤/static/目录下的文件，然后指定了装饰器：/WEB-INF/layouts/default.jsp。</p>
+
+<h3 id="defaultjsp">default.jsp模板</h3>
+<p>&#8220;` jsp
+&lt;%@ page contentType=”text/html;charset=UTF-8” %&gt;
+&lt;%@ taglib prefix=”sitemesh” uri=”http://www.opensymphony.com/sitemesh/decorator” %&gt;
+&lt;%@ taglib prefix=”c” uri=”http://java.sun.com/jsp/jstl/core” %&gt;</p>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+
+<p>&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”&gt;</p>
+<html>
+<head>
+    <title>快贷发平台:<sitemesh:title /></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link type="image/x-icon" href="${ctx}/static/images/favicon.ico" rel="shortcut icon" />
+    <link href="${ctx}/static/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="${ctx}/static/jquery-validation/1.11.1/validate.css" type="text/css" rel="stylesheet" />
+    <link href="${ctx}/static/styles/default.css" type="text/css" rel="stylesheet" />
+    <script src="${ctx}/static/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="${ctx}/static/jquery-validation/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="${ctx}/static/jquery-validation/1.11.1/messages_bs_zh.js" type="text/javascript"></script>
+    <sitemesh:head />
+</head>
+
+<body>
+<div class="container">
+    &lt;%@ include file=&#8221;/WEB-INF/layouts/header.jsp&#8221; %&gt;
+    <div id="content">
+        <sitemesh:body />
+    </div>
+    &lt;%@ include file=&#8221;/WEB-INF/layouts/footer.jsp&#8221; %&gt;
+</div>
+<script src="${ctx}/static/bootstrap/3.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+</body>
+</html>
+<p>&#8220;`
+首先引入了SiteMesh标签，自动替换为被过滤页面的title，
+把被过滤页面head里面的东西（除了title）放在这个地方，被过滤的页面body里面的内容放在这里，
+在content的上下引入了header和footer，
+我们在头部引入了js和css，就可以重用了，
+使用的过程中，几乎感受不到SiteMesh的存在，例如下面的页面：</p>
+
+<p>&#8220;` jsp
+&lt;%@ page language=”java” contentType=”text/html; charset=utf-8”
+    pageEncoding=”utf-8”%&gt;
+&lt;!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “http://www.w3.org/TR/html4/loose.dtd”&gt;</p>
+<html>
+<!-- 第一个被装饰(目标)页面  -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>被装饰（目标）页面title</title>
+<script type="text/javascript" src="http://yidao620c.github.io/js/hello.js"></script>
+</head>
+
+<body>
+    <h4>被装饰（目标）页面body标签内内容。</h4>
+    <h3>使用SiteMesh的好处?</h3>
+    <ul>
+        <li>被装饰（目标）页面和装饰页面完全分离。</li>
+        <li>做到真正的页面复用，一个装饰页面装饰多个被装饰（目标）页面。</li>
+        <li>更容易实现统一的网站风格。</li>
+        <li>还有。。。</li>
+    </ul>
+</body>
+</html>
+<p>&#8220;`</p>
+
+<p>这就是一个普通的页面，但是被SiteMesh装饰之后，就会自动去掉 等元素，然后把相应的东西放在模板对应位置上。</p>
+
+<p>我们来看一下，被SiteMesh装饰过的页面源代码：</p>
+
+<p>&#8220;` html
+&lt;!DOCTYPE html&gt;</p>
+<html>
+<head>
+<title>QuickStart示例:被装饰（目标）页面title</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<link type="image/x-icon" href="http://yidao620c.github.io/SpringMVC/static/images/favicon.ico" rel="shortcut icon" />
+<link href="http://yidao620c.github.io/SpringMVC/sc/bootstrap/2.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="http://yidao620c.github.io/SpringMVC/sc/jquery-validation/1.11.0/validate.css" type="text/css" rel="stylesheet" />
+<link href="http://yidao620c.github.io/SpringMVC/css/base/default.css" type="text/css" rel="stylesheet" />
+<script src="http://yidao620c.github.io/SpringMVC/sc/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="http://yidao620c.github.io/SpringMVC/sc/jquery-validation/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
+<script src="http://yidao620c.github.io/SpringMVC/sc/jquery-validation/1.11.0/messages_bs_zh.js" type="text/javascript"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="http://yidao620c.github.io/js/hello.js"></script>
+</head>
+<body>
+    <div class="container">
+<div id="header">
+</div>
+<div id="content">
+    <h4>被装饰（目标）页面body标签内内容。</h4>
+    <h3>使用SiteMesh的好处?</h3>
+    <ul>
+        <li>被装饰（目标）页面和装饰页面完全分离。</li>
+        <li>做到真正的页面复用，一个装饰页面装饰多个被装饰（目标）页面。</li>
+        <li>更容易实现统一的网站风格。</li>
+        <li>还有。。。</li>
+    </ul>
+</div>
+<div id="footer">
+    Copyright &copy; 2005-2012 <a href="">spring.org.cn</a>
+</div>
+</div>
+<script src="http://yidao620c.github.io/SpringMVC/sc/bootstrap/2.3.0/js/bootstrap.min.js" type="text/javascript"></script>
+</body>
+</html>
+<p>&#8220;`</p>
+
+<h3 id="section-2">总结</h3>
+<p>SiteMesh配置简单，使用灵活，几乎不会影响我们的正常开发，作为一个默默无闻的好帮手，非常推荐使用。</p>
+
+]]></content>
+  </entry>
+  
+</feed>
