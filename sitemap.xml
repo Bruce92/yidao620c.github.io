@@ -133,6 +133,10 @@
     <lastmod>2015-04-06T21:08:25+08:00</lastmod>
   </url>
   <url>
+    <loc>http://yidao620c.github.io/blog/20150318/octopress-blog.html</loc>
+    <lastmod>2015-03-18T17:41:21+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://yidao620c.github.io/blog/categories/</loc>
   </url>
   <url>
@@ -146,6 +150,12 @@
   </url>
   <url>
     <loc>http://yidao620c.github.io/opensource/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/octopress/</loc>
+  </url>
+  <url>
+    <loc>http://yidao620c.github.io/blog/categories/github/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/blog/categories/servlet/</loc>
