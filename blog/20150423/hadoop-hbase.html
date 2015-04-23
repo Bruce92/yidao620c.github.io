@@ -1,0 +1,540 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>centos6上安装Hadoop和HBase - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="centos6上安装Hadoop和HBase 安装前的准备
+操作系统：CentOS 6.5 64位 在linux环境安装Hadoop之前，我们需要使用到ssh，所以要先安装ssh，并且创建一个hadoop用户 备注： 下面所有的命令中，以#开头的表示是root用户，以$开头的是普通用户 &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150423/hadoop-hbase.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">centos6上安装Hadoop和HBase</h1>
+	<div class="entry-content" itemprop="articleBody"><h3 id="section">安装前的准备</h3>
+<p>操作系统：CentOS 6.5 64位</p>
+
+<p>在linux环境安装Hadoop之前，我们需要使用到ssh，所以要先安装ssh，并且创建一个hadoop用户</p>
+
+<p><strong>备注：</strong> 下面所有的命令中，以#开头的表示是root用户，以$开头的是普通用户</p>
+
+<h4 id="ssh">安装SSH</h4>
+<p>先切换到root用户，执行下列步骤</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">rpm -qa |grep ssh  #检查是否装了SSH包
+</span><span class="line">yum install openssh-server  #安装ssh
+</span><span class="line">chkconfig --list sshd #检查SSHD是否设置为开机启动
+</span><span class="line">chkconfig --level 2345 sshd on  #如果没设置启动就设置下.
+</span><span class="line">service sshd restart  #重新启动</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="hadoop--more--">创建hadoop用户<!--more--></h4>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ su
+</span><span class="line">password:
+</span><span class="line"># useradd hadoop
+</span><span class="line"># passwd hadoop
+</span><span class="line">New passwd:
+</span><span class="line">Retype new passwd</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="pub-key">生成pub-key</h4>
+<p>切换到hadoop用户后，执行</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ ssh-keygen -t rsa
+</span><span class="line">$ cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+</span><span class="line">$ chmod 0600 ~/.ssh/authorized_keys</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后确认下是否能正常使用ssh连接</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">ssh localhost</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="jdk17">安装JDK1.7</h3>
+
+<p>进入oracle官网<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</a></p>
+
+<p>下载jdk-7u79-linux-x64.gz，然后执行：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ tar zxf jdk-7u79-linux-x64.gz
+</span><span class="line">$ ls
+</span><span class="line">jdk1.7.0_79 jdk-7u79-linux-x64.gz
+</span><span class="line">$ su
+</span><span class="line">password:
+</span><span class="line"># mv jdk1.7.0_79 /usr/local/
+</span><span class="line"># exit</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>打开~/.bashrc文件，写入JAVA_HOME环境变量</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">export JAVA_HOME=/usr/local/jdk1.7.0_79
+</span><span class="line">export PATH= $PATH:$JAVA_HOME/bin</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>保存刷新下：<code>$ source ~/.bashrc</code></p>
+
+<p>切换到root用户，然后执行下面的语句确保JDK版本更改完成</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># alternatives --install /usr/bin/java java /usr/local/jdk1.7.0_79/bin/java 2
+</span><span class="line"># alternatives --install /usr/bin/javac javac /usr/local/jdk1.7.0_79/bin/javac 2
+</span><span class="line"># alternatives --install /usr/bin/jar jar /usr/local/jdk1.7.0_79/bin/jar 2
+</span><span class="line"># alternatives --set java /usr/local/jdk1.7.0_79/bin/java
+</span><span class="line"># alternatives --set javac /usr/local/jdk1.7.0_79/bin/javac
+</span><span class="line"># alternatives --set jar /usr/local/jdk1.7.0_79/bin/jar</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>最后执行下：<code>java -version</code>看看是不是已经成功安装了JDK7</p>
+
+<h3 id="hadoop">安装配置Hadoop</h3>
+
+<h4 id="hadoophadoop260httpapachefayeacomhadoopcommonstablehadoop-260targz">下载Hadoophadoop2.6.0下载地址：<a href="http://apache.fayea.com/hadoop/common/stable/hadoop-2.6.0.tar.gz">http://apache.fayea.com/hadoop/common/stable/hadoop-2.6.0.tar.gz</a></h4>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ su
+</span><span class="line">password:
+</span><span class="line"># cd /usr/local
+</span><span class="line"># wget http://apache.fayea.com/hadoop/common/stable/hadoop-2.6.0.tar.gz
+</span><span class="line"># tar xzf hadoop-2.6.0.tar.gz
+</span><span class="line"># mv hadoop-2.6.0 hadoop
+</span><span class="line"># exit</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>hadoop有很多种模式，本篇我们演示的是伪分布式模式，包括后面的HBase也选择这种模式。</p>
+
+<h4 id="hadoop-1">配置Hadoop环境</h4>
+<p>第一步，配置环境变量</p>
+
+<p>打开~/.bashrc文件，写入如下内容</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">export HADOOP_HOME=/usr/local/hadoop
+</span><span class="line">export HADOOP_MAPRED_HOME=$HADOOP_HOME
+</span><span class="line">export HADOOP_COMMON_HOME=$HADOOP_HOME
+</span><span class="line">export HADOOP_HDFS_HOME=$HADOOP_HOME
+</span><span class="line">export YARN_HOME=$HADOOP_HOME
+</span><span class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+</span><span class="line">export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+</span><span class="line">export HADOOP_INSTALL=$HADOOP_HOME</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后应用设置</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ source ~/.bashrc</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>第二步，hadoop配置文件</p>
+
+<p>hadoop的配置文件都放在”$HADOOP_HOME/etc/hadoop”目录中，
+你可以根据自己的需要来修改它们。</p>
+
+<p>在此之前，还需要修改下hadoop-env.sh，更改其中的JAVA_HOME变量</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">vim /usr/local/hadoop/etc/hadoop/hadoop-env.sh</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后修改JAVA_HOME为真实的目录</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">export JAVA_HOME=/usr/local/jdk1.7.0_79</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>接下来我们去到hadoop的配置文件目录</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ cd $HADOOP_HOME/etc/hadoop</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>1. 首先打开core-site.xml，写入如下配置</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>hadoop.tmp.dir<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>/usr/local/hadoop/tmp<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>fs.defaultFS<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>hdfs://localhost:9000<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line"><span class="nt">&lt;/configuration&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>2. 然后打开hdfs-site.xml，写入如下配置</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>dfs.replication<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>dfs.name.dir<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>file:///home/hadoop/hadoopinfra/hdfs/namenode<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>dfs.data.dir<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>file:///home/hadoop/hadoopinfra/hdfs/datanode<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>dfs.permissions<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>false<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line"><span class="nt">&lt;/configuration&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>上面的文件夹需要我们手动来创建，那么我们创建下就行了</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ mkdir -p /home/hadoop/hadoopinfra/hdfs/namenode
+</span><span class="line">$ mkdir -p /home/hadoop/hadoopinfra/hdfs/datanode
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3. 然后打开yarn-site.xml文件，写入如下配置</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>yarn.nodemanager.aux-services<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>mapreduce_shuffle<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line"><span class="nt">&lt;/configuration&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>4. 配置mapred-site.xml，先重命名</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ cp mapred-site.xml.template mapred-site.xml
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>打开mapred-site.xml文件，写入如下配置</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;configuration&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>yarn.nodemanager.aux-services<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>mapreduce_shuffle<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line"><span class="nt">&lt;/configuration&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="hadoop-2">确认Hadoop的安装</h4>
+<p>1. NameNode确认</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ cd ~
+</span><span class="line">$ hdfs namenode -format
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>结果应该类似下面</p>
+
+<pre><code>STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = centos00/127.0.0.1
+STARTUP_MSG:   args = [-format]
+STARTUP_MSG:   version = 2.6.0
+...
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at centos00/127.0.0.1
+************************************************************/
+</code></pre>
+
+<p>2. Hadoop dfs确认</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ start-dfs.sh
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>结果应该类似下面</p>
+
+<pre><code>Starting namenodes on [localhost]
+localhost: starting namenode, logging to ....out
+localhost: starting datanode, logging to ....out
+Starting secondary namenodes [0.0.0.0]
+The authenticity of host '0.0.0.0 (0.0.0.0)' can't be established.
+RSA key fingerprint is fd:01:fc:f2:53:a0:58:8e:96:9c:5f:f2:6e:5b:69:1a.
+Are you sure you want to continue connecting (yes/no)? yes
+0.0.0.0: Warning: Permanently added '0.0.0.0' (RSA) to the list of known hosts.
+0.0.0.0: starting secondarynamenode, logging to ...
+</code></pre>
+
+<p>3. Yarn Srcipt确认</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ start-yarn.sh
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>结果应该类似下面这样</p>
+
+<pre><code>starting yarn daemons
+starting resourcemanager, logging to ....out
+localhost: starting nodemanager, logging to ....out
+</code></pre>
+
+<p>4. 浏览器访问Hadoop</p>
+
+<p>默认访问Hadoop的端口是50070，在浏览器中打开链接<a href="http://localhost:50070">http://localhost:50070</a>来访问Hadoop服务。</p>
+
+<p>5. 浏览器确认应用集群</p>
+
+<p>默认访问应用集群的端口号是8088，在浏览器中打开链接<a href="http://localhost:8088">http://localhost:8088</a>来确认下。</p>
+
+<h3 id="hbase">安装HBase</h3>
+<p>你可以在三种模式下安装HBase：单机模式、伪分布式模式、全分布式模式。
+下面我们演示在伪分布式模式下HBase的安装和配置。</p>
+
+<h4 id="hbase100">下载HBase1.0.0</h4>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ su
+</span><span class="line"># cd /usr/local/
+</span><span class="line"># wget http://www.interior-dsgn.com/apache/hbase/stable/hbase-1.0.0-bin.tar.gz
+</span><span class="line"># tar -zxvf hbase-1.0.0-bin.tar.gz
+</span><span class="line"># mv hbase-1.0.0 hbase
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="hbase-sitexml">配置hbase-site.xml</h4>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"># cd /usr/local/hbase/conf
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后打开hbase-env.sh文件，修改如下</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">export JAVA_HOME=/usr/local/jdk1.7.0_79
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>修改hbase-site.xml文件，如下</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.rootdir<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;value&gt;</span>file:/home/hadoop/HBase/HFiles<span class="nt">&lt;/value&gt;</span>
+</span><span class="line"><span class="nt">&lt;/property&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.zookeeper.property.dataDir<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;value&gt;</span>/home/hadoop/zookeeper<span class="nt">&lt;/value&gt;</span>
+</span><span class="line"><span class="nt">&lt;/property&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.cluster.distributed<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+</span><span class="line"><span class="nt">&lt;/property&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.rootdir<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;value&gt;</span>hdfs://localhost:8030/hbase<span class="nt">&lt;/value&gt;</span>
+</span><span class="line"><span class="nt">&lt;/property&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>编辑/etc/profile，增加HBASE_HOME环境变量</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">export HBASE_HOME=/usr/local/hbase
+</span><span class="line">export PATH=$PATH:$HBASE_HOME/bin
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后切换到hadoop用户下，应用更改。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">source /etc/profile
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>OK，现在为止，HBase的安装和配置都已经完成了。你可以通过执行start-hbase.sh来启动HBase</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"># chown -R hadoop:hadoop /usr/local/hbase
+</span><span class="line"># exit
+</span><span class="line">$ mkdir -p /home/hadoop/HBase/HFiles
+</span><span class="line">$ cd /usr/local/hbase/bin
+</span><span class="line">$ ./start-hbase.sh
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="hdfshbase">在HDFS中检查HBase目录</h4>
+<p>HBase会在HDFS中创建自己的目录，在hadoop目录下面执行：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ ./bin/hadoop fs -ls /hbase
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>基本上一切正常就成功了。</p>
+
+</div>
+
+</article>
+
+  <section id="comment">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150423/hadoop-hbase" data-title="centos6上安装Hadoop和HBase" data-url="http://yidao620c.github.io/blog/20150423/hadoop-hbase.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    熊能
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

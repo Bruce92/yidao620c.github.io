@@ -9,7 +9,11 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 11:21 rabbitmq 使用python开发RabbitMQ应用 参考了RabbitMQ网站上提供的英文版本入门指南: http://www.rabbitmq.com/getstarted.html 测试环境：CentOS 6.2 1，测试环境准备 安装python（ &hellip;">
+	<meta name="description" content="2015-04-20 13:45 fastjson fastjson对Date的处理 fastjson对日期的序列化方式： 一种方法是通过注解
+1
+2
+@JSONField (format=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+public Date birthday &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -93,6 +97,68 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20 13:45</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/fastjson/'>fastjson</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/fastjson-date.html" itemprop="url">fastjson对Date的处理</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><strong>fastjson对日期的序列化方式：</strong></p>
+
+<p>一种方法是通过注解</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>另一种是通过SerializeConfig：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
+</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
+</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>json字符串中使用单引号：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+		
+		<a href="/blog/20150420/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -390,63 +456,6 @@ k如果大于lgn,则比归并排序复杂度大了。
 <p>等等，更多信息请见wiki文档。废话不多讲，先上代码：
 		
 		<a href="/blog/20150418/xmemecached.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18 15:52</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/memcached/'>memcached</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/memcached-install.html" itemprop="url">Linux上安装memcached</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>一 准备安装文件</strong></p>
-
-<p>下载memcached与libevent的安装文件：</p>
-
-<p>memcached下载地址：<a href="http://memcached.googlecode.com/files/memcached-1.4.15.tar.gz">memcached-1.4.15.tar.gz</a></p>
-
-<p>libevent下载地址：<a href="https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz">libevent-2.0.21-stable.tar.gz</a></p>
-
-<p><strong>二 具体安装步骤</strong></p>
-
-<ol>
-  <li>由于memcached依赖于libevent，因此需要安装libevent。由于linux系统可能默认已经安装libevent，执行命令：</li>
-</ol>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">rpm -qa|grep libevent </span></code></pre></td></tr></table></div></figure></notextile></div>
-<ol>
-  <li>查看系统是否带有该安装软件，如果有执行命令:</li>
-</ol>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"># 由于系统自带的版本旧，忽略依赖删除
-</span><span class="line">rpm -e libevent-1.4.13-4.el6.x86_64 –nodeps</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ol>
-  <li>安装libevent命令：
-		
-		<a href="/blog/20150418/memcached-install.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

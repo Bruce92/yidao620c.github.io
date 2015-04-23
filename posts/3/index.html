@@ -9,11 +9,9 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 17:31 django, simpleblog Django1.7开发博客（1）- 入门篇 开篇
-笔者用过django一段时间了，是时候做点笔记了。不过官网文档稍微有点复杂，对新手而言很困难，
-而网上的一些教程很多都过时了。
-最近看到一个外文的教程非常不错，
-网址是： &hellip;">
+	<meta name="description" content="2015-04-20 18:49 django, simpleblog Django1.7开发博客（2）- 模型 什么是模型？
+django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
+发表的文章就是一个模型，需要存储在数据库中。 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -97,6 +95,53 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20 18:49</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-02.html" itemprop="url">Django1.7开发博客（2）- 模型</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="section">什么是模型？</h3>
+<p>django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
+发表的文章就是一个模型，需要存储在数据库中。
+这里我们使用django默认的sqlite3库，对于我们的这个小系统而言已经足够了。</p>
+
+<h3 id="section-1">创建一个应用</h3>
+<p>在django中有两个概念需要弄清楚。一个是工程（project）的概念，一个是应用（application）的概念。
+它们的关系是：一个工程中包含多个应用。每个应用都是独立的，应用通过setting.py注册到工程中来就可以使用了。
+这样可以解耦合，并且好的应用也可以复用。很好的模块化设计！</p>
+
+<p>在manage.py文件所在目录，执行下面命令：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">(myvenv) [mango@centos00 mysite]$ python manage.py startapp blog</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>你会看到一个新的blog文件夹被创建，并且下面多了许多文件，目前结构如下：
+		
+		<a href="/blog/20150420/simpleblog-02.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -440,68 +485,6 @@ Clark Evans在2001年在首次发表了这种语言[1] ，
 <p>一个简单的示例：
 		
 		<a href="/blog/20150420/yaml-introduce.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 13:45</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/fastjson/'>fastjson</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/fastjson-date.html" itemprop="url">fastjson对Date的处理</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>fastjson对日期的序列化方式：</strong></p>
-
-<p>一种方法是通过注解</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
-</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>另一种是通过SerializeConfig：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
-</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
-</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
-</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
-</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>json字符串中使用单引号：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-		
-		<a href="/blog/20150420/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>
