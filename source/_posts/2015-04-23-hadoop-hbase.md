@@ -251,18 +251,20 @@ $ start-yarn.sh
 你可以在三种模式下安装HBase：单机模式、伪分布式模式、全分布式模式。
 下面我们演示在伪分布式模式下HBase的安装和配置。
 
-#### 下载HBase1.0.0
+#### 下载HBase
 ```
 $ su
 # cd /usr/local/
-# wget http://www.interior-dsgn.com/apache/hbase/stable/hbase-1.0.0-bin.tar.gz
-# tar -zxvf hbase-1.0.0-bin.tar.gz
-# mv hbase-1.0.0 hbase
+# wget http://apache.fayea.com/hbase/hbase-0.98.12/hbase-0.98.12-hadoop2-bin.tar.gz
+# tar -zxvf hbase-0.98.12-hadoop2-bin.tar.gz
+# mv hbase-0.98.12-hadoop2 hbase
+# chown -R hadoop:hadoop /usr/local/hbase
 ```
 
 #### 配置hbase-site.xml
 ```
-# cd /usr/local/hbase/conf
+su hadoop
+$ cd /usr/local/hbase/conf
 ```
 然后打开hbase-env.sh文件，修改如下
 ```
@@ -273,7 +275,7 @@ export JAVA_HOME=/usr/local/jdk1.7.0_79
 ``` xml
 <property>
     <name>hbase.rootdir</name>
-    <value>file:/home/hadoop/HBase/HFiles</value>
+    <value>hdfs://localhost:8030/hbase</value>
 </property>
 
 <property>
@@ -285,29 +287,26 @@ export JAVA_HOME=/usr/local/jdk1.7.0_79
     <name>hbase.cluster.distributed</name>
     <value>true</value>
 </property>
-
-<property>
-    <name>hbase.rootdir</name>
-    <value>hdfs://localhost:8030/hbase</value>
-</property>
 ```
 编辑/etc/profile，增加HBASE_HOME环境变量
 ```
 export HBASE_HOME=/usr/local/hbase
 export PATH=$PATH:$HBASE_HOME/bin
 ```
-然后切换到hadoop用户下，应用更改。
+应用更改。
 ```
 source /etc/profile
 ```
-OK，现在为止，HBase的安装和配置都已经完成了。你可以通过执行start-hbase.sh来启动HBase
+OK，现在为止，HBase的安装和配置都已经完成了。
+
+现在你可以通过执行start-hbase.sh来启动HBase
 ```
-# chown -R hadoop:hadoop /usr/local/hbase
-# exit
-$ mkdir -p /home/hadoop/HBase/HFiles
 $ cd /usr/local/hbase/bin
 $ ./start-hbase.sh
 ```
+然后执行`jps`命令应该可以看到HMaster和HRegionServer这两个进程。
+
+如果没有看到，可以查看日志`/usr/local/hbase/logs/hbase-hadoop-master-xx.log`
 
 #### 在HDFS中检查HBase目录
 HBase会在HDFS中创建自己的目录，在hadoop目录下面执行：
