@@ -178,6 +178,10 @@ $ mkdir -p /home/hadoop/hadoopinfra/hdfs/datanode
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>localhost:54313</value>
+    </property>
 </configuration>
 ```
 
@@ -275,7 +279,7 @@ export JAVA_HOME=/usr/local/jdk1.7.0_79
 ``` xml
 <property>
     <name>hbase.rootdir</name>
-    <value>hdfs://localhost:8030/hbase</value>
+    <value>hdfs://localhost:9000/hbase</value>
 </property>
 
 <property>
@@ -304,7 +308,17 @@ OK，现在为止，HBase的安装和配置都已经完成了。
 $ cd /usr/local/hbase/bin
 $ ./start-hbase.sh
 ```
-然后执行`jps`命令应该可以看到HMaster和HRegionServer这两个进程。
+然后执行`jps`命令应该可以看到HMaster和HRegionServer这两个进程。类似下面
+
+    10941 DataNode
+    13744 HQuorumPeer
+    14207 Jps
+    11126 SecondaryNameNode
+    11276 ResourceManager
+    10840 NameNode
+    13843 HMaster
+    10016 HRegionServer
+    11378 NodeManager
 
 如果没有看到，可以查看日志`/usr/local/hbase/logs/hbase-hadoop-master-xx.log`
 
@@ -313,5 +327,13 @@ HBase会在HDFS中创建自己的目录，在hadoop目录下面执行：
 ```
 $ ./bin/hadoop fs -ls /hbase
 ```
-基本上一切正常就成功了。
+显示如下
 
+    drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/.tmp
+    drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/WALs
+    drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/data
+    -rw-r--r--   1 hadoop supergroup         42 2015-04-24 16:06 /hbase/hbase.id
+    -rw-r--r--   1 hadoop supergroup          7 2015-04-24 16:06 /hbase/hbase.version
+    drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/oldWALs
+
+那么恭喜你，配置成功了！
