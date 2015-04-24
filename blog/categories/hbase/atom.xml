@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：hbase | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/hbase/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-24T09:57:16+08:00</updated>
+  <updated>2015-04-24T15:11:56+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -266,18 +266,20 @@ localhost: starting nodemanager, logging to ....out
 <p>你可以在三种模式下安装HBase：单机模式、伪分布式模式、全分布式模式。
 下面我们演示在伪分布式模式下HBase的安装和配置。</p>
 
-<h4 id="hbase100">下载HBase1.0.0</h4>
+<h4 id="hbase-1">下载HBase</h4>
 <p><code>
 $ su
 # cd /usr/local/
-# wget http://www.interior-dsgn.com/apache/hbase/stable/hbase-1.0.0-bin.tar.gz
-# tar -zxvf hbase-1.0.0-bin.tar.gz
-# mv hbase-1.0.0 hbase
+# wget http://apache.fayea.com/hbase/hbase-0.98.12/hbase-0.98.12-hadoop2-bin.tar.gz
+# tar -zxvf hbase-0.98.12-hadoop2-bin.tar.gz
+# mv hbase-0.98.12-hadoop2 hbase
+# chown -R hadoop:hadoop /usr/local/hbase
 </code></p>
 
 <h4 id="hbase-sitexml">配置hbase-site.xml</h4>
 <p><code>
-# cd /usr/local/hbase/conf
+su hadoop
+$ cd /usr/local/hbase/conf
 </code>
 然后打开hbase-env.sh文件，修改如下
 <code>
@@ -288,7 +290,7 @@ export JAVA_HOME=/usr/local/jdk1.7.0_79
 <p>&#8220;` xml</p>
 <property>
     <name>hbase.rootdir</name>
-    <value>file:/home/hadoop/HBase/HFiles</value>
+    <value>hdfs://localhost:8030/hbase</value>
 </property>
 
 <property>
@@ -300,29 +302,26 @@ export JAVA_HOME=/usr/local/jdk1.7.0_79
     <name>hbase.cluster.distributed</name>
     <value>true</value>
 </property>
-
-<property>
-    <name>hbase.rootdir</name>
-    <value>hdfs://localhost:8030/hbase</value>
-</property>
 <p><code>
 编辑/etc/profile，增加HBASE_HOME环境变量
 </code>
 export HBASE_HOME=/usr/local/hbase
 export PATH=$PATH:$HBASE_HOME/bin
 <code>
-然后切换到hadoop用户下，应用更改。
+应用更改。
 </code>
 source /etc/profile
+&#8220;`
+OK，现在为止，HBase的安装和配置都已经完成了。</p>
+
+<p>现在你可以通过执行start-hbase.sh来启动HBase
 <code>
-OK，现在为止，HBase的安装和配置都已经完成了。你可以通过执行start-hbase.sh来启动HBase
-</code>
-# chown -R hadoop:hadoop /usr/local/hbase
-# exit
-$ mkdir -p /home/hadoop/HBase/HFiles
 $ cd /usr/local/hbase/bin
 $ ./start-hbase.sh
-&#8220;`</p>
+</code>
+然后执行<code>jps</code>命令应该可以看到HMaster和HRegionServer这两个进程。</p>
+
+<p>如果没有看到，可以查看日志<code>/usr/local/hbase/logs/hbase-hadoop-master-xx.log</code></p>
 
 <h4 id="hdfshbase">在HDFS中检查HBase目录</h4>
 <p>HBase会在HDFS中创建自己的目录，在hadoop目录下面执行：

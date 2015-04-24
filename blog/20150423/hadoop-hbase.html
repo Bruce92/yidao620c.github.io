@@ -403,22 +403,26 @@ localhost: starting nodemanager, logging to ....out
 <p>你可以在三种模式下安装HBase：单机模式、伪分布式模式、全分布式模式。
 下面我们演示在伪分布式模式下HBase的安装和配置。</p>
 
-<h4 id="hbase100">下载HBase1.0.0</h4>
+<h4 id="hbase-1">下载HBase</h4>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
+<span class="line-number">6</span>
 </pre></td><td class="code"><pre><code class="xml"><span class="line">$ su
 </span><span class="line"># cd /usr/local/
-</span><span class="line"># wget http://www.interior-dsgn.com/apache/hbase/stable/hbase-1.0.0-bin.tar.gz
-</span><span class="line"># tar -zxvf hbase-1.0.0-bin.tar.gz
-</span><span class="line"># mv hbase-1.0.0 hbase
+</span><span class="line"># wget http://apache.fayea.com/hbase/hbase-0.98.12/hbase-0.98.12-hadoop2-bin.tar.gz
+</span><span class="line"># tar -zxvf hbase-0.98.12-hadoop2-bin.tar.gz
+</span><span class="line"># mv hbase-0.98.12-hadoop2 hbase
+</span><span class="line"># chown -R hadoop:hadoop /usr/local/hbase
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h4 id="hbase-sitexml">配置hbase-site.xml</h4>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="xml"><span class="line"># cd /usr/local/hbase/conf
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line">su hadoop
+</span><span class="line">$ cd /usr/local/hbase/conf
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>然后打开hbase-env.sh文件，修改如下</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -440,14 +444,9 @@ localhost: starting nodemanager, logging to ....out
 <span class="line-number">12</span>
 <span class="line-number">13</span>
 <span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
 </pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;property&gt;</span>
 </span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.rootdir<span class="nt">&lt;/name&gt;</span>
-</span><span class="line">    <span class="nt">&lt;value&gt;</span>file:/home/hadoop/HBase/HFiles<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;value&gt;</span>hdfs://localhost:8030/hbase<span class="nt">&lt;/value&gt;</span>
 </span><span class="line"><span class="nt">&lt;/property&gt;</span>
 </span><span class="line">
 </span><span class="line"><span class="nt">&lt;property&gt;</span>
@@ -459,11 +458,6 @@ localhost: starting nodemanager, logging to ....out
 </span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.cluster.distributed<span class="nt">&lt;/name&gt;</span>
 </span><span class="line">    <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
 </span><span class="line"><span class="nt">&lt;/property&gt;</span>
-</span><span class="line">
-</span><span class="line"><span class="nt">&lt;property&gt;</span>
-</span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.rootdir<span class="nt">&lt;/name&gt;</span>
-</span><span class="line">    <span class="nt">&lt;value&gt;</span>hdfs://localhost:8030/hbase<span class="nt">&lt;/value&gt;</span>
-</span><span class="line"><span class="nt">&lt;/property&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>编辑/etc/profile，增加HBASE_HOME环境变量</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -471,22 +465,21 @@ localhost: starting nodemanager, logging to ....out
 </pre></td><td class="code"><pre><code class="xml"><span class="line">export HBASE_HOME=/usr/local/hbase
 </span><span class="line">export PATH=$PATH:$HBASE_HOME/bin
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后切换到hadoop用户下，应用更改。</p>
+<p>应用更改。</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="xml"><span class="line">source /etc/profile
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>OK，现在为止，HBase的安装和配置都已经完成了。你可以通过执行start-hbase.sh来启动HBase</p>
+<p>OK，现在为止，HBase的安装和配置都已经完成了。</p>
+
+<p>现在你可以通过执行start-hbase.sh来启动HBase</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="xml"><span class="line"># chown -R hadoop:hadoop /usr/local/hbase
-</span><span class="line"># exit
-</span><span class="line">$ mkdir -p /home/hadoop/HBase/HFiles
-</span><span class="line">$ cd /usr/local/hbase/bin
+</pre></td><td class="code"><pre><code class="xml"><span class="line">$ cd /usr/local/hbase/bin
 </span><span class="line">$ ./start-hbase.sh
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后执行<code>jps</code>命令应该可以看到HMaster和HRegionServer这两个进程。</p>
+
+<p>如果没有看到，可以查看日志<code>/usr/local/hbase/logs/hbase-hadoop-master-xx.log</code></p>
 
 <h4 id="hdfshbase">在HDFS中检查HBase目录</h4>
 <p>HBase会在HDFS中创建自己的目录，在hadoop目录下面执行：</p>
