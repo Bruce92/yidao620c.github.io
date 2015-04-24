@@ -2,9 +2,9 @@
 layout: page
 title: "About Me"
 date: 2015-04-06 17:09
-comments: true
-sharing: true
-footer: true
+comments: false
+sharing: false
+footer: false
 ---
 
 Hello, I'm Xiong Neng. Also known as yidao - means nothing, just for fun ^_^

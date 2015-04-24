@@ -64,17 +64,7 @@ child::A/descendant-or-self::B/child::node()[1]
 
 ### XPath轴
 轴可定义相对于当前节点的节点集。
-<style type="text/css">
-table {
-    border-collapse: collapse;
-    border: none;
-}
-td {
-    border: solid #000 1px;
-    padding: 5px;
-}
-</style>
-<table>
+<table class="goodtable">
     <tr><td>ancestor</td><td>选取当前节点的所有先辈（父、祖父等）。</td></tr>
     <tr><td>ancestor-or-self</td><td>选取当前节点的所有先辈（父、祖父等）以及当前节点本身。</td></tr>
     <tr><td>attribute</td><td>选取当前节点的所有属性</td></tr>
@@ -90,7 +80,7 @@ td {
 </table>
 
 几个实例讲解：
-<table>
+<table class="goodtable">
     <tr><td>child::book</td><td>选取所有属于当前节点的子元素的 book 节点。</td></tr>
     <tr><td>attribute::lang</td><td>选取当前节点的 lang 属性。</td></tr>
     <tr><td>child::*</td><td>选取当前节点的所有子元素。</td></tr>
@@ -105,7 +95,7 @@ td {
 
 ### XPath 运算符
 下面列出了可用在 XPath 表达式中的运算符：
-<table>
+<table class="goodtable">
     <tr><td>|</td><td>计算两个节点集</td><td>//book | //cd</td><td>返回所有拥有 book 和 cd 元素的节点集</td></tr>
     <tr><td>+</td><td>加法</td><td>6 + 4</td><td>10</td></tr>
     <tr><td>-</td><td>减法</td><td>6 – 4</td><td>2</td></tr>

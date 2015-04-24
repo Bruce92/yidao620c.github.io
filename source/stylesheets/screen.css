@@ -8,3 +8,11 @@
     color: #333;
     transition: color 0.3s;
 }
+.goodtable {
+    border-collapse: collapse;
+    border: none;
+}
+.goodtable td {
+    border: solid #000 1px;
+    padding: 5px;
+}

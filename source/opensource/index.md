@@ -2,9 +2,9 @@
 layout: page
 title: "开源项目"
 date: 2015-04-06 17:09
-comments: true
-sharing: true
-footer: true
+comments: false
+sharing: false
+footer: false
 ---
 
 ### 1. [python3-cookbook](https://github.com/yidao620c/python3-cookbook "python3-cookbook")
