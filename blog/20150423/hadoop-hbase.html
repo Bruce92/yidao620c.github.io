@@ -316,10 +316,18 @@
 <span class="line-number">4</span>
 <span class="line-number">5</span>
 <span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
 </pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;configuration&gt;</span>
 </span><span class="line">    <span class="nt">&lt;property&gt;</span>
 </span><span class="line">        <span class="nt">&lt;name&gt;</span>yarn.nodemanager.aux-services<span class="nt">&lt;/name&gt;</span>
 </span><span class="line">        <span class="nt">&lt;value&gt;</span>mapreduce_shuffle<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/property&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property&gt;</span>
+</span><span class="line">        <span class="nt">&lt;name&gt;</span>yarn.resourcemanager.scheduler.address<span class="nt">&lt;/name&gt;</span>
+</span><span class="line">        <span class="nt">&lt;value&gt;</span>localhost:54313<span class="nt">&lt;/value&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/property&gt;</span>
 </span><span class="line"><span class="nt">&lt;/configuration&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -446,7 +454,7 @@ localhost: starting nodemanager, logging to ....out
 <span class="line-number">14</span>
 </pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;property&gt;</span>
 </span><span class="line">    <span class="nt">&lt;name&gt;</span>hbase.rootdir<span class="nt">&lt;/name&gt;</span>
-</span><span class="line">    <span class="nt">&lt;value&gt;</span>hdfs://localhost:8030/hbase<span class="nt">&lt;/value&gt;</span>
+</span><span class="line">    <span class="nt">&lt;value&gt;</span>hdfs://localhost:9000/hbase<span class="nt">&lt;/value&gt;</span>
 </span><span class="line"><span class="nt">&lt;/property&gt;</span>
 </span><span class="line">
 </span><span class="line"><span class="nt">&lt;property&gt;</span>
@@ -477,7 +485,18 @@ localhost: starting nodemanager, logging to ....out
 </pre></td><td class="code"><pre><code class="xml"><span class="line">$ cd /usr/local/hbase/bin
 </span><span class="line">$ ./start-hbase.sh
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后执行<code>jps</code>命令应该可以看到HMaster和HRegionServer这两个进程。</p>
+<p>然后执行<code>jps</code>命令应该可以看到HMaster和HRegionServer这两个进程。类似下面</p>
+
+<pre><code>10941 DataNode
+13744 HQuorumPeer
+14207 Jps
+11126 SecondaryNameNode
+11276 ResourceManager
+10840 NameNode
+13843 HMaster
+10016 HRegionServer
+11378 NodeManager
+</code></pre>
 
 <p>如果没有看到，可以查看日志<code>/usr/local/hbase/logs/hbase-hadoop-master-xx.log</code></p>
 
@@ -486,8 +505,17 @@ localhost: starting nodemanager, logging to ....out
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="xml"><span class="line">$ ./bin/hadoop fs -ls /hbase
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>基本上一切正常就成功了。</p>
+<p>显示如下</p>
 
+<pre><code>drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/.tmp
+drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/WALs
+drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/data
+-rw-r--r--   1 hadoop supergroup         42 2015-04-24 16:06 /hbase/hbase.id
+-rw-r--r--   1 hadoop supergroup          7 2015-04-24 16:06 /hbase/hbase.version
+drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/oldWALs
+</code></pre>
+
+<p>那么恭喜你，配置成功了！</p>
 </div>
 
 </article>

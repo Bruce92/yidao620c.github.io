@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：hadoop | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/hadoop/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-24T15:11:56+08:00</updated>
+  <updated>2015-04-24T16:09:51+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -190,6 +190,10 @@ $ mkdir -p /home/hadoop/hadoopinfra/hdfs/datanode
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>localhost:54313</value>
+    </property>
 </configuration>
 <p>&#8220;`</p>
 
@@ -290,7 +294,7 @@ export JAVA_HOME=/usr/local/jdk1.7.0_79
 <p>&#8220;` xml</p>
 <property>
     <name>hbase.rootdir</name>
-    <value>hdfs://localhost:8030/hbase</value>
+    <value>hdfs://localhost:9000/hbase</value>
 </property>
 
 <property>
@@ -319,7 +323,18 @@ OK，现在为止，HBase的安装和配置都已经完成了。</p>
 $ cd /usr/local/hbase/bin
 $ ./start-hbase.sh
 </code>
-然后执行<code>jps</code>命令应该可以看到HMaster和HRegionServer这两个进程。</p>
+然后执行<code>jps</code>命令应该可以看到HMaster和HRegionServer这两个进程。类似下面</p>
+
+<pre><code>10941 DataNode
+13744 HQuorumPeer
+14207 Jps
+11126 SecondaryNameNode
+11276 ResourceManager
+10840 NameNode
+13843 HMaster
+10016 HRegionServer
+11378 NodeManager
+</code></pre>
 
 <p>如果没有看到，可以查看日志<code>/usr/local/hbase/logs/hbase-hadoop-master-xx.log</code></p>
 
@@ -328,8 +343,17 @@ $ ./start-hbase.sh
 <code>
 $ ./bin/hadoop fs -ls /hbase
 </code>
-基本上一切正常就成功了。</p>
+显示如下</p>
 
+<pre><code>drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/.tmp
+drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/WALs
+drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/data
+-rw-r--r--   1 hadoop supergroup         42 2015-04-24 16:06 /hbase/hbase.id
+-rw-r--r--   1 hadoop supergroup          7 2015-04-24 16:06 /hbase/hbase.version
+drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/oldWALs
+</code></pre>
+
+<p>那么恭喜你，配置成功了！</p>
 ]]></content>
   </entry>
   
