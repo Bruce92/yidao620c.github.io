@@ -152,6 +152,59 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
+2015-04-27 10:35</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150427/simpleblog-12.html" itemprop="url">Django1.7开发博客（12）- I18n国际化</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="wiki">Wiki</h3>
+<p>国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。</p>
+
+<p>Django能完美支持文本翻译、日期时间和数字的格式化、时区。</p>
+
+<p>另外，Django还有两点优势：</p>
+
+<ol>
+  <li>允许开发者和模板作者指定他们哪些app应该被翻译或被格式化为本地形式。</li>
+  <li>允许用户根据自己的偏好来实现本地化显示。翻译依据语言，格式化依据国家，
+这些信息由浏览器中的<code>Accept-Language</code>头来决定。不过目前为止时区还未能实现。</li>
+</ol>
+
+<p>参考官方文档：<a href="https://docs.djangoproject.com/en/1.7/topics/i18n/">https://docs.djangoproject.com/en/1.7/topics/i18n/</a></p>
+
+<h3 id="section">配置</h3>
+<p>实际上django的国际化做的非常好了，配置很简单。</p>
+
+<h4 id="settingspy">settings.py</h4>
+<p>首先在settings中，添加如下内容：
+		
+		<a href="/blog/20150427/simpleblog-12.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 2015-04-23 14:01</div>
 		<div class="tags">
 
@@ -406,56 +459,6 @@ MM：“真人版Windows优化大师！”</p>
 <p>下载下来后，我们把它解压到工程的static/目录下面，如下图所示：
 		
 		<a href="/blog/20150421/simpleblog-11.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 15:47</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-10.html" itemprop="url">Django1.7开发博客（10）- 全文搜索</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki：</h3>
-<p>Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。
-django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。
-其中whoosh为纯python的实现，不是非常大型的应用，是没有问题的。
-本文将介绍Django1.7中通过django-haystack与whoosh集成以及whoosh的中文支持。</p>
-
-<h3 id="section">安装依赖：</h3>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">pip install django-haystack
-</span><span class="line">pip install whoosh
-</span><span class="line">pip install jieba</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h3 id="section-1">建立模型</h3>
-<p>我们以文章为搜索目标，现在我的app名字为blog，
-模型文件是mysite/blog/models.py ：
-		
-		<a href="/blog/20150421/simpleblog-10.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>
