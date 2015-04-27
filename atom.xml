@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-24T16:09:51+08:00</updated>
+  <updated>2015-04-27T10:09:52+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -62,6 +62,10 @@ MM：“真人版Windows优化大师！”</p>
 
 <p>强烈要求广电总局禁播红高粱，我家今年种了几十亩高粱，本以为今年有个好收成，自从电视剧红高粱热播后，
 我家地里的高粱每天成片成片的倒，原因现在都还找不到…</p>
+
+<p><br /></p>
+
+<p>天下武功，唯快不破。 <img src="http://yidaospace.qiniudn.com/rabbit.gif" alt="" /></p>
 
 ]]></content>
   </entry>
@@ -634,11 +638,16 @@ drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/oldWALs
 </span><span class="line"><span class="nt">&lt;/body&gt;</span>
 </span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>首先引入了SiteMesh标签，自动替换为被过滤页面的title，
-把被过滤页面head里面的东西（除了title）放在这个地方，被过滤的页面body里面的内容放在这里，
-在content的上下引入了header和footer，
-我们在头部引入了js和css，就可以重用了，
-使用的过程中，几乎感受不到SiteMesh的存在，例如下面的页面：</p>
+<p>首先引入了SiteMesh标签</p>
+
+<ul>
+  <li><code>&lt;sitemesh:title/&gt;</code>会自动替换为被过滤页面的title</li>
+  <li><code>&lt;sitemesh:head/&gt;</code>会把被过滤页面head里面的东西（除了title）放在这个地方</li>
+  <li><code>&lt;sitemesh:body/&gt;</code>会把被过滤的页面body里面的内容放在这里，</li>
+  <li>在content的上下引入了header和footer，我们在头部引入了js和css，就可以重用了</li>
+</ul>
+
+<p>使用的过程中，几乎感受不到SiteMesh的存在，例如下面的页面：</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -686,7 +695,8 @@ drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/oldWALs
 </span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>这就是一个普通的页面，但是被SiteMesh装饰之后，就会自动去掉 等元素，然后把相应的东西放在模板对应位置上。</p>
+<p>这就是一个普通的页面，但是被SiteMesh装饰之后，就会自动去掉<code>&lt;html&gt; &lt;body&gt; &lt;head&gt;</code>等元素，
+然后把相应的东西放在模板对应位置上。</p>
 
 <p>我们来看一下，被SiteMesh装饰过的页面源代码：</p>
 

@@ -232,11 +232,16 @@ SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重
 </span><span class="line"><span class="nt">&lt;/body&gt;</span>
 </span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>首先引入了SiteMesh标签，自动替换为被过滤页面的title，
-把被过滤页面head里面的东西（除了title）放在这个地方，被过滤的页面body里面的内容放在这里，
-在content的上下引入了header和footer，
-我们在头部引入了js和css，就可以重用了，
-使用的过程中，几乎感受不到SiteMesh的存在，例如下面的页面：</p>
+<p>首先引入了SiteMesh标签</p>
+
+<ul>
+  <li><code>&lt;sitemesh:title/&gt;</code>会自动替换为被过滤页面的title</li>
+  <li><code>&lt;sitemesh:head/&gt;</code>会把被过滤页面head里面的东西（除了title）放在这个地方</li>
+  <li><code>&lt;sitemesh:body/&gt;</code>会把被过滤的页面body里面的内容放在这里，</li>
+  <li>在content的上下引入了header和footer，我们在头部引入了js和css，就可以重用了</li>
+</ul>
+
+<p>使用的过程中，几乎感受不到SiteMesh的存在，例如下面的页面：</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -284,7 +289,8 @@ SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重
 </span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>这就是一个普通的页面，但是被SiteMesh装饰之后，就会自动去掉 等元素，然后把相应的东西放在模板对应位置上。</p>
+<p>这就是一个普通的页面，但是被SiteMesh装饰之后，就会自动去掉<code>&lt;html&gt; &lt;body&gt; &lt;head&gt;</code>等元素，
+然后把相应的东西放在模板对应位置上。</p>
 
 <p>我们来看一下，被SiteMesh装饰过的页面源代码：</p>
 
