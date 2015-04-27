@@ -1,0 +1,461 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（14）- 集成xadmin - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="Django1.7开发博客（14）- 集成xadmin xadmin介绍
+xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
+目的是替换现有的admin，国人开发，有许多新的特性： 兼容 Django Admin 使用 Bootstrap 作为 &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150421/simpleblog-14.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Django1.7开发博客（14）- 集成xadmin</h1>
+	<div class="entry-content" itemprop="articleBody"><h3 id="xadmin">xadmin介绍</h3>
+<p>xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
+目的是替换现有的admin，国人开发，有许多新的特性：</p>
+
+<ul>
+  <li>兼容 Django Admin</li>
+  <li>使用 Bootstrap 作为 UI 框架</li>
+  <li>编辑页面灵活布局</li>
+  <li>主页面仪表盘及小部件</li>
+  <li>过滤器强化</li>
+  <li>数据导出</li>
+  <li>强大的插件机制</li>
+</ul>
+
+<p>项目主页：<a href="http://sshwsfc.github.io/django-xadmin/">http://sshwsfc.github.io/django-xadmin/</a></p>
+
+<p>在线demo: <a href="http://demo.xadmin.io/">http://demo.xadmin.io/</a></p>
+
+<h3 id="django">与django的集成</h3>
+
+<p>本篇以simpleblog项目为例，介绍下怎样在django中集成xadmin<!--more--></p>
+
+<h4 id="python27">python2.7环境切换</h4>
+
+<p>注意，前面的教程都是在python3.4环境下开放的。
+而目前为止xadmin还只能支持python2，所以我们要在此项目基础上新建一个分支py27，
+然后我们创建一个python2.7的virtual environment，切换到此环境下面即可。</p>
+
+<h4 id="section">添加依赖</h4>
+
+<p>在requirements.txt中添加如下的依赖，注意：要用到xadmin的django1.7分支</p>
+
+<pre><code>django-reversion==1.8.5
+xlwt==0.7.5
+git+https://github.com/sshwsfc/django-xadmin.git@django1.7
+</code></pre>
+
+<h4 id="settingspy">修改settings.py</h4>
+
+<p>增加xadmin的配置如下</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">ADMINS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="c"># (&#39;Your Name&#39;, &#39;your_email@example.com&#39;),</span>
+</span><span class="line"><span class="p">)</span>
+</span><span class="line"><span class="n">MANAGERS</span> <span class="o">=</span> <span class="n">ADMINS</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Application definition</span>
+</span><span class="line"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="c"># ...</span>
+</span><span class="line">    <span class="s">&#39;xadmin&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;crispy_forms&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;reversion&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="c"># ...</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="xadmin-1">添加/xadmin的链接</h4>
+
+<p>修改<code>mysite/urls.py</code>如下</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- encoding: utf-8 -*-</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line"><span class="c"># version模块自动注册需要版本控制的 Model</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">xadmin.plugins</span> <span class="kn">import</span> <span class="n">xversion</span>
+</span><span class="line"><span class="n">xversion</span><span class="o">.</span><span class="n">register_models</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;xadmin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;xadmin&#39;</span><span class="p">),</span>
+</span><span class="line">    <span class="c"># ...</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="adminxpy">创建adminx.py</h4>
+
+<p>在blog/目录下创建adminx.py，内容如下</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- encoding: utf-8 -*-</span>
+</span><span class="line"><span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="sd">Topic: adminx定制类</span>
+</span><span class="line"><span class="sd">Desc :</span>
+</span><span class="line"><span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">xadmin</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">xadmin.views</span> <span class="kn">as</span> <span class="nn">xviews</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Post</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Evaluate</span><span class="p">,</span> <span class="n">Page</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">xadmin.layout</span> <span class="kn">import</span> <span class="n">Main</span><span class="p">,</span> <span class="n">TabHolder</span><span class="p">,</span> <span class="n">Tab</span><span class="p">,</span> <span class="n">Fieldset</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">Col</span><span class="p">,</span> <span class="n">AppendedText</span><span class="p">,</span> <span class="n">Side</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BaseSetting</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="n">enable_themes</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">    <span class="n">use_bootswatch</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">xviews</span><span class="o">.</span><span class="n">BaseAdminView</span><span class="p">,</span> <span class="n">BaseSetting</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">AdminSettings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="c"># 设置base_site.html的Title</span>
+</span><span class="line">    <span class="n">site_title</span> <span class="o">=</span> <span class="s">&#39;博客管理后台&#39;</span>
+</span><span class="line">    <span class="c"># 设置base_site.html的Footer</span>
+</span><span class="line">    <span class="n">site_footer</span> <span class="o">=</span> <span class="s">&#39;Winhong Inc.&#39;</span>
+</span><span class="line">    <span class="n">menu_style</span> <span class="o">=</span> <span class="s">&#39;default&#39;</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># 菜单设置</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_site_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="p">(</span>
+</span><span class="line">            <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;博客管理&#39;</span><span class="p">,</span> <span class="s">&#39;perm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_perm</span><span class="p">(</span><span class="n">Page</span><span class="p">,</span> <span class="s">&#39;change&#39;</span><span class="p">),</span> <span class="s">&#39;menus&#39;</span><span class="p">:</span> <span class="p">(</span>
+</span><span class="line">                <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;所有页面&#39;</span><span class="p">,</span> <span class="s">&#39;icon&#39;</span><span class="p">:</span> <span class="s">&#39;fa fa-vimeo-square&#39;</span>
+</span><span class="line">                    <span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_url</span><span class="p">(</span><span class="n">Page</span><span class="p">,</span> <span class="s">&#39;changelist&#39;</span><span class="p">)},</span>
+</span><span class="line">                <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;分类目录&#39;</span><span class="p">,</span> <span class="s">&#39;icon&#39;</span><span class="p">:</span> <span class="s">&#39;fa fa-vimeo-square&#39;</span>
+</span><span class="line">                    <span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_url</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="s">&#39;changelist&#39;</span><span class="p">)},</span>
+</span><span class="line">            <span class="p">)},</span>
+</span><span class="line">        <span class="p">)</span>
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">xviews</span><span class="o">.</span><span class="n">CommAdminView</span><span class="p">,</span> <span class="n">AdminSettings</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Page</span><span class="p">)</span>
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Tag)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Post)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Comment)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Evaluate)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>在这里，我们将所有的model都注册到xadmin中去，这样后台就能自动管理它们了。
+并且自定义了后台的一些菜单、标题等等。具体的定制方法可以参考xadmin的官方文档。</p>
+
+<h4 id="section-1">添加管理后台链接</h4>
+
+<p>在<code>mysite/templates/mysite/base.html</code>模板中添加/xamdin的管理后台链接：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;meta-2&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;widget widget_meta&quot;</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">功能</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;/xadmin&quot;</span><span class="o">&gt;</span><span class="err">管理站点</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.logout&#39; %}&quot;</span><span class="o">&gt;</span><span class="err">登出</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.login&#39; %}&quot;</span><span class="o">&gt;</span><span class="err">登录</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;#&quot;</span><span class="o">&gt;</span><span class="err">文章</span><span class="o">&lt;</span><span class="n">abbr</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;RSS&quot;</span><span class="o">&gt;</span><span class="n">RSS</span><span class="o">&lt;/</span><span class="n">abbr</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="section-2">自定义后台登陆页面</h4>
+
+<p>新建<code>mysite/templates/registration/login.html</code>模板，将xadmin模块中的login.html复制过来，
+修改其内容，改成自己想要的形式即可</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line">{% load i18n %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span>
+</span><span class="line">          <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">content=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;author&quot;</span> <span class="na">content=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;robots&quot;</span> <span class="na">content=</span><span class="s">&quot;NONE,NOARCHIVE&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>用户登录 - SimpleBlog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">    <span class="c">&lt;!--...中间省略...--&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/vendor/jquery/jquery.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;login&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;{% url &#39;django.contrib.auth.views.login&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        {% csrf_token %}
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel panel-default panel-single&quot;</span> <span class="na">id=</span><span class="s">&quot;panel-login&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel-heading&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                <span class="nt">&lt;h2</span> <span class="na">class=</span><span class="s">&quot;form-signin-heading&quot;</span><span class="nt">&gt;</span>请登录<span class="nt">&lt;/h2&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">            <span class="c">&lt;!--...中间省略...--&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="c">&lt;!--...中间省略...--&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/js/xadmin.main.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/js/xadmin.responsive.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span>
+</span><span class="line">        <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/vendor/jquery-ui/jquery.ui.effect.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/js/xadmin.plugin.themes.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这些完成后，我们打开应用，访问<code>管理站点</code>链接，应该可以看到如下的登录页面</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj110.png" alt="" /></p>
+
+<p>登录后的效果</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj111.jpg" alt="" /></p>
+
+</div>
+
+</article>
+
+  <section id="comment">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150421/simpleblog-14" data-title="Django1.7开发博客（14）- 集成xadmin" data-url="http://yidao620c.github.io/blog/20150421/simpleblog-14.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">
+    Copyright &copy; 2015
+
+    熊能
+
+
+    Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+
+</footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

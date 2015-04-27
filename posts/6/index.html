@@ -9,9 +9,7 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-03-18 17:41 github, octopress windows7上面使用Octopress搭建GitHub博客 前言
-经过iteye博客——WordPress——github的三重进化，时间来到了2015年，
-荒废了两年的Blog大业再次东山再起，于是经过一天的配置， &hellip;">
+	<meta name="description" content="2015-04-06 21:08 servlet Servlet Filter详解 在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +93,57 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-06 21:08</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/servlet/'>servlet</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150406/servlet-filter.html" itemprop="url">Servlet Filter详解</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点，最好使用Servlet Filter实现这个需求。</p>
+
+<p>本文将通过几个实际的例子展示下Servlet中的Filter的使用。</p>
+
+<p><strong>1 我们为什么需要使用Filter？</strong></p>
+
+<p>通常我们会使用session来保存登录用户的信息，通过从session中取出保存的属性值来判断用户是否登录，但是如果我们有大量的请求方法，每个人方法中都这样去判断就会有很多重复代码，将来我们想改动下逻辑，那得改动所有的请求方法实现，所以这个是不可取的。</p>
+
+<p>这时候就是使用Servlet Filter的时候了，它是可插拔的，对于普通的action方法来讲是透明的。它会在执行其他方法之前或将结果返回给客户端之前来执行其他逻辑。</p>
+
+<p>以下几种场景下我们会使用到Servlet Filter：</p>
+
+<ul>
+  <li>将请求的参数写入日志文件</li>
+  <li>对于资源的访问进行统一的授权与验证</li>
+  <li>在请求到达实际Servlet之前格式化请求内容或请求头</li>
+  <li>压缩返回数据后发送给客户端</li>
+  <li>修改返回内容，增加一些cookie、header等信息
+		
+		<a href="/blog/20150406/servlet-filter.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">

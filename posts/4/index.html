@@ -9,8 +9,8 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 14:01 xpath Xpath入门笔记 Wiki XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言。
-XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力。 &hellip;">
+	<meta name="description" content="2015-04-20 15:42 java8 Java8中的lambda表达式 2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
+总共增加了55个新特性，其中最最吸引人的就是Lambdas表达式和Stream函数式编程，本文详细讲解这两个特性。 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -94,6 +94,95 @@ XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-20 15:42</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/java8/'>java8</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150420/java8-lambda.html" itemprop="url">Java8中的lambda表达式</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
+总共增加了55个新特性，其中最最吸引人的就是Lambdas表达式和Stream函数式编程，本文详细讲解这两个特性。</p>
+
+<p>其他特性比如日期API，泛型，反射，注解，集合框架，并发，Nashorn引擎等等这里暂时就不详细介绍了。
+具体可以参考：<a href="http://openjdk.java.net/projects/jdk8/features">http://openjdk.java.net/projects/jdk8/features</a></p>
+
+<p>昨天参加了Oracle的Java8宣讲活动，有幸目睹了Simon Ritter的风采，写个总结来分享下。</p>
+
+<p><strong>Java并发编程演变：</strong></p>
+<style type="text/css">
+.mytable {
+    border-collapse: collapse;
+    border: none;
+}
+.mytable td {
+    border: solid #000 1px;
+    padding: 5px;
+}
+</style>
+
+<table class="mytable">
+    <tbody>
+    <tr>
+    <td>版本</td>
+    <td>发布年份</td>
+    <td>并发技术</td>
+    </tr>
+    <tr>
+    <td>1.4</td>
+    <td>2002</td>
+    <td>java.lang.Thread</td>
+    </tr>
+    <tr>
+    <td>5</td>
+    <td>2004</td>
+    <td>java.util.concurrent(jsr166)</td>
+    </tr>
+    <tr>
+    <td>6</td>
+    <td>2006</td>
+    <td>Phasers, etc(jsr166)</td>
+    </tr>
+    <tr>
+    <td>7</td>
+    <td>2011</td>
+    <td>Fork/Join Framework(jsr166y)</td>
+    </tr>
+    <tr>
+    <td>8</td>
+    <td>2014</td>
+    <td>Project Lambda</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>先来一个小例子见识下Java8的威力！
+		
+		<a href="/blog/20150420/java8-lambda.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -417,42 +506,6 @@ k如果大于lgn,则比归并排序复杂度大了。
 最后结论： k &lt; lg(n)的时候，使用插入排序。
 		
 		<a href="/blog/20150420/merge-sort.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-18 17:11</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/eight-queens/'>eight-queens</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150418/eight-queens.html" itemprop="url">回溯法解决八皇后问题</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。八皇后问题可以推广为更一般的n皇后摆放问题：这时棋盘的大小变为n×n，而皇后个数也变成n。当且仅当n = 1或n ≥ 4时问题有解 — 摘自<a href="http://zh.wikipedia.org/wiki/%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98">八皇后问题wiki</a></p>
-
-<p>利用回溯法解决这个问题：
-		
-		<a href="/blog/20150418/eight-queens.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

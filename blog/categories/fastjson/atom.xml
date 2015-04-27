@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：fastjson | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/fastjson/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-27T12:09:18+08:00</updated>
+  <updated>2015-04-27T14:56:06+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -42,15 +42,21 @@ String text = JSON.toJSONString(object, SerializerFeature.UseSingleQuotes);
 </code>
 <!--more-->
 字段显示不同的key：
-&#8220;` java
-public class User {
-    @JSONField(name=”ID”)
-    public int getId() { … }
-}</p>
-
-<p>User user = …;
-JSON.toJSONString(user); // {“ID”:001}
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@JSONField</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="err">”</span><span class="n">ID</span><span class="err">”</span><span class="o">)</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span> <span class="err">…</span> <span class="o">}</span>
+</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="err">…</span><span class="o">;</span>
+</span><span class='line'><span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">user</span><span class="o">);</span> <span class="c1">// {“ID”:001}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>类的反序列化 JavaBean：
 <code>java

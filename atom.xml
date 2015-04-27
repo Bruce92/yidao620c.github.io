@@ -4,7 +4,7 @@
   <title><![CDATA[笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-27T12:08:50+08:00</updated>
+  <updated>2015-04-27T14:56:06+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -1543,6 +1543,332 @@ drwxr-xr-x   - hadoop supergroup          0 2015-04-24 16:06 /hbase/oldWALs
 
 <p>到此为止Python装饰器概率已经介绍完了。我希望你能从中受益，
 如果你哈有任何的建议或问题，可以在评论中提出来。祝您编程快乐！</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（14）- 集成xadmin]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-14.html"/>
+    <updated>2015-04-21T21:45:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-14</id>
+    <content type="html"><![CDATA[<h3 id="xadmin">xadmin介绍</h3>
+<p>xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
+目的是替换现有的admin，国人开发，有许多新的特性：</p>
+
+<ul>
+  <li>兼容 Django Admin</li>
+  <li>使用 Bootstrap 作为 UI 框架</li>
+  <li>编辑页面灵活布局</li>
+  <li>主页面仪表盘及小部件</li>
+  <li>过滤器强化</li>
+  <li>数据导出</li>
+  <li>强大的插件机制</li>
+</ul>
+
+<p>项目主页：<a href="http://sshwsfc.github.io/django-xadmin/">http://sshwsfc.github.io/django-xadmin/</a></p>
+
+<p>在线demo: <a href="http://demo.xadmin.io/">http://demo.xadmin.io/</a></p>
+
+<h3 id="django">与django的集成</h3>
+
+<p>本篇以simpleblog项目为例，介绍下怎样在django中集成xadmin<!--more--></p>
+
+<h4 id="python27">python2.7环境切换</h4>
+
+<p>注意，前面的教程都是在python3.4环境下开放的。
+而目前为止xadmin还只能支持python2，所以我们要在此项目基础上新建一个分支py27，
+然后我们创建一个python2.7的virtual environment，切换到此环境下面即可。</p>
+
+<h4 id="section">添加依赖</h4>
+
+<p>在requirements.txt中添加如下的依赖，注意：要用到xadmin的django1.7分支</p>
+
+<pre><code>django-reversion==1.8.5
+xlwt==0.7.5
+git+https://github.com/sshwsfc/django-xadmin.git@django1.7
+</code></pre>
+
+<h4 id="settingspy">修改settings.py</h4>
+
+<p>增加xadmin的配置如下</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">ADMINS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="c"># (&#39;Your Name&#39;, &#39;your_email@example.com&#39;),</span>
+</span><span class="line"><span class="p">)</span>
+</span><span class="line"><span class="n">MANAGERS</span> <span class="o">=</span> <span class="n">ADMINS</span>
+</span><span class="line">
+</span><span class="line"><span class="c"># Application definition</span>
+</span><span class="line"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="c"># ...</span>
+</span><span class="line">    <span class="s">&#39;xadmin&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;crispy_forms&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;reversion&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="c"># ...</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="xadmin-1">添加/xadmin的链接</h4>
+
+<p>修改<code>mysite/urls.py</code>如下</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- encoding: utf-8 -*-</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+</span><span class="line"><span class="c"># version模块自动注册需要版本控制的 Model</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">xadmin.plugins</span> <span class="kn">import</span> <span class="n">xversion</span>
+</span><span class="line"><span class="n">xversion</span><span class="o">.</span><span class="n">register_models</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;xadmin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;xadmin&#39;</span><span class="p">),</span>
+</span><span class="line">    <span class="c"># ...</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="adminxpy">创建adminx.py</h4>
+
+<p>在blog/目录下创建adminx.py，内容如下</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">#!/usr/bin/env python</span>
+</span><span class="line"><span class="c"># -*- encoding: utf-8 -*-</span>
+</span><span class="line"><span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="sd">Topic: adminx定制类</span>
+</span><span class="line"><span class="sd">Desc :</span>
+</span><span class="line"><span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">xadmin</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">xadmin.views</span> <span class="kn">as</span> <span class="nn">xviews</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Post</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Evaluate</span><span class="p">,</span> <span class="n">Page</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">xadmin.layout</span> <span class="kn">import</span> <span class="n">Main</span><span class="p">,</span> <span class="n">TabHolder</span><span class="p">,</span> <span class="n">Tab</span><span class="p">,</span> <span class="n">Fieldset</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">Col</span><span class="p">,</span> <span class="n">AppendedText</span><span class="p">,</span> <span class="n">Side</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BaseSetting</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="n">enable_themes</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">    <span class="n">use_bootswatch</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">xviews</span><span class="o">.</span><span class="n">BaseAdminView</span><span class="p">,</span> <span class="n">BaseSetting</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">AdminSettings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="c"># 设置base_site.html的Title</span>
+</span><span class="line">    <span class="n">site_title</span> <span class="o">=</span> <span class="s">&#39;博客管理后台&#39;</span>
+</span><span class="line">    <span class="c"># 设置base_site.html的Footer</span>
+</span><span class="line">    <span class="n">site_footer</span> <span class="o">=</span> <span class="s">&#39;Winhong Inc.&#39;</span>
+</span><span class="line">    <span class="n">menu_style</span> <span class="o">=</span> <span class="s">&#39;default&#39;</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># 菜单设置</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_site_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="p">(</span>
+</span><span class="line">            <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;博客管理&#39;</span><span class="p">,</span> <span class="s">&#39;perm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_perm</span><span class="p">(</span><span class="n">Page</span><span class="p">,</span> <span class="s">&#39;change&#39;</span><span class="p">),</span> <span class="s">&#39;menus&#39;</span><span class="p">:</span> <span class="p">(</span>
+</span><span class="line">                <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;所有页面&#39;</span><span class="p">,</span> <span class="s">&#39;icon&#39;</span><span class="p">:</span> <span class="s">&#39;fa fa-vimeo-square&#39;</span>
+</span><span class="line">                    <span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_url</span><span class="p">(</span><span class="n">Page</span><span class="p">,</span> <span class="s">&#39;changelist&#39;</span><span class="p">)},</span>
+</span><span class="line">                <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;分类目录&#39;</span><span class="p">,</span> <span class="s">&#39;icon&#39;</span><span class="p">:</span> <span class="s">&#39;fa fa-vimeo-square&#39;</span>
+</span><span class="line">                    <span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_url</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="s">&#39;changelist&#39;</span><span class="p">)},</span>
+</span><span class="line">            <span class="p">)},</span>
+</span><span class="line">        <span class="p">)</span>
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">xviews</span><span class="o">.</span><span class="n">CommAdminView</span><span class="p">,</span> <span class="n">AdminSettings</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Page</span><span class="p">)</span>
+</span><span class="line"><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Tag)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Post)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Comment)</span>
+</span><span class="line"><span class="c"># xadmin.site.register(Evaluate)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>在这里，我们将所有的model都注册到xadmin中去，这样后台就能自动管理它们了。
+并且自定义了后台的一些菜单、标题等等。具体的定制方法可以参考xadmin的官方文档。</p>
+
+<h4 id="section-1">添加管理后台链接</h4>
+
+<p>在<code>mysite/templates/mysite/base.html</code>模板中添加/xamdin的管理后台链接：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;meta-2&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;widget widget_meta&quot;</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">功能</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;/xadmin&quot;</span><span class="o">&gt;</span><span class="err">管理站点</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.logout&#39; %}&quot;</span><span class="o">&gt;</span><span class="err">登出</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">            <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.login&#39; %}&quot;</span><span class="o">&gt;</span><span class="err">登录</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">        <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span><span class="line">        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;#&quot;</span><span class="o">&gt;</span><span class="err">文章</span><span class="o">&lt;</span><span class="n">abbr</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;RSS&quot;</span><span class="o">&gt;</span><span class="n">RSS</span><span class="o">&lt;/</span><span class="n">abbr</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class="line">    <span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="section-2">自定义后台登陆页面</h4>
+
+<p>新建<code>mysite/templates/registration/login.html</code>模板，将xadmin模块中的login.html复制过来，
+修改其内容，改成自己想要的形式即可</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line">{% load i18n %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span>
+</span><span class="line">          <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">content=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;author&quot;</span> <span class="na">content=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;robots&quot;</span> <span class="na">content=</span><span class="s">&quot;NONE,NOARCHIVE&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>用户登录 - SimpleBlog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">    <span class="c">&lt;!--...中间省略...--&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/vendor/jquery/jquery.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;login&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;{% url &#39;django.contrib.auth.views.login&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        {% csrf_token %}
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel panel-default panel-single&quot;</span> <span class="na">id=</span><span class="s">&quot;panel-login&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel-heading&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                <span class="nt">&lt;h2</span> <span class="na">class=</span><span class="s">&quot;form-signin-heading&quot;</span><span class="nt">&gt;</span>请登录<span class="nt">&lt;/h2&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">            <span class="c">&lt;!--...中间省略...--&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="c">&lt;!--...中间省略...--&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/js/xadmin.main.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/js/xadmin.responsive.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span>
+</span><span class="line">        <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/vendor/jquery-ui/jquery.ui.effect.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;{% static &#39;xadmin/js/xadmin.plugin.themes.js&#39; %}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这些完成后，我们打开应用，访问<code>管理站点</code>链接，应该可以看到如下的登录页面</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj110.png" alt="" /></p>
+
+<p>登录后的效果</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj111.jpg" alt="" /></p>
 
 ]]></content>
   </entry>
@@ -5821,456 +6147,6 @@ MASTER与BACKUP配置仅三处不同：global_defs中的router_id、vrrp_instanc
 </ol>
 
 <p>—————————————————全文完——————————————–</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[mqtt消息中间件mosquitto的安装和配置]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/mosquitto-install.html"/>
-    <updated>2015-04-20T16:33:07+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/mosquitto-install</id>
-    <content type="html"><![CDATA[<h3 id="wiki">Wiki</h3>
-<p>Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。</p>
-
-<p>MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，
-适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。</p>
-
-<p>值得一提的是mqtt提供三种不同质量的消息服务：</p>
-
-<ul>
-  <li>“至多一次”：消息发布完全依赖底层 TCP/IP 网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。</li>
-  <li>“至少一次”：确保消息到达，但消息重复可能会发生。</li>
-  <li>“只有一次”：确保消息到达一次。这一级别可用于如下情况，在计费系统中，消息重复或丢失会导致不正确的结果。</li>
-</ul>
-
-<h3 id="httpmosquittoorgdownload">安装：(参考官网 <a href="http://mosquitto.org/download/">http://mosquitto.org/download/</a>)</h3>
-
-<p>服务器操作系统为CentOS6.4，使用最简单的yum安装</p>
-
-<p>1，先加入yum源：</p>
-
-<p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：<!--more--></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">[home_oojah_mqtt]
-</span><span class="line">name=mqtt (CentOS_CentOS-6)
-</span><span class="line">type=rpm-md
-</span><span class="line">baseurl=http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-6/
-</span><span class="line">gpgcheck=1
-</span><span class="line">gpgkey=http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-6/repodata/repomd.xml.key
-</span><span class="line">enabled=1</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>2，开始安装</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo yum search all mosquitto
-</span><span class="line">sudo yum install mosquitto mosquitto-clients libmosquitto-devel libmosquittopp-devel python-mosquitto
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>3，配置</p>
-
-<p>安装完成之后，所有配置文件会被放置于/etc/mosquitto/目录下，
-其中最重要的就是Mosquitto的配置文件，即mosquitto.conf，以下是详细的配置参数说明。</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-<span class="line-number">53</span>
-<span class="line-number">54</span>
-<span class="line-number">55</span>
-<span class="line-number">56</span>
-<span class="line-number">57</span>
-<span class="line-number">58</span>
-<span class="line-number">59</span>
-<span class="line-number">60</span>
-<span class="line-number">61</span>
-<span class="line-number">62</span>
-<span class="line-number">63</span>
-<span class="line-number">64</span>
-<span class="line-number">65</span>
-<span class="line-number">66</span>
-<span class="line-number">67</span>
-<span class="line-number">68</span>
-<span class="line-number">69</span>
-<span class="line-number">70</span>
-<span class="line-number">71</span>
-<span class="line-number">72</span>
-<span class="line-number">73</span>
-<span class="line-number">74</span>
-<span class="line-number">75</span>
-<span class="line-number">76</span>
-<span class="line-number">77</span>
-<span class="line-number">78</span>
-<span class="line-number">79</span>
-<span class="line-number">80</span>
-<span class="line-number">81</span>
-<span class="line-number">82</span>
-<span class="line-number">83</span>
-<span class="line-number">84</span>
-<span class="line-number">85</span>
-<span class="line-number">86</span>
-<span class="line-number">87</span>
-<span class="line-number">88</span>
-<span class="line-number">89</span>
-<span class="line-number">90</span>
-<span class="line-number">91</span>
-<span class="line-number">92</span>
-<span class="line-number">93</span>
-<span class="line-number">94</span>
-<span class="line-number">95</span>
-<span class="line-number">96</span>
-<span class="line-number">97</span>
-<span class="line-number">98</span>
-<span class="line-number">99</span>
-<span class="line-number">100</span>
-<span class="line-number">101</span>
-<span class="line-number">102</span>
-<span class="line-number">103</span>
-<span class="line-number">104</span>
-<span class="line-number">105</span>
-<span class="line-number">106</span>
-<span class="line-number">107</span>
-<span class="line-number">108</span>
-<span class="line-number">109</span>
-<span class="line-number">110</span>
-<span class="line-number">111</span>
-<span class="line-number">112</span>
-<span class="line-number">113</span>
-<span class="line-number">114</span>
-<span class="line-number">115</span>
-<span class="line-number">116</span>
-<span class="line-number">117</span>
-<span class="line-number">118</span>
-<span class="line-number">119</span>
-<span class="line-number">120</span>
-<span class="line-number">121</span>
-<span class="line-number">122</span>
-<span class="line-number">123</span>
-<span class="line-number">124</span>
-<span class="line-number">125</span>
-<span class="line-number">126</span>
-<span class="line-number">127</span>
-<span class="line-number">128</span>
-<span class="line-number">129</span>
-<span class="line-number">130</span>
-<span class="line-number">131</span>
-<span class="line-number">132</span>
-<span class="line-number">133</span>
-<span class="line-number">134</span>
-<span class="line-number">135</span>
-<span class="line-number">136</span>
-<span class="line-number">137</span>
-<span class="line-number">138</span>
-<span class="line-number">139</span>
-<span class="line-number">140</span>
-<span class="line-number">141</span>
-<span class="line-number">142</span>
-<span class="line-number">143</span>
-<span class="line-number">144</span>
-<span class="line-number">145</span>
-<span class="line-number">146</span>
-<span class="line-number">147</span>
-<span class="line-number">148</span>
-<span class="line-number">149</span>
-<span class="line-number">150</span>
-<span class="line-number">151</span>
-<span class="line-number">152</span>
-<span class="line-number">153</span>
-<span class="line-number">154</span>
-<span class="line-number">155</span>
-<span class="line-number">156</span>
-<span class="line-number">157</span>
-<span class="line-number">158</span>
-<span class="line-number">159</span>
-<span class="line-number">160</span>
-<span class="line-number">161</span>
-<span class="line-number">162</span>
-<span class="line-number">163</span>
-<span class="line-number">164</span>
-<span class="line-number">165</span>
-<span class="line-number">166</span>
-<span class="line-number">167</span>
-<span class="line-number">168</span>
-<span class="line-number">169</span>
-<span class="line-number">170</span>
-<span class="line-number">171</span>
-<span class="line-number">172</span>
-<span class="line-number">173</span>
-<span class="line-number">174</span>
-<span class="line-number">175</span>
-<span class="line-number">176</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line"><span class="c"># General configuration</span>
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 客户端心跳的间隔时间</span>
-</span><span class="line"><span class="c">#retry_interval 20</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 系统状态的刷新时间</span>
-</span><span class="line"><span class="c">#sys_interval 10</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 系统资源的回收时间，0表示尽快处理</span>
-</span><span class="line"><span class="c">#store_clean_interval 10</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 服务进程的PID</span>
-</span><span class="line"><span class="c">#pid_file /var/run/mosquitto.pid</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 服务进程的系统用户</span>
-</span><span class="line"><span class="c">#user mosquitto</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 客户端心跳消息的最大并发数</span>
-</span><span class="line"><span class="c">#max_inflight_messages 10</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 客户端心跳消息缓存队列</span>
-</span><span class="line"><span class="c">#max_queued_messages 100</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 用于设置客户端长连接的过期时间，默认永不过期</span>
-</span><span class="line"><span class="c">#persistent_client_expiration</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line"><span class="c"># Default listener</span>
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 服务绑定的IP地址</span>
-</span><span class="line"><span class="c">#bind_address</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 服务绑定的端口号</span>
-</span><span class="line"><span class="c">#port 1883</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 允许的最大连接数，-1表示没有限制</span>
-</span><span class="line"><span class="c">#max_connections -1</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># cafile：CA证书文件</span>
-</span><span class="line"><span class="c"># capath：CA证书目录</span>
-</span><span class="line"><span class="c"># certfile：PEM证书文件</span>
-</span><span class="line"><span class="c"># keyfile：PEM密钥文件</span>
-</span><span class="line"><span class="c">#cafile</span>
-</span><span class="line"><span class="c">#capath</span>
-</span><span class="line"><span class="c">#certfile</span>
-</span><span class="line"><span class="c">#keyfile</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 必须提供证书以保证数据安全性</span>
-</span><span class="line"><span class="c">#require_certificate false</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 若require_certificate值为true，use_identity_as_username也必须为true</span>
-</span><span class="line"><span class="c">#use_identity_as_username false</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 启用PSK（Pre-shared-key）支持</span>
-</span><span class="line"><span class="c">#psk_hint</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># SSL/TSL加密算法，可以使用“openssl ciphers”命令获取</span>
-</span><span class="line"><span class="c"># as the output of that command.</span>
-</span><span class="line"><span class="c">#ciphers</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line"><span class="c"># Persistence</span>
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 消息自动保存的间隔时间</span>
-</span><span class="line"><span class="c">#autosave_interval 1800</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 消息自动保存功能的开关</span>
-</span><span class="line"><span class="c">#autosave_on_changes false</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 持久化功能的开关</span>
-</span><span class="line">persistence <span class="nb">true</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 持久化DB文件</span>
-</span><span class="line"><span class="c">#persistence_file mosquitto.db</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 持久化DB文件目录</span>
-</span><span class="line"><span class="c">#persistence_location /var/lib/mosquitto/</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line"><span class="c"># Logging</span>
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 4种日志模式：stdout、stderr、syslog、topic</span>
-</span><span class="line"><span class="c"># none 则表示不记日志，此配置可以提升些许性能</span>
-</span><span class="line">log_dest none
-</span><span class="line">
-</span><span class="line"><span class="c"># 选择日志的级别（可设置多项）</span>
-</span><span class="line"><span class="c">#log_type error</span>
-</span><span class="line"><span class="c">#log_type warning</span>
-</span><span class="line"><span class="c">#log_type notice</span>
-</span><span class="line"><span class="c">#log_type information</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 是否记录客户端连接信息</span>
-</span><span class="line"><span class="c">#connection_messages true</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 是否记录日志时间</span>
-</span><span class="line"><span class="c">#log_timestamp true</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line"><span class="c"># Security</span>
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 客户端ID的前缀限制，可用于保证安全性</span>
-</span><span class="line"><span class="c">#clientid_prefixes</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 允许匿名用户</span>
-</span><span class="line"><span class="c">#allow_anonymous true</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 用户/密码文件，默认格式：username:password</span>
-</span><span class="line"><span class="c">#password_file</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># PSK格式密码文件，默认格式：identity:key</span>
-</span><span class="line"><span class="c">#psk_file</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># pattern write sensor/%u/data</span>
-</span><span class="line"><span class="c"># ACL权限配置，常用语法如下：</span>
-</span><span class="line"><span class="c"># 用户限制：user &lt;username&gt;</span>
-</span><span class="line"><span class="c"># 话题限制：topic [read|write] &lt;topic&gt;</span>
-</span><span class="line"><span class="c"># 正则限制：pattern write sensor/%u/data</span>
-</span><span class="line"><span class="c">#acl_file</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line"><span class="c"># Bridges</span>
-</span><span class="line"><span class="c"># =================================================================</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 允许服务之间使用“桥接”模式（可用于分布式部署）</span>
-</span><span class="line"><span class="c">#connection &lt;name&gt;</span>
-</span><span class="line"><span class="c">#address &lt;host&gt;[:&lt;port&gt;]</span>
-</span><span class="line"><span class="c">#topic &lt;topic&gt; [[[out | in | both] qos-level] local-prefix remote-prefix]</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 设置桥接的客户端ID</span>
-</span><span class="line"><span class="c">#clientid</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 桥接断开时，是否清除远程服务器中的消息</span>
-</span><span class="line"><span class="c">#cleansession false</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 是否发布桥接的状态信息</span>
-</span><span class="line"><span class="c">#notifications true</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 设置桥接模式下，消息将会发布到的话题地址</span>
-</span><span class="line"><span class="c"># $SYS/broker/connection/&lt;clientid&gt;/state</span>
-</span><span class="line"><span class="c">#notification_topic</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 设置桥接的keepalive数值</span>
-</span><span class="line"><span class="c">#keepalive_interval 60</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 桥接模式，目前有三种：automatic、lazy、once</span>
-</span><span class="line"><span class="c">#start_type automatic</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 桥接模式automatic的超时时间</span>
-</span><span class="line"><span class="c">#restart_timeout 30</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 桥接模式lazy的超时时间</span>
-</span><span class="line"><span class="c">#idle_timeout 60</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 桥接客户端的用户名</span>
-</span><span class="line"><span class="c">#username</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 桥接客户端的密码</span>
-</span><span class="line"><span class="c">#password</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># bridge_cafile：桥接客户端的CA证书文件</span>
-</span><span class="line"><span class="c"># bridge_capath：桥接客户端的CA证书目录</span>
-</span><span class="line"><span class="c"># bridge_certfile：桥接客户端的PEM证书文件</span>
-</span><span class="line"><span class="c"># bridge_keyfile：桥接客户端的PEM密钥文件</span>
-</span><span class="line"><span class="c">#bridge_cafile</span>
-</span><span class="line"><span class="c">#bridge_capath</span>
-</span><span class="line"><span class="c">#bridge_certfile</span>
-</span><span class="line"><span class="c">#bridge_keyfile</span>
-</span><span class="line">
-</span><span class="line"><span class="c"># 自己的配置可以放到以下目录中</span>
-</span><span class="line">include_dir /etc/mosquitto/conf.d
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>4，启动服务，两种方式</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">mosquitto -c /etc/mosquitto/mosquitto.conf -d
-</span><span class="line">sudo /etc/init.d/mosquitto start
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<hr />
-
-<h3 id="section">演示部分：</h3>
-<p>前面已经开启了服务，如果没有请参考前面步骤。</p>
-
-<p>一、开启另一个终端窗口，运行订阅程序mosquitto_sub:</p>
-
-<p><em>注意</em>：</p>
-
-<p>消息推送的发布和订阅要有主题，选项[-t] 主题，即：mosquitto -t 主题</p>
-
-<p>如需指定用户名称则加选项[-i] 用户名，即：mosquitto_sub -t 主题 -i 订阅端</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">mosquitto_sub -t mqtt
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>二、开启另一个终端窗口，运行发布程序mosquitto_pub:</p>
-
-<p>指定消息推送的主题，发布端用户名和消息：</p>
-
-<p><code>mosquitto_pub -t 主题 -i 发布端 -h 主机 -m 你好</code></p>
-
-<p>*注意：如果消息中间有空格则消息要用引号括起来。</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">mosquitto_pub -t 主题 -i 发布端 -h host -m <span class="s1">&#39;我是发布端，你好。&#39;</span>
-</span><span class="line">mosquitto_pub -h localhost -t mqtt -m <span class="s2">&quot;hello world.&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>这时候前面那个订阅窗口就可以收到”hello world”的消息了。</p>
-
-<p>演示成功！！！</p>
 
 ]]></content>
   </entry>
