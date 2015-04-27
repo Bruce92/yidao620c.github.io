@@ -152,59 +152,6 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-04-27 10:35</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150427/simpleblog-12.html" itemprop="url">Django1.7开发博客（12）- I18n国际化</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki</h3>
-<p>国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。</p>
-
-<p>Django能完美支持文本翻译、日期时间和数字的格式化、时区。</p>
-
-<p>另外，Django还有两点优势：</p>
-
-<ol>
-  <li>允许开发者和模板作者指定他们哪些app应该被翻译或被格式化为本地形式。</li>
-  <li>允许用户根据自己的偏好来实现本地化显示。翻译依据语言，格式化依据国家，
-这些信息由浏览器中的<code>Accept-Language</code>头来决定。不过目前为止时区还未能实现。</li>
-</ol>
-
-<p>参考官方文档：<a href="https://docs.djangoproject.com/en/1.7/topics/i18n/">https://docs.djangoproject.com/en/1.7/topics/i18n/</a></p>
-
-<h3 id="section">配置</h3>
-<p>实际上django的国际化做的非常好了，配置很简单。</p>
-
-<h4 id="settingspy">settings.py</h4>
-<p>首先在settings中，添加如下内容：
-		
-		<a href="/blog/20150427/simpleblog-12.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
 2015-04-23 14:01</div>
 		<div class="tags">
 
@@ -429,7 +376,7 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-04-21 18:27</div>
+2015-04-21 20:27</div>
 		<div class="tags">
 
 
@@ -439,26 +386,83 @@ MM：“真人版Windows优化大师！”</p>
 </div>
 		
 	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-11.html" itemprop="url">Django1.7开发博客（11）- 富文本与代码高亮</a></h1>
+	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-13.html" itemprop="url">Django1.7开发博客（13）- Redis缓存</a></h1>
 	<div class="entry-content" itemprop="articleBody">
-		<h2 id="tinymce">TinyMCE介绍</h2>
-<p>TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
-功能配置灵活简单（两行代码就可以将编辑器嵌入网页中），支持AJAX。另一特点是加载速度非常快。</p>
+		<h3 id="wiki">Wiki</h3>
+<p>Redis 是一个高性能的key-value数据库。redis的出现，
+很大程度补偿了memcached这类keyvalue存储的不足，在部分场合可以对关系数据库起到很好的补充作用。
+它提供了Python，Ruby，Erlang，PHP客户端，使用很方便。</p>
 
-<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
-其实这个我已经在前面文章提到过，可以回去再看看。</p>
+<p>目前Redis已经发布了3.0版本，正式支持分布式，这个特性太强大，以至于你再不用就对不住自己了。</p>
 
-<p>TinyMCE的官方网站是：<a href="http://www.tinymce.com/">http://www.tinymce.com/</a></p>
+<h3 id="section">性能测试</h3>
+<p>服务器配置：Linux 2.6, Xeon X3320 2.5Ghz</p>
 
-<p>下载地址：<a href="http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip">http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip</a></p>
+<p>SET操作每秒钟110000次，GET操作每秒钟81000次</p>
 
-<p>TinyMCE的最新版本是4.1.9，下面是官网截屏：</p>
+<p>stackoverflow网站使用Redis做为缓存服务器。</p>
 
-<p><img src="http://yidaospace.qiniudn.com/tinymce.png" alt="" /></p>
+<h3 id="redis">安装redis</h3>
+<p>服务器安装篇我写了专门文章，
+请参阅<a href="http://yidao620c.github.io/blog/20150418/redis-install.html">redis入门与安装</a></p>
 
-<p>下载下来后，我们把它解压到工程的static/目录下面，如下图所示：
+<h3 id="django">django中的配置</h3>
+<p>我们希望在本博客系统中，对于文章点击数、阅览数等数据实现缓存，提高效率。
 		
-		<a href="/blog/20150421/simpleblog-11.html" class="more-link">「阅读全文」&rarr;</a>
+		<a href="/blog/20150421/simpleblog-13.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-21 19:27</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-12.html" itemprop="url">Django1.7开发博客（12）- I18n国际化</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="wiki">Wiki</h3>
+<p>国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。</p>
+
+<p>Django能完美支持文本翻译、日期时间和数字的格式化、时区。</p>
+
+<p>另外，Django还有两点优势：</p>
+
+<ol>
+  <li>允许开发者和模板作者指定他们哪些app应该被翻译或被格式化为本地形式。</li>
+  <li>允许用户根据自己的偏好来实现本地化显示。翻译依据语言，格式化依据国家，
+这些信息由浏览器中的<code>Accept-Language</code>头来决定。不过目前为止时区还未能实现。</li>
+</ol>
+
+<p>参考官方文档：<a href="https://docs.djangoproject.com/en/1.7/topics/i18n/">https://docs.djangoproject.com/en/1.7/topics/i18n/</a></p>
+
+<h3 id="section">配置</h3>
+<p>实际上django的国际化做的非常好了，配置很简单。</p>
+
+<h4 id="settingspy">settings.py</h4>
+<p>首先在settings中，添加如下内容：
+		
+		<a href="/blog/20150421/simpleblog-12.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

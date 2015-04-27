@@ -9,9 +9,9 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-21 15:47 django, simpleblog Django1.7开发博客（10）- 全文搜索 Wiki：
-Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。
-django-haystack能为Django提供whoosh, &hellip;">
+	<meta name="description" content="2015-04-21 18:27 django, simpleblog Django1.7开发博客（11）- 富文本与代码高亮 TinyMCE介绍
+TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
+功能配置灵活简单（ &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,55 @@ django-haystack能为Django提供whoosh, &hellip;">
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-21 18:27</div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-11.html" itemprop="url">Django1.7开发博客（11）- 富文本与代码高亮</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="tinymce">TinyMCE介绍</h2>
+<p>TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
+功能配置灵活简单（两行代码就可以将编辑器嵌入网页中），支持AJAX。另一特点是加载速度非常快。</p>
+
+<p>django里引用TinyMCE富文本编辑器，其实很简单，前提是你知道django的静态文件配置。
+其实这个我已经在前面文章提到过，可以回去再看看。</p>
+
+<p>TinyMCE的官方网站是：<a href="http://www.tinymce.com/">http://www.tinymce.com/</a></p>
+
+<p>下载地址：<a href="http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip">http://download.moxiecode.com/tinymce/tinymce_4.1.9.zip</a></p>
+
+<p>TinyMCE的最新版本是4.1.9，下面是官网截屏：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/tinymce.png" alt="" /></p>
+
+<p>下载下来后，我们把它解压到工程的static/目录下面，如下图所示：
+		
+		<a href="/blog/20150421/simpleblog-11.html" class="more-link">「阅读全文」&rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -390,56 +439,6 @@ blog.views.post_detail是视图的全路径。
 <p>你的工程里面不需要引入任何的文件，因为这里直接引用了bootstrap公共的css和js文件。
 		
 		<a href="/blog/20150421/simpleblog-05.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 19:16</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-04.html" itemprop="url">Django1.7开发博客（4）- 三部曲</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">什么是三部曲？</h3>
-<p>其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。</p>
-
-<p>这三部曲就是：</p>
-
-<ol>
-  <li>定义urls映射</li>
-  <li>定义views</li>
-  <li>定义templates</li>
-</ol>
-
-<h3 id="url">什么是URL？</h3>
-<p>URL就算一个WEB地址，你在浏览器输入这个地址，然后浏览器返回相应的网页给你。
-比如http://djangogirls.com是一个URL，而127.0.0.1:8000同样也是个URL，默认就是http协议的。</p>
-
-<h3 id="djangourl">Django中的URL工作原理</h3>
-<p>我们打开mysite/urls.py文件，会发现类似下面这样：
-		
-		<a href="/blog/20150420/simpleblog-04.html" class="more-link">「阅读全文」&rarr;</a>
 	</div>
 
 </article>

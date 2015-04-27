@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：simpleblog | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/simpleblog/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-27T11:45:48+08:00</updated>
+  <updated>2015-04-27T12:09:18+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -14,10 +14,175 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Django1.7开发博客（13）- redis缓存]]></title>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-13.html"/>
+    <updated>2015-04-21T20:27:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-13</id>
+    <content type="html"><![CDATA[<h3 id="wiki">Wiki</h3>
+<p>Redis 是一个高性能的key-value数据库。redis的出现，
+很大程度补偿了memcached这类keyvalue存储的不足，在部分场合可以对关系数据库起到很好的补充作用。
+它提供了Python，Ruby，Erlang，PHP客户端，使用很方便。</p>
+
+<p>目前Redis已经发布了3.0版本，正式支持分布式，这个特性太强大，以至于你再不用就对不住自己了。</p>
+
+<h3 id="section">性能测试</h3>
+<p>服务器配置：Linux 2.6, Xeon X3320 2.5Ghz</p>
+
+<p>SET操作每秒钟110000次，GET操作每秒钟81000次</p>
+
+<p>stackoverflow网站使用Redis做为缓存服务器。</p>
+
+<h3 id="redis">安装redis</h3>
+<p>服务器安装篇我写了专门文章，
+请参阅<a href="http://yidao620c.github.io/blog/20150418/redis-install.html">redis入门与安装</a></p>
+
+<h3 id="django">django中的配置</h3>
+<p>我们希望在本博客系统中，对于文章点击数、阅览数等数据实现缓存，提高效率。<!--more--></p>
+
+<h4 id="requirementstxt">requirements.txt</h4>
+<p>添加如下内容，方便部署到heroku上面</p>
+
+<pre><code>redis==2.10.3
+django-redis==3.7.2
+APScheduler==3.0.1
+</code></pre>
+
+<h4 id="settingspy">settings.py配置</h4>
+<p>新增内容
+&#8220;` python
+from urllib.parse import urlparse
+import dj_database_url</p>
+
+<p>redis_url = urlparse(os.environ.get(‘REDISTOGO_URL’, ‘redis://localhost:6959’))
+CACHES = {
+    ‘default’: {
+        ‘BACKEND’: ‘redis_cache.cache.RedisCache’,
+        ‘LOCATION’: ‘{0}:{1}’.format(redis_url.hostname, redis_url.port),
+        ‘OPTIONS’: {
+            ‘DB’: 0,
+            ‘PASSWORD’: redis_url.password,
+            ‘CLIENT_CLASS’: ‘redis_cache.client.DefaultClient’,
+            ‘PICKLE_VERSION’: -1,  # Use the latest protocol version
+            ‘SOCKET_TIMEOUT’: 60,  # in seconds
+            ‘IGNORE_EXCEPTIONS’: True,
+        }
+    }
+}</p>
+
+<p>SESSION_ENGINE = ‘django.contrib.sessions.backends.cache’
+SESSION_CACHE_ALIAS = ‘default’</p>
+
+<h1 id="localsettingspy">本地开发配置放在local_settings.py中</h1>
+<p>try:
+    from .local_settings import *
+except ImportError:
+    pass
+&#8220;`</p>
+
+<h4 id="localsettingspy-1">local_settings.py配置</h4>
+<p>这个是本地开发时候使用到的配置文件
+&#8220;` python
+DEBUG = True</p>
+
+<p>CACHES = {
+    ‘default’: {
+        ‘BACKEND’: ‘redis_cache.cache.RedisCache’,
+        ‘LOCATION’: ‘192.168.203.95:6379:1’,
+        ‘OPTIONS’: {
+            ‘CLIENT_CLASS’: ‘redis_cache.client.DefaultClient’,
+            # ‘PASSWORD’: ‘secretpassword’,
+            ‘PICKLE_VERSION’: -1,  # Use the latest protocol version
+            ‘SOCKET_TIMEOUT’: 60,  # in seconds
+            ‘IGNORE_EXCEPTIONS’: True,
+        }
+    }
+}
+&#8220;`</p>
+
+<h3 id="section-1">使用方法</h3>
+
+<h4 id="cachemanagerpy">cache_manager.py缓存管理器</h4>
+<p>我们新建一个缓存管理器cache_manager.py，内容如下
+&#8220;` python
+#!/usr/bin/env python
+# -<em>- encoding: utf-8 -</em>-
+“””
+Topic: redis缓存管理器
+“””
+from ..models import Post
+from redis_cache import get_redis_connection
+from apscheduler.schedulers.background import BackgroundScheduler</p>
+
+<p>RUNNING_TIMER = False
+REDIS_DB = get_redis_connection(‘default’)</p>
+
+<p>def update_click(post):
+    “”” 更新点击数 “””
+    if REDIS_DB.hexists(“CLICKS”, post.id):
+        print(‘REDIS_DB.hexists…’ + str(post.id))
+        REDIS_DB.hincrby(‘CLICKS’, post.id)
+    else:
+        print(‘REDIS_DB.not_hexists…’ + str(post.id))
+        REDIS_DB.hset(‘CLICKS’, post.id, post.click + 1)
+    run_timer()</p>
+
+<p>def get_click(post):
+    “”” 获取点击数 “””
+    if REDIS_DB.hexists(“CLICKS”, post.id):
+        return REDIS_DB.hget(‘CLICKS’, post.id)
+    else:
+        REDIS_DB.hset(‘CLICKS’, post.id, post.click)
+        return post.click</p>
+
+<p>def sync_click():
+    “&#8221;”同步文章点击数”””
+    print(‘同步文章点击数start….’)
+    for k in REDIS_DB.hkeys(‘CLICKS’):
+        try:
+            p = Post.objects.get(k)
+            print(‘db_click={0}’.format(p.click))
+            cache_click = get_click(p.id)
+            print(‘cache_click={0}’.format(cache_click))
+            if cache_click != p.click:
+                p.click = get_click(p.id)
+                p.save()
+        except:
+            pass
+&#8220;`</p>
+
+<h4 id="viewspy">views.py修改</h4>
+<p>然后我们修改view.py，在相应的action里使用这个cache_manager：
+&#8220;` python
+from .commons import cache_manager</p>
+
+<p>def post_list(request):
+    “&#8221;”所有已发布文章”””
+    posts = Post.objects.annotate(num_comment=Count(‘comment’)).filter(
+        published_date__isnull=False).prefetch_related(
+        ‘category’).prefetch_related(‘tags’).order_by(‘-published_date’)
+    for p in posts:
+        p.click = cache_manager.get_click(p)
+    return render(request, ‘blog/post_list.html’, {‘posts’: posts})</p>
+
+<p>def post_detail(request, pk):
+    try:
+        pass
+    except:
+        raise Http404()
+    if post.published_date:
+        cache_manager.update_click(post)
+        post.click = cache_manager.get_click(post)
+&#8220;`
+其他的我就不多演示了。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Django1.7开发博客（12）- i18n国际化]]></title>
-    <link href="http://yidao620c.github.io/blog/20150427/simpleblog-12.html"/>
-    <updated>2015-04-27T10:35:46+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150427/simpleblog-12</id>
+    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-12.html"/>
+    <updated>2015-04-21T19:27:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/simpleblog-12</id>
     <content type="html"><![CDATA[<h3 id="wiki">Wiki</h3>
 <p>国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。</p>
 
@@ -110,7 +275,7 @@ django-admin.py compilemessages
 <h3 id="section-1">使用</h3>
 <p>我们用<code>base.html</code>来做演示，打开<code>mysite/templates/mysite/base.html</code></p>
 
-<p></p>
+<p>{% raw %}</p>
 
 <p>&#8220;` html
 {% load staticfiles %}
@@ -140,9 +305,9 @@ django-admin.py compilemessages
 </body>
 </html>
 <p>&#8220;`
-</p>
+{% endraw %}</p>
 
-<p>注意<code>&lt;title&gt;{% trans 'Simple Blog'%}&lt;/title&gt;</code>这句，
+<p>注意{% raw %}<code>&lt;title&gt;{% trans 'Simple Blog'%}&lt;/title&gt;</code>{% endraw %}这句，
 如果用户选择中文，那么就会被翻译成<code>极简博客</code>。
 这个在django.po文件中定义过。其他的内容也是类似，就不多说了。</p>
 
@@ -182,7 +347,7 @@ tinymce.min.js会根据初始配置里的信息找到需要用编辑器的html�
 
 <p>例如在post_edit.html页面使用编辑器，只需要在模板文件写下：</p>
 
-<p></p>
+<p>{% raw %}</p>
 
 <p><code>html
 {% load staticfiles %}
@@ -206,7 +371,7 @@ tinymce.min.js会根据初始配置里的信息找到需要用编辑器的html�
     &lt;/script&gt;
 {% endblock %}
 </code>
-</p>
+{% endraw %}</p>
 
 <p>这段代码的含义是 初始化 tinyMCE编辑器，selector指需要将编辑器显示在html那个标签节点，
 这里选了textareas。则表示<textareas>会变成编辑器所在的位置。</textareas></p>
@@ -264,7 +429,7 @@ plugins: [
 <p>只需要修改django页面的基础模板就行了，非常简单。</p>
 
 <p>打开mysite/templates/mysite/base.html页面，引入syntaxhighlighter：
-</p>
+{% raw %}</p>
 
 <p>&#8220;` html
 {% load staticfiles %}
@@ -303,7 +468,7 @@ plugins: [
 </body>
 </html>
 <p>&#8220;`
-</p>
+{% endraw %}</p>
 
 <p>由于我们之前已经安装过了TinyMCE，这个跟它结合起来就非常好用了，因为TinyMCE自带有选择代码语言功能。</p>
 
@@ -407,8 +572,8 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 <p>如：<code>mysite/blog/templates/search/indexes/blog/post_text.txt</code>:</p>
 
 <p><code>
-
-
+{{ object.title }}
+{{ object.text }}
 </code></p>
 
 <h3 id="settingspy">3. settings.py</h3>
@@ -490,7 +655,7 @@ def full_search(request):
 </code></p>
 
 <p>(2) 然后在template页面中：
-</p>
+{% raw %}</p>
 
 <p>&#8220;` html
 <!-- searchbox START --></p>
@@ -505,7 +670,7 @@ def full_search(request):
     </form>
 </div>
 <p>&#8220;`
-</p>
+{% endraw %}</p>
 
 <p>更详细内容请参考官方文档：<a href="http://django-haystack.readthedocs.org/en/latest/">http://django-haystack.readthedocs.org/en/latest/</a></p>
 ]]></content>
@@ -554,32 +719,23 @@ def post_new(request):
 url(r'^accounts/login/$', 'django.contrib.auth.views.login')
 </code>
 现在这个文件内容如下：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
-</span><span class='line'><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="err">‘’</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">admin</span><span class="o">/</span><span class="err">’</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’</span><span class="o">^</span><span class="n">accounts</span><span class="o">/</span><span class="n">login</span><span class="o">/</span><span class="err">$’</span><span class="p">,</span> <span class="err">‘</span><span class="n">django</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">login</span><span class="err">’</span><span class="p">),</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="n">r</span><span class="err">’’</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="err">‘</span><span class="n">blog</span><span class="o">.</span><span class="n">urls</span><span class="err">’</span><span class="p">)),</span>
-</span><span class='line'><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;` python
+from django.conf.urls import patterns, include, url</p>
+
+<p>from django.contrib import admin
+admin.autodiscover()</p>
+
+<p>urlpatterns = patterns(‘’,
+    url(r’^admin/’, include(admin.site.urls)),
+    url(r’^accounts/login/$’, ‘django.contrib.auth.views.login’),
+    url(r’’, include(‘blog.urls’)),
+)
+&#8220;`</p>
 
 <p>然后我们再定义一个登陆页面，创建目录mysite/templates/registration，
 并在里面新建模板文件login.html，内容如下：</p>
 
-<p></p>
+<p>{% raw %}</p>
 
 <p>&#8220;` html
 {% extends “mysite/base.html” %}</p>
@@ -605,7 +761,7 @@ url(r'^accounts/login/$', 'django.contrib.auth.views.login')
 
 &lt;input type="submit" value="login" /&gt;
 &lt;input type="hidden" name="next" value="{{ next }}" /&gt;
-&lt;/form&gt; {% endblock %} ``` 
+&lt;/form&gt; {% endblock %} ``` {% endraw %}
 </code></pre>
 
 <p>你可以看到我们仍然使用到了模板继承。这个时候可以定义一个mysite/templates/mysite/base.html，
@@ -622,7 +778,7 @@ LOGIN_REDIRECT_URL = '/'
 这个是很不好的体验。现在如果是未登录用户的话就把这些按钮给隐藏掉。</p>
 
 <p>因此我们修改mysite/templates/mysite/base.html如下：
-</p>
+{% raw %}</p>
 
 <p>&#8220;` html</p>
 <body>
@@ -645,10 +801,10 @@ LOGIN_REDIRECT_URL = '/'
     </div>
 </body>
 <p>&#8220;`
-</p>
+{% endraw %}</p>
 
 <p>然后修改blog/templates/blog/post_detail.html如下：
-</p>
+{% raw %}</p>
 
 <p>&#8220;` html
 {% extends ‘blog/base.html’ %}</p>
@@ -670,85 +826,55 @@ LOGIN_REDIRECT_URL = '/'
     &lt;h1&gt;{{ post.title }}&lt;/h1&gt;
     &lt;p&gt;{{ post.text|linebreaks }}&lt;/p&gt;
 {% endblock %}
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-4&quot;</span><span class="o">&gt;</span><span class="err">用户注销</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">当用户登录后显示欢迎语句，</span><span class="n">Hello</span> <span class="err">，然后后面跟一个</span><span class="n">logout</span><span class="err">链接。还是依靠</span><span class="n">django</span><span class="err">帮我们处理</span><span class="n">logout</span><span class="err">动作。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">修改</span><span class="n">mysite</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">mysite</span><span class="o">/</span><span class="n">base</span><span class="o">.</span><span class="n">html</span><span class="err">文件如下：</span>
-</span><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">raw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span> <span class="n">html</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;page-header&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span> <span class="o">%</span><span class="p">}</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;post_new&#39; %}&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-plus&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;post_draft_list&#39; %}&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-edit&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;</span><span class="n">Hello</span> <span class="p">{{</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="p">}}</span><span class="o">&lt;</span><span class="n">small</span><span class="o">&gt;&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.logout&#39; %}&quot;</span><span class="o">&gt;</span><span class="n">Log</span> <span class="n">out</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;django.contrib.auth.views.login&#39; %}&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;top-menu&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;glyphicon glyphicon-lock&quot;</span><span class="o">&gt;&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;{</span><span class="si">% u</span><span class="s">rl &#39;blog.views.post_list&#39; %}&quot;</span><span class="o">&gt;</span><span class="n">Django</span> <span class="n">Girls</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+&#8220;`
+{% endraw %}</p>
 
+<h2 id="section-4">用户注销</h2>
+<p>当用户登录后显示欢迎语句，Hello ，然后后面跟一个logout链接。还是依靠django帮我们处理logout动作。</p>
+
+<p>修改mysite/templates/mysite/base.html文件如下：
+{% raw %}</p>
+
+<p>&#8220;` html</p>
+<div class="page-header">
+    {% if user.is_authenticated %}
+    <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+    <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
+    <p class="top-menu">Hello {{ user.username }}<small>&nbsp;<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>
+    {% else %}
+    <a href="{% url 'django.contrib.auth.views.login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+    {% endif %}
+    <h1><a href="{% url 'blog.views.post_list' %}">Django Girls</a></h1>
+
+&#8220;`
+{% endraw %}
 
 很显然这时候logout肯定会报错。我们还得做些事情。
 
 对于这方面的详细文档请参考：&lt;https://docs.djangoproject.com/en/1.7/topics/auth/default/&gt;
 
 打开mysite/urls.py文件，添加一个logout配置：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
-</span><span class='line'><span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">),</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/logout/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.logout&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;next_page&#39;</span><span class="p">:</span> <span class="s">&#39;/&#39;</span><span class="p">}),</span>
-</span><span class='line'>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
-</span><span class='line'><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` python
+from django.conf.urls import patterns, include, url
+
+from django.contrib import admin
+admin.autodiscover()
+
+urlpatterns = patterns(&#8221;,
+    url(r&#8217;^admin/&#8217;, include(admin.site.urls)),
+    url(r&#8217;^accounts/login/$&#8217;, &#8216;django.contrib.auth.views.login&#8217;),
+    url(r&#8217;^accounts/logout/$&#8217;, &#8216;django.contrib.auth.views.logout&#8217;, {&#8216;next_page&#8217;: &#8216;/&#8217;}),
+    url(r&#8221;, include(&#8216;blog.urls&#8217;)),
+)
+&#8220;`
 如果访问网站时出现模板找不到错误，那么你就在mysite/settings.py中添加如下配置：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># TEMPLATE_DIRS</span>
-</span><span class='line'><span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
-</span><span class='line'>    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&#39;mysite/templates&#39;</span><span class="p">),</span>
-</span><span class='line'>    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&#39;blog/templates&#39;</span><span class="p">),</span>
-</span><span class='line'><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` python
+# TEMPLATE_DIRS
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, &#8216;mysite/templates&#8217;),
+    os.path.join(BASE_DIR, &#8216;blog/templates&#8217;),
+)
+&#8220;`
 
 好的，现在你已经可以达成如下的效果了：
 
@@ -758,269 +884,6 @@ LOGIN_REDIRECT_URL = '/'
 
 这么说的话，这个博客系统算功能比较完善了！朋友，祝福你。
 </small></p></div>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（8）- 继续完善]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-08.html"/>
-    <updated>2015-04-21T14:24:11+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-08</id>
-    <content type="html"><![CDATA[<p>到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
-我们的博客还有很多功能需要完善，下面抛砖引玉新增几个功能，还有其他功能等你自己去发现和实现。</p>
-
-<h2 id="section">草稿箱</h2>
-<p>之前我们新建文章的时候只是是保存到数据库，也就是仅仅保存了草稿，还没有对外发布，
-在博客首页上面是看不到的，因为published_date字段为空。这里我们需要添加一个草稿箱的链接。还是四部曲。</p>
-
-<p>第一步，添加一个链接：</p>
-
-<p>打开mysite/templates/mysite/base.html文件，在</p>
-
-<p>&#8220;` html</p>
-<h1><a href="http://yidao620c.github.io/">Django Girls Blog</a></h1>
-<p>&#8220;`
-的上面一行添加如下链接：<!--more-->
-</p>
-
-<p><code>html
-&lt;a href="{% url 'post_draft_list' %}" class="top-menu"&gt;
-&lt;span class="glyphicon glyphicon-edit"&gt;&lt;/span&gt;&lt;/a&gt;
-</code>
-</p>
-
-<p>第二步就是配置urls，在blog/urls.py中添加：
-<code>python
-url(r'^drafts/$', views.post_draft_list, name='post_draft_list'),
-</code></p>
-
-<p>第三步在blog/views.py中添加一个view：
-<code>python
-def post_draft_list(request):
-    posts = Post.objects.filter(published_date__isnull=True).order_by('-created_date')
-    return render(request, 'blog/post_draft_list.html', {'posts': posts})
-</code></p>
-
-<p>第四步添加一个template，新建blog/templates/blog/post_draft_list.html，内容如下：
-</p>
-
-<p><code>html
-{% extends 'blog/base.html' %}
-{% block content %}
-    {% for post in posts %}
-        &lt;div class="post"&gt;
-            &lt;p class="date"&gt;created: {{ post.created_date|date:'d-m-Y' }}&lt;/p&gt;
-            &lt;h1&gt;&lt;a href="{% url 'blog.views.post_detail' pk=post.pk %}"&gt;{{ post.title }}&lt;/a&gt;&lt;/h1&gt;
-            &lt;p&gt;{{ post.text|truncatechars:200 }}&lt;/p&gt;
-        &lt;/div&gt;
-    {% endfor %}
-{% endblock %}
-</code>
-</p>
-
-<p>这个模板跟我们的post_list.html非常相似。</p>
-
-<p>刷新首页，点击那个草稿箱链接，看看效果。</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj024.jpg" alt="" /></p>
-
-<h2 id="section-1">发布功能</h2>
-<p>在文章详情页面添加一个发布的按钮，如果觉得合适的时候就能发布文章了。
-每个新功能都是四部曲，你照着这四步做就行，你会发现越来越简单。</p>
-
-<p>第一步在页面上添加一个链接或Form表单，这里我们添加一个链接。</p>
-
-<p>打开blog/template/blog/post_detail.html，将下面这段
-</p>
-
-<p><code>
-{% if post.published_date %}
-    {{ post.published_date }}
-{% endif %}
-</code>
-</p>
-
-<p>换成下面这段：
-</p>
-
-<p><code>html
-{% if post.published_date %}
-    {{ post.published_date }}
-{% else %}
-    &lt;a class="btn btn-default" href="{% url 'blog.views.post_publish' pk=post.pk %}"&gt;Publish&lt;/a&gt;
-{% endif %}
-</code>
-
-这里增加了一个else语句，意思是如果没有发布日期的话就增加一个发布按钮。</p>
-
-<p>第二步添加urls配置，打开blog/urls.py：
-<code>python
-url(r'^post/(?P&lt;pk&gt;[0-9]+)/publish/$', views.post_publish, name='post_publish'),
-</code>
-第三步视图，打开blog/views.py：
-<code>python
-def post_publish(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.publish()
-    return redirect('blog.views.post_detail', pk=pk)
-</code>
-第四步模板，由于这次没有引入新的模板，所以这步省略。</p>
-
-<p>刷新后看效果：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj025.jpg" alt="" /></p>
-
-<p>发布之后的效果：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj026.jpg" alt="" /></p>
-
-<p>注意观察发布前和发布后文章的发布日期那个位置的变化。并且发布后再去首页看看，文章已经可以正常显示了。</p>
-
-<h2 id="section-2">删除功能</h2>
-<p>最后当然需要一个删除功能了，还是四部曲！</p>
-
-<p>第一步是在页面上添加链接，打开blog/templates/blog/post_detail.html，在编辑按钮下面一行添加如下：
-</p>
-
-<p><code>html
-&lt;a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"&gt;
-&lt;span class="glyphicon glyphicon-remove"&gt;&lt;/span&gt;&lt;/a&gt;
-</code>
-
-第二步配置urls映射，打开blog/urls.py，添加如下一行：
-<code>python
-url(r'^post/(?P&lt;pk&gt;[0-9]+)/remove/$', views.post_remove, name='post_remove'),
-</code>
-第三步添加视图view，打开blog/views.py，添加一个视图函数：
-<code>python
-def post_remove(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    return redirect('blog.views.post_list')
-</code>
-第四步模板，由于这次又没有新的模板，所有这步省略。</p>
-
-<p>OK，刷新页面看效果：</p>
-
-<p><img src="http://yidaospace.qiniudn.com/dj027.jpg" alt="" /></p>
-
-<p>删除后再去首页看，已经没有这篇文章了。</p>
-
-<h2 id="section-3">分页功能</h2>
-<p>在首页显示文章列表时候需要分页显示，这时候可以使用django的一个插件叫pagination</p>
-
-<p>设置非常简单，简直是简单到变态。</p>
-
-<p>settings.py文件中</p>
-
-<ol>
-  <li>INSTALLED_APPS增加’pagination’项
-<code>python
-# Application definition
-INSTALLED_APPS = (
- 'django.contrib.admin',
- 'django.contrib.auth',
- 'django.contrib.contenttypes',
- 'django.contrib.sessions',
- 'django.contrib.messages',
- 'django.contrib.staticfiles',
- 'blog',
- 'pagination',
-)
-</code></li>
-  <li>MIDDLEWARE_CLASSES增加’pagination.middleware.PaginationMiddleware’
-<code>python
-MIDDLEWARE_CLASSES = (
- 'django.contrib.sessions.middleware.SessionMiddleware',
- 'django.middleware.common.CommonMiddleware',
- 'django.middleware.csrf.CsrfViewMiddleware',
- 'django.contrib.auth.middleware.AuthenticationMiddleware',
- 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
- 'django.contrib.messages.middleware.MessageMiddleware',
- 'django.middleware.clickjacking.XFrameOptionsMiddleware',
- 'pagination.middleware.PaginationMiddleware',
-)
-</code></li>
-  <li>TEMPLATE_CONTEXT_PROCESSORS增加’django.core.context_processors.request’
-<code>python
-TEMPLATE_CONTEXT_PROCESSORS = (
- "django.contrib.auth.context_processors.auth",
- "django.core.context_processors.debug",
- "django.core.context_processors.i18n",
- "django.core.context_processors.media",
- "django.core.context_processors.static",
- "django.core.context_processors.tz",
- "django.contrib.messages.context_processors.messages",
- "blog.commons.context_processors.custom_proc",
- "django.core.context_processors.request",
-)
-</code></li>
-  <li>requirements.txt中增加依赖：
-<code>
-django-pagination-py3==1.1.1
-</code></li>
-  <li>修改post_list.html页面，增加autopaginate标签
-</li>
-</ol>
-
-<p><code>
-{% extends 'mysite/base.html' %}
-{% load blog_tags %}
-{% load pagination_tags %}
-{% block content %}
-    {% if list_header %}
-        &lt;div class="box"&gt;{{ list_header }}&lt;/div&gt;
-    {% endif %}
-    {% autopaginate posts 10 %}
-    {% for post in posts %}
-        &lt;div class="post"&gt;
-            &lt;h2&gt;&lt;a href="{% url 'blog.views.post_detail' pk=post.pk %}"&gt;{{ post.title }}&lt;/a&gt;&lt;/h2&gt;
-            &lt;div class="info"&gt;
-                &lt;span class="date"&gt;{{ post.published_date|date:'Y年m月d日' }}&lt;/span&gt;
-                &lt;span class="comments"&gt;
-                    {% if post.num_comment &gt; 0 %}
-                        {{ post.num_comment }} 条评论
-                    {% else %}
-                        没有评论
-                    {% endif %}
-                &lt;/span&gt;
-                &lt;span class="comments"&gt;
-                    {{ post.click }} 人阅读&amp;nbsp;&amp;nbsp;
-                &lt;/span&gt;
-                &lt;div class="fixed"&gt;&lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="content"&gt;
-                &lt;p&gt;
-                    {% autoescape off %}
-                        {{ post.text|more:post.id }}
-                    {% endautoescape %}
-                &lt;/p&gt;
-            &lt;/div&gt;
-            &lt;div class="under"&gt;
-                &lt;span class="categories"&gt;分类: &lt;/span&gt;
-                &lt;span&gt;
-                    &lt;a href="{% url 'blog.views.post_list_by_category' cg=post.category.name %}"
-                       rel="category tag"&gt;{{ post.category.name }}
-                    &lt;/a&gt;
-                &lt;/span&gt;
-                &lt;span class="tags"&gt;标签: &lt;/span&gt;
-                &lt;span&gt;
-                    {% for tg in post.tags.all %}
-                        &lt;a href="{% url 'blog.views.post_list_by_tag' tag=tg.name %}"
-                           rel="tag"&gt;{{ tg.name }}&lt;/a&gt;&amp;nbsp;
-                    {% endfor %}
-                &lt;/span&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    {% endfor %}
-    {% paginate %}
-{% endblock %}
-</code>
-</p>
-
-<p>刷新下列表首页，看看分页效果。</p>
-
-<p>恭喜你，你可以大声对自己喊：我太棒了。^_^</p>
 ]]></content>
   </entry>
   

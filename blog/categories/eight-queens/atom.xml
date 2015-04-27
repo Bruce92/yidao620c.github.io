@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：eight-queens | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/eight-queens/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-27T11:45:48+08:00</updated>
+  <updated>2015-04-27T12:09:18+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -21,69 +21,39 @@
     <content type="html"><![CDATA[<p>八皇后问题是一个以国际象棋为背景的问题：如何能够在8×8的国际象棋棋盘上放置八个皇后，使得任何一个皇后都无法直接吃掉其他的皇后？为了达到此目的，任两个皇后都不能处于同一条横行、纵行或斜线上。八皇后问题可以推广为更一般的n皇后摆放问题：这时棋盘的大小变为n×n，而皇后个数也变成n。当且仅当n = 1或n ≥ 4时问题有解 — 摘自<a href="http://zh.wikipedia.org/wiki/%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98">八皇后问题wiki</a></p>
 
 <p>利用回溯法解决这个问题：<!--more-->
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># coding: utf-8</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">author</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Administrator</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section&quot;</span><span class="o">&gt;</span><span class="err">冲突函数</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c"># 如果下一个皇后和正在考虑的前一个皇后的水平距离为0，</span>
-</span><span class='line'><span class="c"># 或者等于垂直距离（在一条对角线上），返回True</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">conflict</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">nextX</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">nextY</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nextY</span><span class="p">):</span>
-</span><span class='line'>        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">nextX</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nextY</span> <span class="o">-</span> <span class="n">i</span><span class="p">):</span>
-</span><span class='line'>            <span class="k">return</span> <span class="bp">True</span>
-</span><span class='line'>    <span class="k">return</span> <span class="bp">False</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;num&quot;</span><span class="o">&gt;</span><span class="n">num</span><span class="err">：皇后的总数</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c"># state：已经注册了的每行的皇后的位置列表（X坐标）</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">queens</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="p">()):</span>
-</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">find</span> <span class="o">=</span> <span class="bp">False</span>
-</span><span class='line'>    <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-</span><span class='line'>        <span class="k">if</span> <span class="ow">not</span> <span class="n">conflict</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
-</span><span class='line'>            <span class="n">find</span> <span class="o">=</span> <span class="bp">True</span>
-</span><span class='line'>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">==</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-</span><span class='line'>                <span class="c"># 如果state大小已经是num-1了，那么yield最后一个位置</span>
-</span><span class='line'>                <span class="k">yield</span> <span class="p">(</span><span class="n">pos</span><span class="p">,)</span>
-</span><span class='line'>            <span class="k">else</span><span class="p">:</span>
-</span><span class='line'>                <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">queens</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">state</span> <span class="o">+</span> <span class="p">(</span><span class="n">pos</span><span class="p">,)):</span>
-</span><span class='line'>                    <span class="k">yield</span> <span class="p">(</span><span class="n">pos</span><span class="p">,)</span> <span class="o">+</span> <span class="n">result</span>
-</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">find</span><span class="p">:</span>
-</span><span class='line'>        <span class="k">print</span><span class="p">(</span><span class="err">“</span><span class="n">HO</span><span class="p">,</span> <span class="n">NO</span><span class="err">…”</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">))</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">queens</span><span class="p">(</span><span class="mi">4</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;` python
+# coding: utf-8
+<strong>author</strong> = ‘Administrator’</p>
+
+<h1 id="section">冲突函数</h1>
+<p># 如果下一个皇后和正在考虑的前一个皇后的水平距离为0，
+# 或者等于垂直距离（在一条对角线上），返回True
+def conflict(state, nextX):
+    nextY = len(state)
+    for i in range(nextY):
+        if abs(state[i] - nextX) in (0, nextY - i):
+            return True
+    return False</p>
+
+<h1 id="num">num：皇后的总数</h1>
+<p># state：已经注册了的每行的皇后的位置列表（X坐标）
+def queens(num=8, state=()):
+    print(state)
+    find = False
+    for pos in range(num):
+        if not conflict(state, pos):
+            find = True
+            if len(state) == num - 1:
+                # 如果state大小已经是num-1了，那么yield最后一个位置
+                yield (pos,)
+            else:
+                for result in queens(num, state + (pos,)):
+                    yield (pos,) + result
+    if not find:
+        print(“HO, NO…” + str(state))</p>
+
+<p>print(list(queens(4)))
+&#8220;`</p>
 
 <p><strong>回溯法原理：</strong></p>
 

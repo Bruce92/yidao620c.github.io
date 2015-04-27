@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：search | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/search/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-27T11:45:48+08:00</updated>
+  <updated>2015-04-27T12:09:18+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -58,65 +58,37 @@
 <p>经过上述的递归过程，最终将返回匹配元素的索引，或者是-1 ，表示找不到。<!--more--></p>
 
 <p>二分搜索算法之所以速度快，是因为它每次可以把数组切分成两半，每次递归调用都能去除一半数据，而不用匹配每一个数据。下面是代码，逻辑清楚，代码简单。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * @param array</span>
-</span><span class='line'><span class="cm"> * @param start</span>
-</span><span class='line'><span class="cm"> * @param end</span>
-</span><span class='line'><span class="cm"> *            这是最后一个元素的索引，第一次调用应该是array.length - 1</span>
-</span><span class='line'><span class="cm"> * @param value</span>
-</span><span class='line'><span class="cm"> * @return</span>
-</span><span class='line'><span class="cm"> */</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="n">start</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">==</span> <span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">start</span><span class="o">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="n">start</span><span class="o">;</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">end</span><span class="o">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="n">end</span><span class="o">;</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">middle</span><span class="o">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">middle</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">array</span><span class="o">[</span><span class="n">middle</span><span class="o">])</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">end</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="n">array</span><span class="o">[</span><span class="n">middle</span><span class="o">])</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">start</span><span class="o">,</span> <span class="n">middle</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+&#8220;` java
+/**
+ * @param array
+ * @param start
+ * @param end
+ *            这是最后一个元素的索引，第一次调用应该是array.length - 1
+ * @param value
+ * @return
+ */</p>
+
+<p>public static int binarySearch(int[] array, int start, int end, int value) {
+    int middle = (start + end) / 2;
+    if (end &lt; start) {
+        return -1;
+    }
+    if (end == (start + 1)) {
+        if (array[start] == value) {
+            return start;
+        } else if (array[end] == value) {
+            return end;
+        }
+    } else if (array[middle] == value) {
+        return middle;
+    } else if (value &gt; array[middle]) {
+        return binarySearch(array, middle + 1, end, value);
+    } else if (value &lt; array[middle]) {
+        return binarySearch(array, start, middle - 1, value);
+    }
+    return -1;
+}
+&#8220;`
 上述代码稍加改变，就可以排序任意类型。如使用泛型，然后加上对Comparable 接口的实现即可。</p>
 
 <p><br />
