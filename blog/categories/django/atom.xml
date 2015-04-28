@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：django | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/django/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-27T14:56:06+08:00</updated>
+  <updated>2015-04-28T17:45:58+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -14,11 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Django1.7开发博客（14）- 集成xadmin]]></title>
+    <title type="html"><![CDATA[Django1.7开发博客（14）- 集成Xadmin]]></title>
     <link href="http://yidao620c.github.io/blog/20150421/simpleblog-14.html"/>
     <updated>2015-04-21T21:45:29+08:00</updated>
     <id>http://yidao620c.github.io/blog/20150421/simpleblog-14</id>
-    <content type="html"><![CDATA[<h3 id="xadmin">xadmin介绍</h3>
+    <content type="html"><![CDATA[<h3 id="xadmin">Xadmin介绍</h3>
 <p>xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
 目的是替换现有的admin，国人开发，有许多新的特性：</p>
 
