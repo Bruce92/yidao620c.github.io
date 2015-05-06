@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：github | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/github/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-28T17:45:58+08:00</updated>
+  <updated>2015-05-06T10:52:36+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -203,8 +203,11 @@ categories: octopress
 <p>title默认和你新建文章时的名字相同，这里可以修改。comments表示是否允许评论。categories是自己分类用的目录。
 之后文章正文的语法就用Markdown来写。语法参考可见<a href="http://wowubuntu.com/markdown">这里</a>。</p>
 
-<p>写完文章之后就可以用rake generate生成一下静态了。
-如果你之前已经运行了rake preview启动了网站，那么文章保存后自动就生成静态了，比较方便即时查看。</p>
+<p>写完文章之后就可以用rake generate生成静态页面。然后通过rake preview来本地预览。</p>
+
+<p>如果你觉得每次都这样生成再预览比较麻烦的话，可以通过配置实时的更新你的修改而不需要重新generate，配置如下：</p>
+
+<p>打开Rakefile文件，找到<code>task :generate do</code>这一段，将里面的<code>"jekyll build"</code>修改为<code>"jekyll build --watch"</code>。</p>
 
 <p>另外还需要注意一下，写好的文章要保存为utf-8无bom格式，否则对中文支持会有问题。</p>
 
@@ -234,6 +237,72 @@ git push origin source
 branch is behind its remote counterpart.也就是告诉你远程目录已经有内容了，
 此时请到发布的目录_deploy下，打开一个新的cmd，运行命令：git push -f，强制用本地内容覆盖远程即可。</li>
 </ul>
+
+<h3 id="mathjax-latex-">加入MathJax，支持 LaTeX 公式</h3>
+<p>博客里需要插入数学公式，比较好的选择是用LaTeX写数学公式，
+但是Octopress默认不支持，需要修改一下Octopress配置，加入MathJax。</p>
+
+<p><strong>1. 把 rdiscount 换成 kramdown</strong></p>
+
+<ul>
+  <li><code>gem install kramdown</code></li>
+  <li>修改 _config.yml，把 <code>markdown: rdiscount</code> 改成 <code>markdown: kramdown</code></li>
+  <li>修改 Gemfile， 把 <code>gem 'rdiscount'</code> 改成 <code>gem 'kramdown', '~&gt; 1.6.0'</code>，kramdown 版本可以在 gem list 中看到</li>
+</ul>
+
+<p>实际上这一步我们已经在刚开始的时候完成了。所以如果你安装我之前的步骤做过，这部分可以省略了。</p>
+
+<p><strong>2. 添加 MathJax 配置</strong></p>
+
+<p>在 source/_includes/custom/head.html 文件中添加以下内容：</p>
+
+<p><code>html
+&lt;!-- MathJax Configuration --&gt;
+&lt;script type="text/x-mathjax-config"&gt;
+MathJax.Hub.Config({
+  MathMenu: {
+      showLocale: false
+  },
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+&lt;/script&gt;
+&lt;script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"&gt;&lt;/script&gt;
+</code></p>
+
+<p><strong>3. 测试</strong></p>
+
+<p>3.1 整段公式：</p>
+
+<p><code>
+$$
+\begin{align}
+\mbox{Union: } &amp; A\cup B = \{x\mid x\in A \mbox{ or } x\in B\} \\
+\mbox{Concatenation: } &amp; A\circ B  = \{xy\mid x\in A \mbox{ and } y\in B\} \\
+\mbox{Star: } &amp; A^\star  = \{x_1x_2\ldots x_k \mid  k\geq 0 \mbox{ and each } x_i\in A\} \\
+\end{align}
+$$
+</code></p>
+
+<p>3.2 行内公式：</p>
+
+<p><code>
+If $a^2=b$ and $b=2$, then the solution must be
+either $a=+\sqrt{2}$ or $a=-\sqrt{2}$.
+</code></p>
+
+<p><strong>附：参考文章</strong></p>
+
+<p><a href="http://www.lucypark.kr/blog/2013/02/25/mathjax-kramdown-and-octopress/">Mathjax, Kramdown and Octopress</a></p>
+
+<p><a href="http://dreamrunner.org/blog/2014/03/09/octopresszhong-shi-yong-latexxie-shu-xue-gong-shi/">Octopress 中使用 Latex 写数学公式</a></p>
 
 <h3 id="section-11">结语</h3>
 <p>正如octopress的标语所说的那样：</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：redis | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-04-28T17:45:58+08:00</updated>
+  <updated>2015-05-06T10:52:36+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -293,28 +293,29 @@ redis会把所接收到的每一次写操作请求都追加到appendonly.aof文�
 <h2 id="redis-2">四、操作Redis</h2>
 <p>1、插入数据
 <code>bash
-redis 127.0.0.1:6379&amp;gt; set name wwl #设置一个key-value对
+redis 127.0.0.1:6379&gt; set name wwl #设置一个key-value对
 </code>
 2、查询数据
 <code>bash
-redis 127.0.0.1:6379&amp;gt; get name #取出key所对应的value
+redis 127.0.0.1:6379&gt; get name #取出key所对应的value
 </code>
 3、删除键值
 <code>bash
-redis 127.0.0.1:6379&amp;gt; del name #删除这个key以及对应的value
+redis 127.0.0.1:6379&gt; del name #删除这个key以及对应的value
 </code>
 4、验证键是否存在
 <code>bash
-redis 127.0.0.1:6379&amp;gt; exists name #其中0，代表此key不存在;1代表存在
+redis 127.0.0.1:6379&gt; exists name #其中0，代表此key不存在;1代表存在
 </code></p>
 
 <hr />
 
-<p><strong>FAQ：</strong></p>
+<h2 id="faq">FAQ</h2>
 
-<p>redis的java客户端是Jedis，地址：<a href="https://github.com/xetorthio/jedis">https://github.com/xetorthio/jedis</a></p>
-
-<p>用redis做像memcache的缓存如何设计？</p>
+<ol>
+  <li>redis的java客户端是Jedis，地址：<a href="https://github.com/xetorthio/jedis">https://github.com/xetorthio/jedis</a></li>
+  <li>用redis做像memcache的缓存如何设计？</li>
+</ol>
 
 <p>想利用redis作为缓存，将查询结果缓存起来，像memcache的效果。
 但是jedis(java客户端)的参数只接收String或者byte[]参数，那么Object如何设计存储呢？</p>
@@ -330,14 +331,13 @@ redis 127.0.0.1:6379&amp;gt; exists name #其中0，代表此key不存在;1代�
 我在项目中使用memcache不会缓存对象，而是存储json字符串。因为频繁的序列化和反序列化会占用cpu，所以我们这样使用可以降低memcache服务对CPU的要求。
 一般部署memcache的主机都是内存比较空闲的主机，而把解析json这部分工作移到应用内部，应用所在主机的CPU配置必然是高的。这样可以有效的利用主机资源。</p>
 
-<p>解析json字符串的工具，选择fastjson，地址：<a href="http://code.alibabatech.com/wiki/pages/viewpage.action?pageId=2424946">http://code.alibabatech.com/wiki/pages/viewpage.action?pageId=2424946</a></p>
+<p>解析json字符串的工具，选择fastjson，地址：<a href="https://github.com/alibaba/fastjson">https://github.com/alibaba/fastjson</a></p>
 
 <p><strong>还有一个选择：</strong></p>
 
 <p>I want to persist my objects in Redis. How can I do it?</p>
 
 <p>You should definitely check JOhm! And of course, you can always serialize it and store it.</p>
-
 ]]></content>
   </entry>
   
