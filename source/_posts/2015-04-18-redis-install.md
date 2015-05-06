@@ -277,28 +277,27 @@ Redis支持很多的参数，但都有默认值。
 ## 四、操作Redis ##
 1、插入数据
 ``` bash
-redis 127.0.0.1:6379&gt; set name wwl #设置一个key-value对
+redis 127.0.0.1:6379> set name wwl #设置一个key-value对
 ```
 2、查询数据
 ``` bash
-redis 127.0.0.1:6379&gt; get name #取出key所对应的value
+redis 127.0.0.1:6379> get name #取出key所对应的value
 ```
 3、删除键值
 ``` bash
-redis 127.0.0.1:6379&gt; del name #删除这个key以及对应的value
+redis 127.0.0.1:6379> del name #删除这个key以及对应的value
 ```
 4、验证键是否存在
 ``` bash
-redis 127.0.0.1:6379&gt; exists name #其中0，代表此key不存在;1代表存在
+redis 127.0.0.1:6379> exists name #其中0，代表此key不存在;1代表存在
 ```
 
 ----------------------------
 
-**FAQ：**
+##FAQ
 
-redis的java客户端是Jedis，地址：<https://github.com/xetorthio/jedis>
-
-用redis做像memcache的缓存如何设计？
+1. redis的java客户端是Jedis，地址：<https://github.com/xetorthio/jedis>
+1. 用redis做像memcache的缓存如何设计？
 
 想利用redis作为缓存，将查询结果缓存起来，像memcache的效果。
 但是jedis(java客户端)的参数只接收String或者byte[]参数，那么Object如何设计存储呢？
@@ -314,11 +313,10 @@ memcache存取对象是序列化和反序列化。redis可以在客户端自行�
 我在项目中使用memcache不会缓存对象，而是存储json字符串。因为频繁的序列化和反序列化会占用cpu，所以我们这样使用可以降低memcache服务对CPU的要求。
 一般部署memcache的主机都是内存比较空闲的主机，而把解析json这部分工作移到应用内部，应用所在主机的CPU配置必然是高的。这样可以有效的利用主机资源。
 
-解析json字符串的工具，选择fastjson，地址：<http://code.alibabatech.com/wiki/pages/viewpage.action?pageId=2424946>
+解析json字符串的工具，选择fastjson，地址：<https://github.com/alibaba/fastjson>
 
 **还有一个选择：**
 
 I want to persist my objects in Redis. How can I do it?
 
 You should definitely check JOhm! And of course, you can always serialize it and store it.
-

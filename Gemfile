@@ -17,7 +17,7 @@ group :development do
 end
 
 gem 'sinatra', '~> 1.4.2'
-gem 'kramdown'
+gem 'kramdown', '~> 1.6.0'
 gem 'metaweblog', '~> 0.1.0'
 gem 'nokogiri', '~> 1.5.9'
 gem 'wdm', '>= 0.1.0'

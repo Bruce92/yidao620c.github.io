@@ -11,6 +11,7 @@ PyInstaller是一个能将Python程序转换成单个可执行文件的程序，
 操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。
 
 环境为windows7操作系统，python2.7.8 virtual environment
+
 官网：<https://github.com/pyinstaller/pyinstaller>
 
 ### 详细步骤：

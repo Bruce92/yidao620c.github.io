@@ -185,8 +185,11 @@ rake new_post["mypost"]
 title默认和你新建文章时的名字相同，这里可以修改。comments表示是否允许评论。categories是自己分类用的目录。
 之后文章正文的语法就用Markdown来写。语法参考可见[这里](http://wowubuntu.com/markdown)。
 
-写完文章之后就可以用rake generate生成一下静态了。
-如果你之前已经运行了rake preview启动了网站，那么文章保存后自动就生成静态了，比较方便即时查看。
+写完文章之后就可以用rake generate生成静态页面。然后通过rake preview来本地预览。
+
+如果你觉得每次都这样生成再预览比较麻烦的话，可以通过配置实时的更新你的修改而不需要重新generate，配置如下：
+
+打开Rakefile文件，找到`task :generate do`这一段，将里面的`"jekyll build"`修改为`"jekyll build --watch"`。
 
 另外还需要注意一下，写好的文章要保存为utf-8无bom格式，否则对中文支持会有问题。
 
@@ -214,6 +217,71 @@ git push origin source
 * 发布时可能会提示你 Updates were rejected because the tip of your current
   branch is behind its remote counterpart.也就是告诉你远程目录已经有内容了，
   此时请到发布的目录_deploy下，打开一个新的cmd，运行命令：git push -f，强制用本地内容覆盖远程即可。
+
+### 加入MathJax，支持 LaTeX 公式
+博客里需要插入数学公式，比较好的选择是用LaTeX写数学公式，
+但是Octopress默认不支持，需要修改一下Octopress配置，加入MathJax。
+
+**1\. 把 rdiscount 换成 kramdown**
+
+* `gem install kramdown`
+* 修改 _config.yml，把 `markdown: rdiscount` 改成 `markdown: kramdown`
+* 修改 Gemfile， 把 `gem 'rdiscount'` 改成 `gem 'kramdown', '~> 1.6.0'`，kramdown 版本可以在 gem list 中看到
+
+实际上这一步我们已经在刚开始的时候完成了。所以如果你安装我之前的步骤做过，这部分可以省略了。
+
+**2\. 添加 MathJax 配置**
+
+在 source/_includes/custom/head.html 文件中添加以下内容：
+
+``` html
+<!-- MathJax Configuration -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  MathMenu: {
+      showLocale: false
+  },
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+```
+
+**3\. 测试**
+
+3.1 整段公式：
+
+```
+$$
+\begin{align}
+\mbox{Union: } & A\cup B = \{x\mid x\in A \mbox{ or } x\in B\} \\
+\mbox{Concatenation: } & A\circ B  = \{xy\mid x\in A \mbox{ and } y\in B\} \\
+\mbox{Star: } & A^\star  = \{x_1x_2\ldots x_k \mid  k\geq 0 \mbox{ and each } x_i\in A\} \\
+\end{align}
+$$
+```
+
+3.2 行内公式：
+
+```
+If $a^2=b$ and $b=2$, then the solution must be
+either $a=+\sqrt{2}$ or $a=-\sqrt{2}$.
+```
+
+**附：参考文章**
+
+[Mathjax, Kramdown and Octopress](http://www.lucypark.kr/blog/2013/02/25/mathjax-kramdown-and-octopress/)
+
+[Octopress 中使用 Latex 写数学公式](http://dreamrunner.org/blog/2014/03/09/octopresszhong-shi-yong-latexxie-shu-xue-gong-shi/)
+
 
 ### 结语
 正如octopress的标语所说的那样：
