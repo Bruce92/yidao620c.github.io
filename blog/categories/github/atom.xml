@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：github | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/github/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-06T11:06:17+08:00</updated>
+  <updated>2015-05-06T11:51:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -146,6 +146,63 @@ date_format: "%Y年%m月%d日"
 
 <p>由于是纯静态网站，因此网站评论必须使用第三方插件。我选择了国内的一个同类产品——多说（其实应该是山寨Disqus的）。</p>
 
+<p><strong>多说插件配置</strong></p>
+
+<p>这里详细讲解下多说这个插件的配置。其实很简单</p>
+
+<p>1) 申请多说账号</p>
+
+<p>去<a href="http://duoshuo.com/">http://duoshuo.com/</a>上面申请一个账号，一般都可以使用QQ等社交账号来绑定。
+然后去管理后台添加一个新站点，设置下域名，获取你的short_name，就是你的二级域名前缀。
+比如<code>shortname.duoshuo.com</code>。</p>
+
+<p>2) 配置_config.yml</p>
+
+<p><code>
+# duoshuo comments
+duoshuo_comments: true
+duoshuo_short_name: shortname
+duoshuo_asides_num: 10      # 侧边栏评论显示条目数
+duoshuo_asides_avatars: 1   # 侧边栏评论是否显示头像
+duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
+duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
+duoshuo_asides_length: 45   # 侧边栏评论截取的长度
+</code></p>
+
+<p>3) 新增source/blog/comments/index.html文件，内容如下</p>
+
+<h2 id="section-6">&#8220;`</h2>
+<p>layout: page
+title: “最新评论”
+date: 2015-05-06 11:29
+comments: false
+sharing: false
+footer: false
+—</p>
+
+<section>
+    <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="0" data-excerpt-length="45"></ul>
+    <!--多说js加载开始，一个页面只需要加载一次 -->
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"yidao620c"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = 'http://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+<p>&#8220;`
+4) 修改<code>source/_includes/custom/navigation.html</code>，在首页新增一个链接：</p>
+
+<p>&#8220;` html</p>
+<li><a href="/blog/comments">最新评论</a></li>
+<p>&#8220;`</p>
+
 <p><strong>3) 国内访问加速</strong></p>
 
 <p>由于防火长城的原因，脸书、推、G+的服务在国内都没法用，加上Octopress引用的一些资源都来自Google，
@@ -171,7 +228,7 @@ date_format: "%Y年%m月%d日"
 
 <p>在前面提到的_config.yml中twitter_tweet_butto改为false即可。</p>
 
-<h4 id="section-6">中文化</h4>
+<h4 id="section-7">中文化</h4>
 <p>Octopress的页面中很多显示信息都是英文的，我们可以改成中文。直接打开文件改对应字符串保存即可。</p>
 
 <ul>
@@ -182,7 +239,7 @@ date_format: "%Y年%m月%d日"
 
 <p>这里写到的只是其中的一部分，总之源码都在source目录，需要改动哪个部分找字串然后改了保存就可以汉化了。</p>
 
-<h3 id="section-7">撰写日志</h3>
+<h3 id="section-8">撰写日志</h3>
 <p>要发布一篇新文章，在命令行中输入以下命令：
 <code>
 rake new_post["mypost"]
@@ -211,15 +268,15 @@ categories: octopress
 
 <p>另外还需要注意一下，写好的文章要保存为utf-8无bom格式，否则对中文支持会有问题。</p>
 
-<h3 id="section-8">发布</h3>
+<h3 id="section-9">发布</h3>
 
-<h4 id="section-9">申请空间</h4>
+<h4 id="section-10">申请空间</h4>
 <p>在Github注册一个账号。登录，创建一个新仓库（Create new repository），
 Repository name一定要写成username.github.io的形式，
 username是你刚注册的账号名称。其他的不用变。
 申请完毕后大约几分钟，域名https://username.github.io就可以访问了。</p>
 
-<h4 id="section-10">本地配置</h4>
+<h4 id="section-11">本地配置</h4>
 
 <ul>
   <li>在Git官网下载git for windows并安装。安装完成后可在cmd输入git version来确认是否安装成功。</li>
@@ -304,7 +361,7 @@ either $a=+\sqrt{2}$ or $a=-\sqrt{2}$.
 
 <p><a href="http://dreamrunner.org/blog/2014/03/09/octopresszhong-shi-yong-latexxie-shu-xue-gong-shi/">Octopress 中使用 Latex 写数学公式</a></p>
 
-<h3 id="section-11">结语</h3>
+<h3 id="section-12">结语</h3>
 <p>正如octopress的标语所说的那样：</p>
 
 <pre><code>A blogging framework for hackers.
@@ -314,7 +371,7 @@ either $a=+\sqrt{2}$ or $a=-\sqrt{2}$.
 
 <p>欢迎来折腾。</p>
 
-<h3 id="section-12">问题记录</h3>
+<h3 id="section-13">问题记录</h3>
 <ul>
   <li>在引用代码的时候，如果代码中有<code>{ %</code>的标签，需要使用<code>{ % raw % }{ % endraw % }</code>包围</li>
   <li>在在代码片段的前后都应该有一个空号</li>

@@ -69,6 +69,7 @@ MathJax.Hub.Config({
     <li><a href="/">Home</a></li>
 	<li><a href="/blog/categories">标签云</a></li>
 	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/blog/comments">最新评论</a></li>
     <li><a href="/opensource/">开源项目</a></li>
     <li><a href="/about">About</a></li>
 </ul>
@@ -260,6 +261,105 @@ date_format: "%Y年%m月%d日"
 
 <p>由于是纯静态网站，因此网站评论必须使用第三方插件。我选择了国内的一个同类产品——多说（其实应该是山寨Disqus的）。</p>
 
+<p><strong>多说插件配置</strong></p>
+
+<p>这里详细讲解下多说这个插件的配置。其实很简单</p>
+
+<p>1) 申请多说账号</p>
+
+<p>去<a href="http://duoshuo.com/">http://duoshuo.com/</a>上面申请一个账号，一般都可以使用QQ等社交账号来绑定。
+然后去管理后台添加一个新站点，设置下域名，获取你的short_name，就是你的二级域名前缀。
+比如<code>shortname.duoshuo.com</code>。</p>
+
+<p>2) 配置_config.yml</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># duoshuo comments
+</span><span class="line">duoshuo_comments: true
+</span><span class="line">duoshuo_short_name: shortname
+</span><span class="line">duoshuo_asides_num: 10      # 侧边栏评论显示条目数
+</span><span class="line">duoshuo_asides_avatars: 1   # 侧边栏评论是否显示头像
+</span><span class="line">duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+</span><span class="line">duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
+</span><span class="line">duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
+</span><span class="line">duoshuo_asides_length: 45   # 侧边栏评论截取的长度</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3) 新增source/blog/comments/index.html文件，内容如下</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">---
+</span><span class="line">layout: page
+</span><span class="line">title: "最新评论"
+</span><span class="line">date: 2015-05-06 11:29
+</span><span class="line">comments: false
+</span><span class="line">sharing: false
+</span><span class="line">footer: false
+</span><span class="line">---
+</span><span class="line">
+</span><span class="line">&lt;section&gt;
+</span><span class="line">    &lt;ul class="ds-recent-comments"
+</span><span class="line">        data-num-items="10"
+</span><span class="line">        data-show-avatars="1"
+</span><span class="line">        data-show-time="1"
+</span><span class="line">        data-show-title="1"
+</span><span class="line">        data-show-admin="0"
+</span><span class="line">        data-excerpt-length="45"&gt;&lt;/ul&gt;
+</span><span class="line">    &lt;!--多说js加载开始，一个页面只需要加载一次 --&gt;
+</span><span class="line">    &lt;script type="text/javascript"&gt;
+</span><span class="line">        var duoshuoQuery = {short_name:"yidao620c"};
+</span><span class="line">        (function() {
+</span><span class="line">            var ds = document.createElement('script');
+</span><span class="line">            ds.type = 'text/javascript';ds.async = true;
+</span><span class="line">            ds.src = 'http://static.duoshuo.com/embed.js';
+</span><span class="line">            ds.charset = 'UTF-8';
+</span><span class="line">            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+</span><span class="line">        })();
+</span><span class="line">    &lt;/script&gt;
+</span><span class="line">    &lt;!--多说js加载结束，一个页面只需要加载一次 --&gt;
+</span><span class="line">&lt;/section&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>4) 修改<code>source/_includes/custom/navigation.html</code>，在首页新增一个链接：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/blog/comments&quot;</span><span class="nt">&gt;</span>最新评论<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <p><strong>3) 国内访问加速</strong></p>
 
 <p>由于防火长城的原因，脸书、推、G+的服务在国内都没法用，加上Octopress引用的一些资源都来自Google，
@@ -268,11 +368,13 @@ date_format: "%Y年%m月%d日"
 
 <p>1) 修改jQuery的源
 打开source/_includes/head.html，找到如下字串</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"&gt;&lt;/script&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>改为</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">&lt;script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"&gt;&lt;/script&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>2）修改字体源</p>
 
 <p>Octopress的英文字体是加载的Google Fonts，我们将其改成国内的CDN源，
@@ -296,8 +398,9 @@ date_format: "%Y年%m月%d日"
 
 <h3 id="section-7">撰写日志</h3>
 <p>要发布一篇新文章，在命令行中输入以下命令：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">rake new_post["mypost"]</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">rake new_post[&quot;mypost&quot;]
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>之后在source/_posts里就可以找到这个文件形如2015-03-10-mypost.markdown，打开编辑就可以写日志内容了。</p>
 
 <p>文件里已经默认有一段基本属性的说明：</p>
@@ -340,12 +443,13 @@ username是你刚注册的账号名称。其他的不用变。
   <li>发布完毕后查看https://username.github.io就可以看到我们的网站已经运行了。</li>
   <li>发布源码</li>
 </ul>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">git add .
-</span><span class="line">git commit -m "push source"
-</span><span class="line">git push origin source</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="html"><span class="line">git add .
+</span><span class="line">git commit -m &quot;push source&quot;
+</span><span class="line">git push origin source
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
   <li>发布时可能会提示你 Updates were rejected because the tip of your current
 branch is behind its remote counterpart.也就是告诉你远程目录已经有内容了，
