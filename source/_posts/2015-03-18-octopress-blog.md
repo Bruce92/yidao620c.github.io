@@ -131,6 +131,70 @@ rake preview
 
 由于是纯静态网站，因此网站评论必须使用第三方插件。我选择了国内的一个同类产品——多说（其实应该是山寨Disqus的）。
 
+**多说插件配置**
+
+这里详细讲解下多说这个插件的配置。其实很简单
+
+1) 申请多说账号
+
+去<http://duoshuo.com/>上面申请一个账号，一般都可以使用QQ等社交账号来绑定。
+然后去管理后台添加一个新站点，设置下域名，获取你的short_name，就是你的二级域名前缀。
+比如`shortname.duoshuo.com`。
+
+2) 配置_config.yml
+
+```
+# duoshuo comments
+duoshuo_comments: true
+duoshuo_short_name: shortname
+duoshuo_asides_num: 10      # 侧边栏评论显示条目数
+duoshuo_asides_avatars: 1   # 侧边栏评论是否显示头像
+duoshuo_asides_time: 1      # 侧边栏评论是否显示时间
+duoshuo_asides_title: 1     # 侧边栏评论是否显示标题
+duoshuo_asides_admin: 0     # 侧边栏评论是否显示作者评论
+duoshuo_asides_length: 45   # 侧边栏评论截取的长度
+```
+
+3) 新增source/blog/comments/index.html文件，内容如下
+
+```
+---
+layout: page
+title: "最新评论"
+date: 2015-05-06 11:29
+comments: false
+sharing: false
+footer: false
+---
+
+<section>
+    <ul class="ds-recent-comments"
+        data-num-items="{{ site.duoshuo_asides_num }}"
+        data-show-avatars="{{ site.duoshuo_asides_avatars }}"
+        data-show-time="{{ site.duoshuo_asides_time }}"
+        data-show-title="{{ site.duoshuo_asides_title }}"
+        data-show-admin="{{ site.duoshuo_asides_admin }}"
+        data-excerpt-length="{{ site.duoshuo_asides_length }}"></ul>
+    <!--多说js加载开始，一个页面只需要加载一次 -->
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"{{ site.duoshuo_short_name }}"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = 'http://static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+```
+4) 修改`source/_includes/custom/navigation.html`，在首页新增一个链接：
+
+``` html
+<li><a href="{{ root_url }}/blog/comments">最新评论</a></li>
+```
+
 **3) 国内访问加速**
 
 由于防火长城的原因，脸书、推、G+的服务在国内都没法用，加上Octopress引用的一些资源都来自Google，
