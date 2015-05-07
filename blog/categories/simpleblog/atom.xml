@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：simpleblog | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/simpleblog/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-06T11:51:29+08:00</updated>
+  <updated>2015-05-07T16:30:54+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -1011,19 +1011,24 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     },
 }
-</code>
-### 6. 重建索引</p>
+</code></p>
+
+<h3 id="section-2">6. 重建索引</h3>
 
 <p><code>python
 python manage.py rebuild_index
-</code>
-### 7. 索引更新
-最简单的办法就是在settings.py中添加：
+</code></p>
+
+<h3 id="section-3">7. 索引更新</h3>
+
+<p>最简单的办法就是在settings.py中添加：
 <code>python
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-</code>
-### 8. 自定义搜索示例
-(1) 先定义view：</p>
+</code></p>
+
+<h3 id="section-4">8. 自定义搜索示例</h3>
+
+<p>(1) 先定义view：</p>
 
 <p><code>python
 from haystack.forms import SearchForm

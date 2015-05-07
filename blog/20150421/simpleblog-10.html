@@ -335,18 +335,23 @@ django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文�
 </span><span class="line">    <span class="p">},</span>
 </span><span class="line"><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>### 6. 重建索引</p>
+
+<h3 id="section-2">6. 重建索引</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">rebuild_index</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>### 7. 索引更新
-最简单的办法就是在settings.py中添加：</p>
+
+<h3 id="section-3">7. 索引更新</h3>
+
+<p>最简单的办法就是在settings.py中添加：</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">HAYSTACK_SIGNAL_PROCESSOR</span> <span class="o">=</span> <span class="s">&#39;haystack.signals.RealtimeSignalProcessor&#39;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>### 8. 自定义搜索示例
-(1) 先定义view：</p>
+
+<h3 id="section-4">8. 自定义搜索示例</h3>
+
+<p>(1) 先定义view：</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
