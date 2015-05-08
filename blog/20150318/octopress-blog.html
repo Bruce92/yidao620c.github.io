@@ -9,10 +9,8 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-03-18 17:41 github, octopress windows7上面使用Octopress搭建GitHub博客 前言
-经过iteye博客——WordPress——github的三重进化，时间来到了2015年，
-荒废了两年的Blog大业再次东山再起，于是经过一天的配置， &hellip;">
-	
+	<meta name="description" content="windows7上面使用Octopress搭建GitHub博客">
+	<meta name="keywords" content="blog, octopress, github, 博客, windows7">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -46,6 +44,15 @@ MathJax.Hub.Config({
 });
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?f0976c083d81edfb956cb301fa3b2e8e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
 
   
 
@@ -546,7 +553,66 @@ branch is behind its remote counterpart.也就是告诉你远程目录已经有�
 
 <p><a href="http://dreamrunner.org/blog/2014/03/09/octopresszhong-shi-yong-latexxie-shu-xue-gong-shi/">Octopress 中使用 Latex 写数学公式</a></p>
 
-<h3 id="section-11">结语</h3>
+<h3 id="seo">SEO</h3>
+
+<h5 id="section-11">增加统计工具</h5>
+
+<p>博客搭建好了以后，大家一定很想知道每天都有多少的访问量。现在有很多工具都可以帮助我们做这件事，
+比如Google Analytics、百度统计、CNZZ 等</p>
+
+<p>其中Google Analytics是Octopress自带的统计工具，使用方式也非常简单，只需要到Google Analytics申请一个app id，
+填写到_config.yml文件中的google_analytics_tracking_id后面即可。
+但Google Analytics存在翻墙的麻烦，而且百度统计功能也挺齐全，完全能满足我的需求，就选择了百度统计。</p>
+
+<p>集成百度统计方式非常简单：</p>
+
+<p>只需到百度统计官方网站申请一个账号，将获取的代码添加到source/_includes/custom/footer.html中，重新部署即可。</p>
+
+<h5 id="section-12">搜索优化</h5>
+
+<p>为了让自己搭建的博客更容易被搜索引擎搜到，最好将网站地址提交给各大搜索引擎，下面有两个连接搜集了各个搜索引擎的网站提交入口：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">http://urlc.cn/tool/addurl.html
+</span><span class="line">http://tool.lusongsong.com/addurl.html
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>我试了下，添加到google以后，搜索关键字的时候自己的博客确实排名靠前了。</p>
+
+<p>光是将网址添加到搜索引擎还不够，你必须得为你的文章添加关键字，才能更好地被引擎搜到，
+在创建一篇新文章的时候，生成的makedown文件包含以下内容，以本文举例：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">---
+</span><span class="line">layout: post
+</span><span class="line">title: &quot;windows7上面使用Octopress搭建GitHub博客&quot;
+</span><span class="line">date: 2015-04-28 11:17:22 +0800
+</span><span class="line">comments: true
+</span><span class="line">categories: octopress github
+</span><span class="line">---
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>实际上我们还可以为其添加以下几项，以本文举例：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">tags: [octopress, github, seo, blog]
+</span><span class="line">keywords: seo, octopress, analytics, github, blog
+</span><span class="line">description: windows7上面使用Octopress搭建GitHub博客
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这样更利于搜索引擎抓取到我们的博客。</p>
+
+<p>事实上，如果我们不做上述设置，Octopress会默认将文章的前150个字作为文章的关键字，
+供搜索引擎抓取，但那并不一定准确。</p>
+
+<h3 id="section-13">结语</h3>
 <p>正如octopress的标语所说的那样：</p>
 
 <pre><code>A blogging framework for hackers.
@@ -556,7 +622,7 @@ branch is behind its remote counterpart.也就是告诉你远程目录已经有�
 
 <p>欢迎来折腾。</p>
 
-<h3 id="section-12">问题记录</h3>
+<h3 id="section-14">问题记录</h3>
 <ul>
   <li>在引用代码的时候，如果代码中有<code>{ %</code>的标签，需要使用<code>{ % raw % }{ % endraw % }</code>包围</li>
   <li>在在代码片段的前后都应该有一个空号</li>
@@ -591,7 +657,7 @@ branch is behind its remote counterpart.也就是告诉你远程目录已经有�
 			<footer id="footer" class="inner">
     Copyright &copy; 2015
 
-    熊能
+熊能
 
 
     Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
