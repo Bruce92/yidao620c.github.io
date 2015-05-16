@@ -22,7 +22,6 @@ Thanks for coming here and wish we could be friends. I'll be appreciate if you l
 * Email: <yidao620@gmail.com>
 * Blog: <http://yidao620c.github.io>
 * GitHub: <https://github.com/yidao620c>
-* Company: [Guangzhou Winhong Information Technology Co.,Ltd](http://www.winhong.com/)
 
 <br />
 
@@ -46,6 +45,5 @@ Thanks for coming here and wish we could be friends. I'll be appreciate if you l
 * 邮件: <yidao620@gmail.com>
 * 博客: <http://yidao620c.github.io>
 * GitHub: <https://github.com/yidao620c>
-* 公司: [广州云宏信息科技股份有限公司](http://www.winhong.com/)
 
 ![](http://yidaospace.qiniudn.com/mylove.jpg)
