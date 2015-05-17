@@ -9,6 +9,11 @@ footer: false
 
 <ul>
 {% for item in site.categories %}
-    <li class="tagli"><a href="/blog/categories/{{ item[0] }}/">{{ item[0] | capitalize }}</a> [ {{ item[1].size }} ]</li>
+    <li class="tagli">
+        <a href="/blog/categories/{{ item[0] }}/" style="font-size: {{ item[1].size | minus:1 | times:2 | plus:20 }}px;">
+            {{ item[0] | capitalize }}
+        </a>
+        <span style="font-size: {{ item[1].size | minus:1 | times:2 | plus:20 }}px;">[ {{ item[1].size }} ]</span>
+    </li>
 {% endfor %}
 </ul>
