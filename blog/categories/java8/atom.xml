@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：java8 | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/java8/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-17T19:26:49+08:00</updated>
+  <updated>2015-05-17T20:07:25+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -440,75 +440,56 @@ Stream里有个操作函数的集合，每次转换操作就是把转换函数�
 <r> R collect(Supplier<r> supplier,
         BiConsumer&lt;R, ? super T&gt; accumulator,
         BiConsumer&lt;R, R&gt; combiner);
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>先来看看这三个参数的含义：Supplier supplier是一个工厂函数，用来生成一个新的容器；
-</span><span class='line'>BiConsumer accumulator也是一个函数，用来把Stream中的元素添加到结果容器中；
-</span><span class='line'>BiConsumer combiner还是一个函数，用来把中间状态的多个结果容器合并成为一个（并发的时候会用到）
-</span><span class='line'>
-</span><span class='line'>还有好消息，Java8还给我们提供了Collector的工具类–[Collectors]</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+
+先来看看这三个参数的含义：Supplier supplier是一个工厂函数，用来生成一个新的容器；
+BiConsumer accumulator也是一个函数，用来把Stream中的元素添加到结果容器中；
+BiConsumer combiner还是一个函数，用来把中间状态的多个结果容器合并成为一个（并发的时候会用到）
+
+还有好消息，Java8还给我们提供了Collector的工具类–[Collectors]
+&#8220;` java
 List<integer> numsWithoutNull = nums.stream().filter(num -&gt; num != null).
        collect(Collectors.toList());
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>**其他汇聚**
-</span><span class='line'>
-</span><span class='line'>reduce方法：reduce方法非常的通用，后面介绍的count，sum等都可以使用其实现。
-</span><span class='line'>reduce方法有三个override的方法，本文介绍两个最常用的，
-</span><span class='line'>先来看reduce方法的第一种形式，其方法定义如下：</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+
+**其他汇聚**
+
+reduce方法：reduce方法非常的通用，后面介绍的count，sum等都可以使用其实现。
+reduce方法有三个override的方法，本文介绍两个最常用的，
+先来看reduce方法的第一种形式，其方法定义如下：
+&#8220;` java
 Optional<t> reduce(BinaryOperator<t> accumulator);
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>接受一个BinaryOperator类型的参数，在使用的时候我们可以用lambda表达式来。</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+接受一个BinaryOperator类型的参数，在使用的时候我们可以用lambda表达式来。
+&#8220;` java
 List<integer> ints = Lists.newArrayList(1,2,3,4,5,6,7,8,9,10);
 System.out.println(&#8220;ints sum is:&#8221; + ints.stream().reduce((sum, item) -&gt; sum + item).get());
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>可以看到reduce方法接受一个函数，这个函数有两个参数，第一个参数是上次函数执行的返回值（也称为中间结果），
-</span><span class='line'>第二个参数是stream中的元素，这个函数把这两个值相加，得到的和会被赋值给下次执行这个函数的第一个参数。
-</span><span class='line'>
-</span><span class='line'>reduce方法还有一个很常用的变种：</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+可以看到reduce方法接受一个函数，这个函数有两个参数，第一个参数是上次函数执行的返回值（也称为中间结果），
+第二个参数是stream中的元素，这个函数把这两个值相加，得到的和会被赋值给下次执行这个函数的第一个参数。
+
+reduce方法还有一个很常用的变种：
+&#8220;` java
 T reduce(T identity, BinaryOperator<t> accumulator);
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>这个定义了初值，不是默认的第一个位初值。
-</span><span class='line'>
-</span><span class='line'>其他参数:
-</span><span class='line'>
-</span><span class='line'>* allMatch：是不是Stream中的所有元素都满足给定的匹配条件
-</span><span class='line'>* anyMatch：Stream中是否存在任何一个元素满足匹配条件
-</span><span class='line'>* findFirst: 返回Stream中的第一个元素，如果Stream为空，返回空Optional
-</span><span class='line'>* noneMatch：是不是Stream中的所有元素都不满足给定的匹配条件
-</span><span class='line'>* max和min：使用给定的比较器（Operator），返回Stream中的最大|最小值
-</span><span class='line'>
-</span><span class='line'>其他Tips：
-</span><span class='line'>
-</span><span class='line'>Optional防止空指针异常，考虑一个常见的嵌套调用：</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+这个定义了初值，不是默认的第一个位初值。
+
+其他参数:
+
+* allMatch：是不是Stream中的所有元素都满足给定的匹配条件
+* anyMatch：Stream中是否存在任何一个元素满足匹配条件
+* findFirst: 返回Stream中的第一个元素，如果Stream为空，返回空Optional
+* noneMatch：是不是Stream中的所有元素都不满足给定的匹配条件
+* max和min：使用给定的比较器（Operator），返回Stream中的最大|最小值
+
+其他Tips：
+
+Optional防止空指针异常，考虑一个常见的嵌套调用：
+&#8220;` java
 String version = computer.getSoundcard().getUSB().getVersion();
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>在之前的Java中，我们对于空指针需要这么做：</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+在之前的Java中，我们对于空指针需要这么做：
+&#8220;` java
 String version = &#8220;UNKNOWN&#8221;;
 if(computer != null){
     Soundcard soundcard = computer.getSoundcard();
@@ -519,13 +500,14 @@ if(computer != null){
         }
     }
 }
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>很显然，这个种做法太挫了！
-</span><span class='line'>Groovy语言里面有个?.的语法可以非常优雅的解决这个问题：</span></code></pre></td></tr></table></div></figure> groovy
+&#8220;`
+很显然，这个种做法太挫了！
+Groovy语言里面有个?.的语法可以非常优雅的解决这个问题：
+&#8220;` groovy
 String version = computer?.getSoundcard()?.getUSB()?.getVersion() ?: &#8220;UNKNOWN&#8221;;
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>当然了，Java8不能示弱啊，所以就有了Optional：</span></code></pre></td></tr></table></div></figure> java
+&#8220;`
+当然了，Java8不能示弱啊，所以就有了Optional：
+&#8220;` java
 Optional computer = Optional.ofNullable(computer);
 String name = computer.map(Computer::getSoundcard)
         .map(Soundcard::getUSB)
