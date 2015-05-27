@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：simpleblog | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/simpleblog/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-17T20:07:25+08:00</updated>
+  <updated>2015-05-27T15:26:55+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -58,27 +58,39 @@ git+https://github.com/sshwsfc/django-xadmin.git@django1.7
 <h4 id="settingspy">修改settings.py</h4>
 
 <p>增加xadmin的配置如下
-&#8220;` python
-ADMINS = (
-    # (‘Your Name’, ‘your_email@example.com’),
-)
-MANAGERS = ADMINS</p>
-
-<h1 id="application-definition">Application definition</h1>
-<p>INSTALLED_APPS = (
-    # …
-    ‘xadmin’,
-    ‘crispy_forms’,
-    ‘reversion’,
-    # …
-)
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">ADMINS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c"># (‘Your Name’, ‘your_email@example.com’),</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'><span class="n">MANAGERS</span> <span class="o">=</span> <span class="n">ADMINS</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;application-definition&quot;</span><span class="o">&gt;</span><span class="n">Application</span> <span class="n">definition</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c"># …</span>
+</span><span class='line'>    <span class="err">‘</span><span class="n">xadmin</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>    <span class="err">‘</span><span class="n">crispy_forms</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>    <span class="err">‘</span><span class="n">reversion</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>    <span class="c"># …</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h4 id="xadmin-1">添加/xadmin的链接</h4>
 
 <p>修改<code>mysite/urls.py</code>如下</p>
 
-<p>{% raw %}</p>
+<p></p>
 
 <p>&#8220;` python
 #!/usr/bin/env python
@@ -93,59 +105,108 @@ xversion.register_models()</p>
     url(r’xadmin/’, include(xadmin.site.urls), name=’xadmin’),
     # …
 )
-&#8220;`
-{% endraw %}</p>
-
-<h4 id="adminxpy">创建adminx.py</h4>
-
-<p>在blog/目录下创建adminx.py，内容如下</p>
-
-<p>{% raw %}</p>
-
-<p>&#8220;` python
-#!/usr/bin/env python
-# -<em>- encoding: utf-8 -</em>-
-“””
-Topic: adminx定制类
-Desc :
-“””
-import xadmin
-import xadmin.views as xviews
-from .models import Tag, Category, Post, Comment, Evaluate, Page
-from xadmin.layout import Main, TabHolder, Tab, Fieldset, Row, Col, AppendedText, Side</p>
-
-<p>class BaseSetting(object):
-    enable_themes = True
-    use_bootswatch = True
-xadmin.site.register(xviews.BaseAdminView, BaseSetting)</p>
-
-<p>class AdminSettings(object):
-    # 设置base_site.html的Title
-    site_title = ‘博客管理后台’
-    # 设置base_site.html的Footer
-    site_footer = ‘Winhong Inc.’
-    menu_style = ‘default’</p>
-
-<pre><code># 菜单设置
-def get_site_menu(self):
-    return (
-        {'title': '博客管理', 'perm': self.get_model_perm(Page, 'change'), 'menus': (
-            {'title': '所有页面', 'icon': 'fa fa-vimeo-square'
-                , 'url': self.get_model_url(Page, 'changelist')},
-            {'title': '分类目录', 'icon': 'fa fa-vimeo-square'
-                , 'url': self.get_model_url(Category, 'changelist')},
-        )},
-    ) xadmin.site.register(xviews.CommAdminView, AdminSettings)
-</code></pre>
-
-<p>xadmin.site.register(Page)
-xadmin.site.register(Category)
-# xadmin.site.register(Tag)
-# xadmin.site.register(Post)
-# xadmin.site.register(Comment)
-# xadmin.site.register(Evaluate)
-&#8220;`
-{% endraw %}</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h4</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;adminxpy&quot;</span><span class="o">&gt;</span><span class="err">创建</span><span class="n">adminx</span><span class="o">.</span><span class="n">py</span><span class="o">&lt;/</span><span class="n">h4</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">在</span><span class="n">blog</span><span class="o">/</span><span class="err">目录下创建</span><span class="n">adminx</span><span class="o">.</span><span class="n">py</span><span class="err">，内容如下</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">%</span> <span class="n">raw</span> <span class="o">%</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span> <span class="n">python</span>
+</span><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="c"># -&lt;em&gt;- encoding: utf-8 -&lt;/em&gt;-</span>
+</span><span class='line'><span class="err">“””</span>
+</span><span class='line'><span class="n">Topic</span><span class="p">:</span> <span class="n">adminx</span><span class="err">定制类</span>
+</span><span class='line'><span class="n">Desc</span> <span class="p">:</span>
+</span><span class='line'><span class="err">“””</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">xadmin</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">xadmin.views</span> <span class="kn">as</span> <span class="nn">xviews</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Post</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Evaluate</span><span class="p">,</span> <span class="n">Page</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">xadmin.layout</span> <span class="kn">import</span> <span class="n">Main</span><span class="p">,</span> <span class="n">TabHolder</span><span class="p">,</span> <span class="n">Tab</span><span class="p">,</span> <span class="n">Fieldset</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">Col</span><span class="p">,</span> <span class="n">AppendedText</span><span class="p">,</span> <span class="n">Side</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">BaseSetting</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">enable_themes</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class='line'>    <span class="n">use_bootswatch</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class='line'><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">xviews</span><span class="o">.</span><span class="n">BaseAdminView</span><span class="p">,</span> <span class="n">BaseSetting</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">AdminSettings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class='line'>    <span class="c"># 设置base_site.html的Title</span>
+</span><span class='line'>    <span class="n">site_title</span> <span class="o">=</span> <span class="err">‘博客管理后台’</span>
+</span><span class='line'>    <span class="c"># 设置base_site.html的Footer</span>
+</span><span class='line'>    <span class="n">site_footer</span> <span class="o">=</span> <span class="err">‘</span><span class="n">Winhong</span> <span class="n">Inc</span><span class="o">.</span><span class="err">’</span>
+</span><span class='line'>    <span class="n">menu_style</span> <span class="o">=</span> <span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c"># 菜单设置</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">get_site_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>        <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;博客管理&#39;</span><span class="p">,</span> <span class="s">&#39;perm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_perm</span><span class="p">(</span><span class="n">Page</span><span class="p">,</span> <span class="s">&#39;change&#39;</span><span class="p">),</span> <span class="s">&#39;menus&#39;</span><span class="p">:</span> <span class="p">(</span>
+</span><span class='line'>            <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;所有页面&#39;</span><span class="p">,</span> <span class="s">&#39;icon&#39;</span><span class="p">:</span> <span class="s">&#39;fa fa-vimeo-square&#39;</span>
+</span><span class='line'>                <span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_url</span><span class="p">(</span><span class="n">Page</span><span class="p">,</span> <span class="s">&#39;changelist&#39;</span><span class="p">)},</span>
+</span><span class='line'>            <span class="p">{</span><span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;分类目录&#39;</span><span class="p">,</span> <span class="s">&#39;icon&#39;</span><span class="p">:</span> <span class="s">&#39;fa fa-vimeo-square&#39;</span>
+</span><span class='line'>                <span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_url</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="s">&#39;changelist&#39;</span><span class="p">)},</span>
+</span><span class='line'>        <span class="p">)},</span>
+</span><span class='line'>    <span class="p">)</span> <span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">xviews</span><span class="o">.</span><span class="n">CommAdminView</span><span class="p">,</span> <span class="n">AdminSettings</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Page</span><span class="p">)</span>
+</span><span class='line'><span class="n">xadmin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">)</span>
+</span><span class='line'><span class="c"># xadmin.site.register(Tag)</span>
+</span><span class='line'><span class="c"># xadmin.site.register(Post)</span>
+</span><span class='line'><span class="c"># xadmin.site.register(Comment)</span>
+</span><span class='line'><span class="c"># xadmin.site.register(Evaluate)</span>
+</span></code></pre></td></tr></table></div></figure>
+</p>
 
 <p>在这里，我们将所有的model都注册到xadmin中去，这样后台就能自动管理它们了。
 并且自定义了后台的一些菜单、标题等等。具体的定制方法可以参考xadmin的官方文档。</p>
@@ -154,7 +215,7 @@ xadmin.site.register(Category)
 
 <p>在<code>mysite/templates/mysite/base.html</code>模板中添加/xamdin的管理后台链接：</p>
 
-<p>{% raw %}</p>
+<p></p>
 
 <p>&#8220;`</p>
 <div id="meta-2" class="widget widget_meta">
@@ -176,14 +237,14 @@ xadmin.site.register(Category)
     </ul>
 </div>
 <p>&#8220;`
-{% endraw %}</p>
+</p>
 
 <h4 id="section-2">自定义后台登陆页面</h4>
 
 <p>新建<code>mysite/templates/registration/login.html</code>模板，将xadmin模块中的login.html复制过来，
 修改其内容，改成自己想要的形式即可</p>
 
-<p>{% raw %}</p>
+<p></p>
 
 <p>&#8220;` html
 {% load staticfiles %}
@@ -220,7 +281,7 @@ xadmin.site.register(Category)
 </body>
 </html>
 <p>&#8220;`
-{% endraw %}</p>
+</p>
 
 <p>这些完成后，我们打开应用，访问<code>管理站点</code>链接，应该可以看到如下的登录页面</p>
 
@@ -269,130 +330,231 @@ APScheduler==3.0.1
 
 <h4 id="settingspy">settings.py配置</h4>
 <p>新增内容
-&#8220;` python
-from urllib.parse import urlparse
-import dj_database_url</p>
-
-<p>redis_url = urlparse(os.environ.get(‘REDISTOGO_URL’, ‘redis://localhost:6959’))
-CACHES = {
-    ‘default’: {
-        ‘BACKEND’: ‘redis_cache.cache.RedisCache’,
-        ‘LOCATION’: ‘{0}:{1}’.format(redis_url.hostname, redis_url.port),
-        ‘OPTIONS’: {
-            ‘DB’: 0,
-            ‘PASSWORD’: redis_url.password,
-            ‘CLIENT_CLASS’: ‘redis_cache.client.DefaultClient’,
-            ‘PICKLE_VERSION’: -1,  # Use the latest protocol version
-            ‘SOCKET_TIMEOUT’: 60,  # in seconds
-            ‘IGNORE_EXCEPTIONS’: True,
-        }
-    }
-}</p>
-
-<p>SESSION_ENGINE = ‘django.contrib.sessions.backends.cache’
-SESSION_CACHE_ALIAS = ‘default’</p>
-
-<h1 id="localsettingspy">本地开发配置放在local_settings.py中</h1>
-<p>try:
-    from .local_settings import *
-except ImportError:
-    pass
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">dj_database_url</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">redis_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="err">‘</span><span class="n">REDISTOGO_URL</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">redis</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">6959</span><span class="err">’</span><span class="p">))</span>
+</span><span class='line'><span class="n">CACHES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">BACKEND</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">RedisCache</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">LOCATION</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="p">{</span><span class="mi">0</span><span class="p">}:{</span><span class="mi">1</span><span class="p">}</span><span class="err">’</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">redis_url</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">redis_url</span><span class="o">.</span><span class="n">port</span><span class="p">),</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">OPTIONS</span><span class="err">’</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">DB</span><span class="err">’</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">PASSWORD</span><span class="err">’</span><span class="p">:</span> <span class="n">redis_url</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">CLIENT_CLASS</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">DefaultClient</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">PICKLE_VERSION</span><span class="err">’</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c"># Use the latest protocol version</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">SOCKET_TIMEOUT</span><span class="err">’</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>  <span class="c"># in seconds</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">IGNORE_EXCEPTIONS</span><span class="err">’</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">SESSION_ENGINE</span> <span class="o">=</span> <span class="err">‘</span><span class="n">django</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">sessions</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cache</span><span class="err">’</span>
+</span><span class='line'><span class="n">SESSION_CACHE_ALIAS</span> <span class="o">=</span> <span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;localsettingspy&quot;</span><span class="o">&gt;</span><span class="err">本地开发配置放在</span><span class="n">local_settings</span><span class="o">.</span><span class="n">py</span><span class="err">中</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">try</span><span class="p">:</span>
+</span><span class='line'>    <span class="kn">from</span> <span class="nn">.local_settings</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class='line'><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">pass</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h4 id="localsettingspy-1">local_settings.py配置</h4>
 <p>这个是本地开发时候使用到的配置文件
-&#8220;` python
-DEBUG = True</p>
-
-<p>CACHES = {
-    ‘default’: {
-        ‘BACKEND’: ‘redis_cache.cache.RedisCache’,
-        ‘LOCATION’: ‘192.168.203.95:6379:1’,
-        ‘OPTIONS’: {
-            ‘CLIENT_CLASS’: ‘redis_cache.client.DefaultClient’,
-            # ‘PASSWORD’: ‘secretpassword’,
-            ‘PICKLE_VERSION’: -1,  # Use the latest protocol version
-            ‘SOCKET_TIMEOUT’: 60,  # in seconds
-            ‘IGNORE_EXCEPTIONS’: True,
-        }
-    }
-}
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">CACHES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">BACKEND</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">RedisCache</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">LOCATION</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">203.95</span><span class="p">:</span><span class="mi">6379</span><span class="p">:</span><span class="mi">1</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">OPTIONS</span><span class="err">’</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">CLIENT_CLASS</span><span class="err">’</span><span class="p">:</span> <span class="err">‘</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">DefaultClient</span><span class="err">’</span><span class="p">,</span>
+</span><span class='line'>            <span class="c"># ‘PASSWORD’: ‘secretpassword’,</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">PICKLE_VERSION</span><span class="err">’</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c"># Use the latest protocol version</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">SOCKET_TIMEOUT</span><span class="err">’</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>  <span class="c"># in seconds</span>
+</span><span class='line'>            <span class="err">‘</span><span class="n">IGNORE_EXCEPTIONS</span><span class="err">’</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h3 id="section-1">使用方法</h3>
 
 <h4 id="cachemanagerpy">cache_manager.py缓存管理器</h4>
 <p>我们新建一个缓存管理器cache_manager.py，内容如下
-&#8220;` python
-#!/usr/bin/env python
-# -<em>- encoding: utf-8 -</em>-
-“””
-Topic: redis缓存管理器
-“””
-from ..models import Post
-from redis_cache import get_redis_connection
-from apscheduler.schedulers.background import BackgroundScheduler</p>
-
-<p>RUNNING_TIMER = False
-REDIS_DB = get_redis_connection(‘default’)</p>
-
-<p>def update_click(post):
-    “”” 更新点击数 “””
-    if REDIS_DB.hexists(“CLICKS”, post.id):
-        print(‘REDIS_DB.hexists…’ + str(post.id))
-        REDIS_DB.hincrby(‘CLICKS’, post.id)
-    else:
-        print(‘REDIS_DB.not_hexists…’ + str(post.id))
-        REDIS_DB.hset(‘CLICKS’, post.id, post.click + 1)
-    run_timer()</p>
-
-<p>def get_click(post):
-    “”” 获取点击数 “””
-    if REDIS_DB.hexists(“CLICKS”, post.id):
-        return REDIS_DB.hget(‘CLICKS’, post.id)
-    else:
-        REDIS_DB.hset(‘CLICKS’, post.id, post.click)
-        return post.click</p>
-
-<p>def sync_click():
-    “&#8221;”同步文章点击数”””
-    print(‘同步文章点击数start….’)
-    for k in REDIS_DB.hkeys(‘CLICKS’):
-        try:
-            p = Post.objects.get(k)
-            print(‘db_click={0}’.format(p.click))
-            cache_click = get_click(p.id)
-            print(‘cache_click={0}’.format(cache_click))
-            if cache_click != p.click:
-                p.click = get_click(p.id)
-                p.save()
-        except:
-            pass
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="c"># -&lt;em&gt;- encoding: utf-8 -&lt;/em&gt;-</span>
+</span><span class='line'><span class="err">“””</span>
+</span><span class='line'><span class="n">Topic</span><span class="p">:</span> <span class="n">redis</span><span class="err">缓存管理器</span>
+</span><span class='line'><span class="err">“””</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Post</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">redis_cache</span> <span class="kn">import</span> <span class="n">get_redis_connection</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">apscheduler.schedulers.background</span> <span class="kn">import</span> <span class="n">BackgroundScheduler</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">RUNNING_TIMER</span> <span class="o">=</span> <span class="bp">False</span>
+</span><span class='line'><span class="n">REDIS_DB</span> <span class="o">=</span> <span class="n">get_redis_connection</span><span class="p">(</span><span class="err">‘</span><span class="n">default</span><span class="err">’</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">update_click</span><span class="p">(</span><span class="n">post</span><span class="p">):</span>
+</span><span class='line'>    <span class="err">“””</span> <span class="err">更新点击数</span> <span class="err">“””</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hexists</span><span class="p">(</span><span class="err">“</span><span class="n">CLICKS</span><span class="err">”</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">print</span><span class="p">(</span><span class="err">‘</span><span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hexists</span><span class="err">…’</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+</span><span class='line'>        <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hincrby</span><span class="p">(</span><span class="err">‘</span><span class="n">CLICKS</span><span class="err">’</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span><span class="p">(</span><span class="err">‘</span><span class="n">REDIS_DB</span><span class="o">.</span><span class="n">not_hexists</span><span class="err">…’</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+</span><span class='line'>        <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="err">‘</span><span class="n">CLICKS</span><span class="err">’</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">click</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">run_timer</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">get_click</span><span class="p">(</span><span class="n">post</span><span class="p">):</span>
+</span><span class='line'>    <span class="err">“””</span> <span class="err">获取点击数</span> <span class="err">“””</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hexists</span><span class="p">(</span><span class="err">“</span><span class="n">CLICKS</span><span class="err">”</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hget</span><span class="p">(</span><span class="err">‘</span><span class="n">CLICKS</span><span class="err">’</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hset</span><span class="p">(</span><span class="err">‘</span><span class="n">CLICKS</span><span class="err">’</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">click</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">post</span><span class="o">.</span><span class="n">click</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">sync_click</span><span class="p">():</span>
+</span><span class='line'>    <span class="err">“</span><span class="s">&quot;”同步文章点击数”””</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="err">‘同步文章点击数</span><span class="n">start</span><span class="err">…</span><span class="o">.</span><span class="err">’</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">REDIS_DB</span><span class="o">.</span><span class="n">hkeys</span><span class="p">(</span><span class="err">‘</span><span class="n">CLICKS</span><span class="err">’</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">p</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">print</span><span class="p">(</span><span class="err">‘</span><span class="n">db_click</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span><span class="err">’</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">click</span><span class="p">))</span>
+</span><span class='line'>            <span class="n">cache_click</span> <span class="o">=</span> <span class="n">get_click</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">print</span><span class="p">(</span><span class="err">‘</span><span class="n">cache_click</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span><span class="err">’</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cache_click</span><span class="p">))</span>
+</span><span class='line'>            <span class="k">if</span> <span class="n">cache_click</span> <span class="o">!=</span> <span class="n">p</span><span class="o">.</span><span class="n">click</span><span class="p">:</span>
+</span><span class='line'>                <span class="n">p</span><span class="o">.</span><span class="n">click</span> <span class="o">=</span> <span class="n">get_click</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class='line'>        <span class="k">except</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">pass</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h4 id="viewspy">views.py修改</h4>
 <p>然后我们修改view.py，在相应的action里使用这个cache_manager：
-&#8220;` python
-from .commons import cache_manager</p>
-
-<p>def post_list(request):
-    “&#8221;”所有已发布文章”””
-    posts = Post.objects.annotate(num_comment=Count(‘comment’)).filter(
-        published_date__isnull=False).prefetch_related(
-        ‘category’).prefetch_related(‘tags’).order_by(‘-published_date’)
-    for p in posts:
-        p.click = cache_manager.get_click(p)
-    return render(request, ‘blog/post_list.html’, {‘posts’: posts})</p>
-
-<p>def post_detail(request, pk):
-    try:
-        pass
-    except:
-        raise Http404()
-    if post.published_date:
-        cache_manager.update_click(post)
-        post.click = cache_manager.get_click(post)
-&#8220;`
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">.commons</span> <span class="kn">import</span> <span class="n">cache_manager</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class='line'>    <span class="err">“</span><span class="s">&quot;”所有已发布文章”””</span>
+</span><span class='line'>    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">num_comment</span><span class="o">=</span><span class="n">Count</span><span class="p">(</span><span class="err">‘</span><span class="n">comment</span><span class="err">’</span><span class="p">))</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+</span><span class='line'>        <span class="n">published_date__isnull</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span>
+</span><span class='line'>        <span class="err">‘</span><span class="n">category</span><span class="err">’</span><span class="p">)</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="err">‘</span><span class="n">tags</span><span class="err">’</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="err">‘</span><span class="o">-</span><span class="n">published_date</span><span class="err">’</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">p</span><span class="o">.</span><span class="n">click</span> <span class="o">=</span> <span class="n">cache_manager</span><span class="o">.</span><span class="n">get_click</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="err">‘</span><span class="n">blog</span><span class="o">/</span><span class="n">post_list</span><span class="o">.</span><span class="n">html</span><span class="err">’</span><span class="p">,</span> <span class="p">{</span><span class="err">‘</span><span class="n">posts</span><span class="err">’</span><span class="p">:</span> <span class="n">posts</span><span class="p">})</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">post_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">pass</span>
+</span><span class='line'>    <span class="k">except</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">raise</span> <span class="n">Http404</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">published_date</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">cache_manager</span><span class="o">.</span><span class="n">update_click</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">post</span><span class="o">.</span><span class="n">click</span> <span class="o">=</span> <span class="n">cache_manager</span><span class="o">.</span><span class="n">get_click</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 其他的我就不多演示了。</p>
 
 ]]></content>
@@ -495,7 +657,7 @@ django-admin.py compilemessages
 <h3 id="section-1">使用</h3>
 <p>我们用<code>base.html</code>来做演示，打开<code>mysite/templates/mysite/base.html</code></p>
 
-<p>{% raw %}</p>
+<p></p>
 
 <p>&#8220;` html
 {% load staticfiles %}
@@ -525,9 +687,9 @@ django-admin.py compilemessages
 </body>
 </html>
 <p>&#8220;`
-{% endraw %}</p>
+</p>
 
-<p>注意{% raw %}<code>&lt;title&gt;{% trans 'Simple Blog'%}&lt;/title&gt;</code>{% endraw %}这句，
+<p>注意<code>&lt;title&gt;{% trans 'Simple Blog'%}&lt;/title&gt;</code>这句，
 如果用户选择中文，那么就会被翻译成<code>极简博客</code>。
 这个在django.po文件中定义过。其他的内容也是类似，就不多说了。</p>
 
@@ -567,7 +729,7 @@ tinymce.min.js会根据初始配置里的信息找到需要用编辑器的html�
 
 <p>例如在post_edit.html页面使用编辑器，只需要在模板文件写下：</p>
 
-<p>{% raw %}</p>
+<p></p>
 
 <p><code>html
 {% load staticfiles %}
@@ -591,7 +753,7 @@ tinymce.min.js会根据初始配置里的信息找到需要用编辑器的html�
     &lt;/script&gt;
 {% endblock %}
 </code>
-{% endraw %}</p>
+</p>
 
 <p>这段代码的含义是 初始化 tinyMCE编辑器，selector指需要将编辑器显示在html那个标签节点，
 这里选了textareas。则表示<textareas>会变成编辑器所在的位置。</textareas></p>
@@ -649,7 +811,7 @@ plugins: [
 <p>只需要修改django页面的基础模板就行了，非常简单。</p>
 
 <p>打开mysite/templates/mysite/base.html页面，引入syntaxhighlighter：
-{% raw %}</p>
+</p>
 
 <p>&#8220;` html
 {% load staticfiles %}
@@ -688,7 +850,7 @@ plugins: [
 </body>
 </html>
 <p>&#8220;`
-{% endraw %}</p>
+</p>
 
 <p>由于我们之前已经安装过了TinyMCE，这个跟它结合起来就非常好用了，因为TinyMCE自带有选择代码语言功能。</p>
 
@@ -792,8 +954,8 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 <p>如：<code>mysite/blog/templates/search/indexes/blog/post_text.txt</code>:</p>
 
 <p><code>
-{{ object.title }}
-{{ object.text }}
+
+
 </code></p>
 
 <h3 id="settingspy">3. settings.py</h3>
@@ -880,7 +1042,7 @@ def full_search(request):
 </code></p>
 
 <p>(2) 然后在template页面中：
-{% raw %}</p>
+</p>
 
 <p>&#8220;` html
 <!-- searchbox START --></p>
@@ -895,7 +1057,7 @@ def full_search(request):
     </form>
 </div>
 <p>&#8220;`
-{% endraw %}</p>
+</p>
 
 <p>更详细内容请参考官方文档：<a href="http://django-haystack.readthedocs.org/en/latest/">http://django-haystack.readthedocs.org/en/latest/</a></p>
 ]]></content>
