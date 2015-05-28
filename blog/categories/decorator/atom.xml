@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：decorator | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/decorator/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-28T16:08:11+08:00</updated>
+  <updated>2015-05-28T17:43:00+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -37,27 +37,18 @@
 在Python中，函数是一等公民，它们就是对象，因此我们可以使用它来做很多事。</p>
 
 <p>1.把函数赋值给某个变量：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="err">“</span><span class="n">hello</span> <span class="err">“</span><span class="o">+</span><span class="n">name</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">greet_someone</span> <span class="o">=</span> <span class="n">greet</span>
-</span><span class='line'><span class="k">print</span> <span class="n">greet_someone</span><span class="p">(</span><span class="err">“</span><span class="n">John</span><span class="err">”</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;outputs-hello-john&quot;</span><span class="o">&gt;</span><span class="n">Outputs</span><span class="p">:</span> <span class="n">hello</span> <span class="n">John</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="mf">2.</span><span class="err">在某个函数内部定义另外一个函数：</span>
-</span></code></pre></td></tr></table></div></figure> python
+&#8220;` python
+def greet(name):
+    return “hello “+name</p>
+
+<p>greet_someone = greet
+print greet_someone(“John”)</p>
+
+<h1 id="outputs-hello-john">Outputs: hello John</h1>
+<p>&#8220;`</p>
+
+<p>2.在某个函数内部定义另外一个函数：
+&#8220;` python
 def greet(name):
     def get_message():
         return “Hello “</p>
@@ -72,33 +63,21 @@ return result
 <p>&#8220;`</p>
 
 <p>3.函数可以被当做参数传递给另外一个函数：
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-</span><span class='line'>   <span class="k">return</span> <span class="err">“</span><span class="n">Hello</span> <span class="err">“</span> <span class="o">+</span> <span class="n">name</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">call_func</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">other_name</span> <span class="o">=</span> <span class="err">“</span><span class="n">John</span><span class="err">”</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">other_name</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span> <span class="n">call_func</span><span class="p">(</span><span class="n">greet</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;outputs-hello-john-2&quot;</span><span class="o">&gt;</span><span class="n">Outputs</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">John</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="mf">4.</span><span class="err">函数返回值可以是其他函数：</span>
-</span></code></pre></td></tr></table></div></figure> python
+&#8220;` python
+def greet(name):
+   return “Hello “ + name</p>
+
+<p>def call_func(func):
+    other_name = “John”
+    return func(other_name)</p>
+
+<p>print call_func(greet)</p>
+
+<h1 id="outputs-hello-john-2">Outputs: Hello John</h1>
+<p>&#8220;`</p>
+
+<p>4.函数返回值可以是其他函数：
+&#8220;` python
 def compose_greet_func():
     def get_message():
         return “Hello there!”</p>
@@ -119,41 +98,25 @@ print greet()</p>
 
 <p>观察一下下面的代码，
 注意我们是如何通过修改上面实例代码来读取外部函数中的name参数值并返回一个新的函数的。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">compose_greet_func</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">get_message</span><span class="p">():</span>
-</span><span class='line'>        <span class="k">return</span> <span class="err">“</span><span class="n">Hello</span> <span class="n">there</span> <span class="err">“</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="err">”!”</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="n">get_message</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">greet</span> <span class="o">=</span> <span class="n">compose_greet_func</span><span class="p">(</span><span class="err">“</span><span class="n">John</span><span class="err">”</span><span class="p">)</span>
-</span><span class='line'><span class="k">print</span> <span class="n">greet</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;outputs-hello-there-john&quot;</span><span class="o">&gt;</span><span class="n">Outputs</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">there</span> <span class="n">John</span><span class="err">!</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-2&quot;</span><span class="o">&gt;</span><span class="err">构造装饰器</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">函数装饰器就是已存在函数的一个包装器。我们把上面的这些结合起来就能构建一个装饰器了。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">下面例子中我们先构造一个函数来用</span><span class="n">p</span><span class="err">标签包装其他函数返回的一个字符串。</span>
-</span></code></pre></td></tr></table></div></figure> python
+&#8220;` python
+def compose_greet_func(name):
+    def get_message():
+        return “Hello there “+name+”!”</p>
+
+<pre><code>return get_message
+</code></pre>
+
+<p>greet = compose_greet_func(“John”)
+print greet()</p>
+
+<h1 id="outputs-hello-there-john">Outputs: Hello there John!</h1>
+<p>&#8220;`</p>
+
+<h3 id="section-2">构造装饰器</h3>
+<p>函数装饰器就是已存在函数的一个包装器。我们把上面的这些结合起来就能构建一个装饰器了。</p>
+
+<p>下面例子中我们先构造一个函数来用p标签包装其他函数返回的一个字符串。
+&#8220;` python
 def get_text(name):
    return “lorem ipsum, {0} dolor sit amet”.format(name)</p>
 
@@ -172,31 +135,20 @@ def get_text(name):
 <p>这是我们的第一个装饰器——一个增强其他函数功能并返回新函数的函数。
 为了让get_text函数被p_decorate装饰，我们只需要将get_text作为参数传给后者，
 并将结果赋值给一个变量，然后就可以对这个变量函数调用就能实现效果了。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">get_text</span> <span class="o">=</span> <span class="n">p_decorate</span><span class="p">(</span><span class="n">get_text</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span> <span class="n">get_text</span><span class="p">(</span><span class="err">“</span><span class="n">John</span><span class="err">”</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;outputs-lorem-ipsum-john-dolor-sit-amet&quot;</span><span class="o">&gt;</span><span class="n">Outputs</span> <span class="n">lorem</span> <span class="n">ipsum</span><span class="p">,</span> <span class="n">John</span> <span class="n">dolor</span> <span class="n">sit</span> <span class="n">amet</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span>
-</span><span class='line'><span class="err">主要原来的函数有一个</span><span class="n">name</span><span class="err">参数，那么我们调用的时候将这个参数传递给装饰器函数就行了。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;python&quot;</span><span class="o">&gt;</span><span class="n">Python</span><span class="err">的装饰器语法</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Python</span><span class="err">通过一些语法糖让创建和使用装饰器变得相当简单。</span>
-</span><span class='line'><span class="err">我们并不需要使用语句</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">get_text</span> <span class="o">=</span> <span class="n">p_decorator</span><span class="p">(</span><span class="n">get_text</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">来装饰</span><span class="n">get_text</span><span class="err">。</span>
-</span><span class='line'><span class="err">有一个快捷方式可以做到，它会在被装饰函数前面加一层装饰函数。装饰器的名字需要使用@前缀。</span>
-</span></code></pre></td></tr></table></div></figure> python
+&#8220;` python
+get_text = p_decorate(get_text)</p>
+
+<p>print get_text(“John”)</p>
+
+<h1 id="outputs-lorem-ipsum-john-dolor-sit-amet">Outputs lorem ipsum, John dolor sit amet</h1>
+<p>&#8220;`
+主要原来的函数有一个name参数，那么我们调用的时候将这个参数传递给装饰器函数就行了。</p>
+
+<h3 id="python">Python的装饰器语法</h3>
+<p>Python通过一些语法糖让创建和使用装饰器变得相当简单。
+我们并不需要使用语句<code>get_text = p_decorator(get_text)</code>来装饰get_text。
+有一个快捷方式可以做到，它会在被装饰函数前面加一层装饰函数。装饰器的名字需要使用@前缀。
+&#8220;` python
 def p_decorate(func):
    def func_wrapper(name):
        return “&lt;p&gt;{0}&lt;/p&gt;“.format(func(name))
@@ -248,146 +200,82 @@ def get_text(name):
 <h3 id="section-3">装饰方法</h3>
 <p>在python中，其实方法就是第一个参数为当前对象的引用的函数而已。
 我们同样能够给方法构造装饰器，只需要将self参数放到包装函数中。
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-</span><span class='line'>   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>       <span class="k">return</span> <span class="err">“</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;{</span><span class="mi">0</span><span class="p">}</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="err">“</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-</span><span class='line'>   <span class="k">return</span> <span class="n">func_wrapper</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">def</span> <span class="err">&lt;</span><span class="nf">strong</span><span class="o">&gt;</span><span class="n">init</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="err">“</span><span class="n">John</span><span class="err">”</span>
-</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">family</span> <span class="o">=</span> <span class="err">“</span><span class="n">Doe</span><span class="err">”</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@p_decorate</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">get_fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">family</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">my_person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span>
-</span><span class='line'><span class="k">print</span> <span class="n">my_person</span><span class="o">.</span><span class="n">get_fullname</span><span class="p">()</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">一个更好的做法是改造我们的装饰器使他们可以作用于函数以及类方法。</span>
-</span><span class='line'><span class="err">可以将</span><span class="o">*</span><span class="n">args</span><span class="err">和</span><span class="o">**</span><span class="n">kwargs</span><span class="err">作为包装器的参数，然后它就能接受任意数量的位置参数和关键字参数了。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">python</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">p_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-</span><span class='line'>   <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span class='line'>       <span class="k">return</span> <span class="err">“</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;{</span><span class="mi">0</span><span class="p">}</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="err">“</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
-</span><span class='line'>   <span class="k">return</span> <span class="n">func_wrapper</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">def</span> <span class="err">&lt;</span><span class="nf">strong</span><span class="o">&gt;</span><span class="n">init</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="err">“</span><span class="n">John</span><span class="err">”</span>
-</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">family</span> <span class="o">=</span> <span class="err">“</span><span class="n">Doe</span><span class="err">”</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@p_decorate</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">get_fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">family</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">my_person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span> <span class="n">my_person</span><span class="o">.</span><span class="n">get_fullname</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;` python
+def p_decorate(func):
+   def func_wrapper(self):
+       return “&lt;p&gt;{0}&lt;/p&gt;“.format(func(self))
+   return func_wrapper</p>
+
+<p>class Person(object):
+    def <strong>init</strong>(self):
+        self.name = “John”
+        self.family = “Doe”</p>
+
+<pre><code>@p_decorate
+def get_fullname(self):
+    return self.name+" "+self.family
+</code></pre>
+
+<p>my_person = Person()
+print my_person.get_fullname()
+<code>
+一个更好的做法是改造我们的装饰器使他们可以作用于函数以及类方法。
+可以将*args和**kwargs作为包装器的参数，然后它就能接受任意数量的位置参数和关键字参数了。
+</code> python
+def p_decorate(func):
+   def func_wrapper(<em>args, **kwargs):
+       return “&lt;p&gt;{0}&lt;/p&gt;“.format(func(</em>args, **kwargs))
+   return func_wrapper</p>
+
+<p>class Person(object):
+    def <strong>init</strong>(self):
+        self.name = “John”
+        self.family = “Doe”</p>
+
+<pre><code>@p_decorate
+def get_fullname(self):
+    return self.name+" "+self.family
+</code></pre>
+
+<p>my_person = Person()</p>
+
+<p>print my_person.get_fullname()
+&#8220;`</p>
 
 <h3 id="section-4">给装饰器传递参数</h3>
 <p>回顾下上面的例子，你会发现例子中的装饰器太过冗余了。
 3个装饰器(div_decorate,p_decorate, strong_decorate)拥有相同功能，只是使用了不同的标签包装而已。</p>
 
 <p>我们可以做得更好，为什么不使用一种更加通用的方式，将标签作为参数传递进来呢？
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">tags</span><span class="p">(</span><span class="n">tag_name</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">tags_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-</span><span class='line'>        <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-</span><span class='line'>            <span class="k">return</span> <span class="err">“</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;{</span><span class="mi">0</span><span class="p">}</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;{</span><span class="mi">1</span><span class="p">}</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="err">”</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag_name</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">func_wrapper</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">tags_decorator</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="nd">@tags</span><span class="p">(</span><span class="err">“</span><span class="n">p</span><span class="err">”</span><span class="p">)</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">get_text</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">return</span> <span class="err">“</span><span class="n">Hello</span> <span class="err">“</span><span class="o">+</span><span class="n">name</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">print</span> <span class="n">get_text</span><span class="p">(</span><span class="err">“</span><span class="n">John</span><span class="err">”</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;outputs-phello-johnp&quot;</span><span class="o">&gt;</span><span class="n">Outputs</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">Hello</span> <span class="n">John</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">p</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="sb">``</span><span class="err">`</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;section-5&quot;</span><span class="o">&gt;</span><span class="err">调试被装饰函数</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">最后当我们调试被装饰函数时会发现它的名字、模块和文档字符串都发生了改变。</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">python</span>
-</span><span class='line'><span class="k">print</span> <span class="n">get_text</span><span class="o">.</span><span class="n">__name__</span>
-</span><span class='line'><span class="c"># Outputs func_wrapper</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">我们期望的输出应该是</span><span class="n">get_text</span><span class="err">，</span><span class="n">get_text</span><span class="err">的</span><span class="n">__name__</span><span class="err">、</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">doc</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span> <span class="err">和</span> <span class="n">__module__</span><span class="err">已经被包装函数覆盖了。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span> <span class="nb">id</span><span class="o">=</span><span class="s">&quot;functools&quot;</span><span class="o">&gt;</span><span class="err">使用</span><span class="n">functools</span><span class="err">来解决</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">幸运的是</span><span class="n">python2</span><span class="o">.</span><span class="mi">5</span><span class="err">版本以上有了一个</span><span class="n">functools</span><span class="err">包可以来解决这个问题。</span>
-</span><span class='line'><span class="err">只需要简单在包装函数上标注</span><span class="nd">@wrap</span><span class="err">标签即可。</span>
-</span></code></pre></td></tr></table></div></figure> python
+&#8220;` python
+def tags(tag_name):
+    def tags_decorator(func):
+        def func_wrapper(name):
+            return “&lt;{0}&gt;{1}&lt;/{0}&gt;”.format(tag_name, func(name))
+        return func_wrapper
+    return tags_decorator</p>
+
+<p>@tags(“p”)
+def get_text(name):
+    return “Hello “+name</p>
+
+<p>print get_text(“John”)</p>
+
+<h1 id="outputs-phello-johnp">Outputs &lt;p&gt;Hello John&lt;/p&gt;</h1>
+<p>&#8220;`</p>
+
+<h3 id="section-5">调试被装饰函数</h3>
+<p>最后当我们调试被装饰函数时会发现它的名字、模块和文档字符串都发生了改变。
+<code>python
+print get_text.__name__
+# Outputs func_wrapper
+</code>
+我们期望的输出应该是get_text，get_text的__name__、<strong>doc</strong> 和 __module__已经被包装函数覆盖了。</p>
+
+<h3 id="functools">使用functools来解决</h3>
+<p>幸运的是python2.5版本以上有了一个functools包可以来解决这个问题。
+只需要简单在包装函数上标注@wrap标签即可。
+&#8220;` python
 from functools import wraps</p>
 
 <p>def tags(tag_name):
