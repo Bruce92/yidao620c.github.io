@@ -19,4 +19,13 @@
 	</div>
 	<h1 class="title" itemprop="name">{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
 	<div class="entry-content" itemprop="articleBody">{{ content }}</div>
+
+	<ul class="pager">
+		{% if page.previous.url %}
+			<li><a href="{{page.previous.url}}">« 上一篇: {{page.previous.title}}</a></li>
+		{% endif %}
+	  	{% if page.next.url %}
+			<li><a href="{{page.next.url}}">» 下一篇: {{page.next.title}}</a></li>
+		{% endif %}
+	</ul>
 {% endif %}
