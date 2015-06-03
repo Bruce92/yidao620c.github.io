@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：rabbitmq | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/rabbitmq/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-28T17:43:00+08:00</updated>
+  <updated>2015-06-03T10:07:48+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -100,21 +100,33 @@ hello 2
 <p>如果你也看到hello队列里面有一个消息的话，就证明可以发消息了。</p>
 
 <p>然后写一个接收消息脚本：receive.py
-&#8220;` python
-#!/usr/bin/env python
-# -<em>- coding: utf-8 -</em>-
-import pika
-connection = pika.BlockingConnection(pika.ConnectionParameters( ‘localhost’ ))
-channel = connection.channel()
-channel.queue_declare(queue = ‘hello’ )
-print ‘[*] Waiting for messages. To exit press CTRL+C’</p>
-
-<p>def callback(ch, method, properties, body):
-     print body</p>
-
-<p>channel.basic_consume(callback, queue = ‘hello’ , no_ack = True )
-channel.start_consuming()
-&#8220;`
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="c"># -&lt;em&gt;- coding: utf-8 -&lt;/em&gt;-</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span> <span class="err">‘</span><span class="n">localhost</span><span class="err">’</span> <span class="p">))</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="err">‘</span><span class="n">hello</span><span class="err">’</span> <span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="err">‘</span><span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">messages</span><span class="o">.</span> <span class="n">To</span> <span class="nb">exit</span> <span class="n">press</span> <span class="n">CTRL</span><span class="o">+</span><span class="n">C</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class='line'>     <span class="k">print</span> <span class="n">body</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">queue</span> <span class="o">=</span> <span class="err">‘</span><span class="n">hello</span><span class="err">’</span> <span class="p">,</span> <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 其中第12行的 no_ack=True 表示消费完了这个消息以后不主动把完成状态通知rabbitmq。</p>
 
 <p>然后开另外一个shell，执行一下receive.py
@@ -162,28 +174,47 @@ connection.close()
 其中第8行的 durable=True 声明了队列需要持久化，第14行的 delivery_mode = 2 声明了队列的消息需要持久化。</p>
 
 <p>然后写一个接收消息脚本：worker.py
-&#8220;` python
-#!/usr/bin/env python
-# -<em>- coding: utf-8 -</em>-
-import pika
-import time
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-         host = ‘localhost’ ))
-channel = connection.channel()
-channel.queue_declare(queue = ‘task_queue’ , durable = True )
-print ‘ [*] Waiting for messages. To exit press CTRL+C’</p>
-
-<p>def callback(ch, method, properties, body):
-     print “ [x] Received %r” % (body,)
-     time.sleep( body.count( ‘.’ ) )
-     print “ [x] Done”
-     ch.basic_ack(delivery_tag = method.delivery_tag)</p>
-
-<p>channel.basic_qos(prefetch_count = 1 )
-channel.basic_consume(callback,
-                       queue = ‘task_queue’ )
-channel.start_consuming()
-&#8220;`
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="c"># -&lt;em&gt;- coding: utf-8 -&lt;/em&gt;-</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">time</span>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class='line'>         <span class="n">host</span> <span class="o">=</span> <span class="err">‘</span><span class="n">localhost</span><span class="err">’</span> <span class="p">))</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span> <span class="o">=</span> <span class="err">‘</span><span class="n">task_queue</span><span class="err">’</span> <span class="p">,</span> <span class="n">durable</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="err">‘</span> <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">messages</span><span class="o">.</span> <span class="n">To</span> <span class="nb">exit</span> <span class="n">press</span> <span class="n">CTRL</span><span class="o">+</span><span class="n">C</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class='line'>     <span class="k">print</span> <span class="err">“</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="n">Received</span> <span class="o">%</span><span class="n">r</span><span class="err">”</span> <span class="o">%</span> <span class="p">(</span><span class="n">body</span><span class="p">,)</span>
+</span><span class='line'>     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span> <span class="n">body</span><span class="o">.</span><span class="n">count</span><span class="p">(</span> <span class="err">‘</span><span class="o">.</span><span class="err">’</span> <span class="p">)</span> <span class="p">)</span>
+</span><span class='line'>     <span class="k">print</span> <span class="err">“</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="n">Done</span><span class="err">”</span>
+</span><span class='line'>     <span class="n">ch</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">delivery_tag</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">channel</span><span class="o">.</span><span class="n">basic_qos</span><span class="p">(</span><span class="n">prefetch_count</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">)</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">queue</span> <span class="o">=</span> <span class="err">‘</span><span class="n">task_queue</span><span class="err">’</span> <span class="p">)</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 其中第15行的 basic_ack 是执行完任务通知rabbitmq，
 第17行的basic_qos是告诉rabbitmq只有当worker完成了任务以后才分派1条新的消息，实现公平分派。</p>
 
@@ -215,49 +246,89 @@ $ vim emitlog.py (代码如下)
 $ vim recelog.py (代码如下)
 </code>
 日志生产者
-&#8220;` python emitlog.py
-#!/usr/bin/env python
-import pika
-import sys</p>
-
-<p>connection = pika.BlockingConnection(pika.ConnectionParameters(
-         host = ‘localhost’ ))
-channel = connection.channel()</p>
-
-<p>channel.exchange_declare(exchange = ‘logs’ ,
-                          type = ‘fanout’ )</p>
-
-<p>message = ‘ ‘ .join(sys.argv[ 1 :]) or “info: Hello World!”
-channel.basic_publish(exchange = ‘logs’ ,
-                       routing_key = ‘’,
-                       body = message)
-print “ [x] Sent %r” % (message,)
-connection.close()
-<code>
-然后是日志消费者
-</code> python recelog.py
-#!/usr/bin/env python
-import pika</p>
-
-<p>connection = pika.BlockingConnection(pika.ConnectionParameters(
-         host = ‘localhost’ ))
-channel = connection.channel()
-channel.exchange_declare(exchange = ‘logs’ ,
-                          type = ‘fanout’ )
-result = channel.queue_declare(exclusive = True )
-queue_name = result.method.queue
-channel.queue_bind(exchange = ‘logs’ ,
-                    queue = queue_name)
-print ‘ [*] Waiting for logs. To exit press CTRL+C’</p>
-
-<p>def callback(ch, method, properties, body):
-     print “ [x] %r” % (body,)</p>
-
-<p>channel.basic_consume(callback,
-                       queue = queue_name,
-                       no_ack = True )
-channel.start_consuming()
-&#8220;`
+<figure class='code'><figcaption><span>emitlog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class='line'>         <span class="n">host</span> <span class="o">=</span> <span class="err">‘</span><span class="n">localhost</span><span class="err">’</span> <span class="p">))</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                          <span class="nb">type</span> <span class="o">=</span> <span class="err">‘</span><span class="n">fanout</span><span class="err">’</span> <span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="err">‘</span> <span class="err">‘</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:])</span> <span class="ow">or</span> <span class="err">“</span><span class="n">info</span><span class="p">:</span> <span class="n">Hello</span> <span class="n">World</span><span class="err">!”</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                       <span class="n">routing_key</span> <span class="o">=</span> <span class="err">‘’</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="err">“</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="n">Sent</span> <span class="o">%</span><span class="n">r</span><span class="err">”</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,)</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">然后是日志消费者</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">recelog</span><span class="o">.</span><span class="n">py</span>
+</span><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">pika</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class='line'>         <span class="n">host</span> <span class="o">=</span> <span class="err">‘</span><span class="n">localhost</span><span class="err">’</span> <span class="p">))</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                          <span class="nb">type</span> <span class="o">=</span> <span class="err">‘</span><span class="n">fanout</span><span class="err">’</span> <span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class='line'><span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                    <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="err">‘</span> <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">logs</span><span class="o">.</span> <span class="n">To</span> <span class="nb">exit</span> <span class="n">press</span> <span class="n">CTRL</span><span class="o">+</span><span class="n">C</span><span class="err">’</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class='line'>     <span class="k">print</span> <span class="err">“</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">%</span><span class="n">r</span><span class="err">”</span> <span class="o">%</span> <span class="p">(</span><span class="n">body</span><span class="p">,)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 测试：</p>
 
 <p>和前一个实例差不多。开3个bash，2个跑recelog，1个跑emitlog。
@@ -271,58 +342,100 @@ $ vim emitlog.py (代码如下)
 $ vim recelog.py (代码如下)
 </code>
 生产者
-&#8220;` python emitlog.py
-#!/usr/bin/env python
-import pika
-import sys</p>
-
-<p>connection = pika.BlockingConnection(pika.ConnectionParameters(
-         host = ‘localhost’ ))
-channel = connection.channel()
-channel.exchange_declare(exchange = ‘direct_logs’ ,
-                          type = ‘direct’ )
-severity = sys.argv[ 1 ] if len (sys.argv) &gt; 1 else ‘info’
-message = ‘ ‘ .join(sys.argv[ 2 :]) or ‘Hello World!’
-channel.basic_publish(exchange = ‘direct_logs’ ,
-                       routing_key = severity,
-                       body = message)
-print “ [x] Sent %r:%r” % (severity, message)
-connection.close()
-&#8220;`
+<figure class='code'><figcaption><span>emitlog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class='line'>         <span class="n">host</span> <span class="o">=</span> <span class="err">‘</span><span class="n">localhost</span><span class="err">’</span> <span class="p">))</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">direct_logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                          <span class="nb">type</span> <span class="o">=</span> <span class="err">‘</span><span class="n">direct</span><span class="err">’</span> <span class="p">)</span>
+</span><span class='line'><span class="n">severity</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">]</span> <span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">1</span> <span class="k">else</span> <span class="err">‘</span><span class="n">info</span><span class="err">’</span>
+</span><span class='line'><span class="n">message</span> <span class="o">=</span> <span class="err">‘</span> <span class="err">‘</span> <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">2</span> <span class="p">:])</span> <span class="ow">or</span> <span class="err">‘</span><span class="n">Hello</span> <span class="n">World</span><span class="err">!’</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">direct_logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                       <span class="n">routing_key</span> <span class="o">=</span> <span class="n">severity</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">body</span> <span class="o">=</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="err">“</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="n">Sent</span> <span class="o">%</span><span class="n">r</span><span class="p">:</span><span class="o">%</span><span class="n">r</span><span class="err">”</span> <span class="o">%</span> <span class="p">(</span><span class="n">severity</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 这里声明exchange时类型定义为direct（直接匹配），就是说只有当一个信息的routing_key和队列的binding_key一 致时，
 信息才会被放入到这个队列。消息发布给exchange时必须带上routing_key。其实在消息生产端，队列这个概念是透明的。</p>
 
 <p>消费者
-&#8220;` python recelog.py
-#!/usr/bin/env python
-import pika
-import sys</p>
-
-<p>connection = pika.BlockingConnection(pika.ConnectionParameters(
-         host = ‘localhost’ ))
-channel = connection.channel()</p>
-
-<p>channel.exchange_declare(exchange = ‘direct_logs’ ,
-                          type = ‘direct’ )
-result = channel.queue_declare(exclusive = True )
-queue_name = result.method.queue
-severities = sys.argv[ 1 :]
-if not severities:
-     print » sys.stderr, “Usage: %s [info] [warning] [error]” % \
-                          (sys.argv[ 0 ],)
-     sys.exit( 1 )
-for severity in severities:
-     channel.queue_bind(exchange = ‘direct_logs’ ,
-                        queue = queue_name,
-                        routing_key = severity)
-print ‘ [*] Waiting for logs. To exit press CTRL+C’
-def callback(ch, method, properties, body):
-     print “ [x] %r:%r” % (method.routing_key, body,)
-channel.basic_consume(callback,
-                       queue = queue_name,
-                       no_ack = True )
-channel.start_consuming()
-&#8220;`</p>
+<figure class='code'><figcaption><span>recelog.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/env python</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">pika</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+</span><span class='line'>         <span class="n">host</span> <span class="o">=</span> <span class="err">‘</span><span class="n">localhost</span><span class="err">’</span> <span class="p">))</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">direct_logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                          <span class="nb">type</span> <span class="o">=</span> <span class="err">‘</span><span class="n">direct</span><span class="err">’</span> <span class="p">)</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">exclusive</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class='line'><span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+</span><span class='line'><span class="n">severities</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">1</span> <span class="p">:]</span>
+</span><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">severities</span><span class="p">:</span>
+</span><span class='line'>     <span class="k">print</span><span class="err"> »</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="err">“</span><span class="n">Usage</span><span class="p">:</span> <span class="o">%</span><span class="n">s</span> <span class="p">[</span><span class="n">info</span><span class="p">]</span> <span class="p">[</span><span class="n">warning</span><span class="p">]</span> <span class="p">[</span><span class="n">error</span><span class="p">]</span><span class="err">”</span> <span class="o">%</span> \
+</span><span class='line'>                          <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span> <span class="mi">0</span> <span class="p">],)</span>
+</span><span class='line'>     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span> <span class="mi">1</span> <span class="p">)</span>
+</span><span class='line'><span class="k">for</span> <span class="n">severity</span> <span class="ow">in</span> <span class="n">severities</span><span class="p">:</span>
+</span><span class='line'>     <span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span> <span class="o">=</span> <span class="err">‘</span><span class="n">direct_logs</span><span class="err">’</span> <span class="p">,</span>
+</span><span class='line'>                        <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
+</span><span class='line'>                        <span class="n">routing_key</span> <span class="o">=</span> <span class="n">severity</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="err">‘</span> <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">logs</span><span class="o">.</span> <span class="n">To</span> <span class="nb">exit</span> <span class="n">press</span> <span class="n">CTRL</span><span class="o">+</span><span class="n">C</span><span class="err">’</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+</span><span class='line'>     <span class="k">print</span> <span class="err">“</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">%</span><span class="n">r</span><span class="p">:</span><span class="o">%</span><span class="n">r</span><span class="err">”</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">routing_key</span><span class="p">,</span> <span class="n">body</span><span class="p">,)</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">queue</span> <span class="o">=</span> <span class="n">queue_name</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">no_ack</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+</span><span class='line'><span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>这里首先定义exchange，和消息发送端是一样的。然后定义队列，队列是自动命名，
 并且只要进程终止，队列就会终止。然后把队列和 exchange绑定，绑定时的routing_key是用户输入的，

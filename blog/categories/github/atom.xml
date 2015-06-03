@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：github | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/github/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-05-28T17:43:00+08:00</updated>
+  <updated>2015-06-03T10:07:48+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -182,10 +182,10 @@ footer: false
 —</p>
 
 <section>
-    <ul class="ds-recent-comments" data-num-items="{{ site.duoshuo_asides_num }}" data-show-avatars="{{ site.duoshuo_asides_avatars }}" data-show-time="{{ site.duoshuo_asides_time }}" data-show-title="{{ site.duoshuo_asides_title }}" data-show-admin="{{ site.duoshuo_asides_admin }}" data-excerpt-length="{{ site.duoshuo_asides_length }}"></ul>
+    <ul class="ds-recent-comments" data-num-items="60" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="0" data-excerpt-length="45"></ul>
     <!--多说js加载开始，一个页面只需要加载一次 -->
     <script type="text/javascript">
-        var duoshuoQuery = {short_name:"{{ site.duoshuo_short_name }}"};
+        var duoshuoQuery = {short_name:"yidao620c"};
         (function() {
             var ds = document.createElement('script');
             ds.type = 'text/javascript';ds.async = true;
@@ -200,7 +200,7 @@ footer: false
 4) 修改<code>source/_includes/custom/navigation.html</code>，在首页新增一个链接：</p>
 
 <p>&#8220;` html</p>
-<li><a href="{{ root_url }}/blog/comments">最新评论</a></li>
+<li><a href="/blog/comments">最新评论</a></li>
 <p>&#8220;`</p>
 
 <p><strong>3) 国内访问加速</strong></p>
