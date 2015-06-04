@@ -181,57 +181,6 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-06-02 10:22</div>
-        <div class="tags">
-
-
-	<a class='category' href='/blog/categories/pyinstaller/'>pyinstaller</a>, <a class='category' href='/blog/categories/python/'>python</a>
-
-
-</div>
-        
-    </div>
-    <h1 class="title" itemprop="name"><a href="/blog/20150602/pyinstaller.html" itemprop="url">使用PyInstaller打包Python程序</a></h1>
-    <div class="entry-content" itemprop="articleBody">
-        <h3 id="pyinstaller">PyInstaller介绍：</h3>
-<p>PyInstaller是一个能将Python程序转换成单个可执行文件的程序，
-操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。</p>
-
-<p>环境为windows7操作系统，python2.7.8 virtual environment</p>
-
-<p>官网：<a href="https://github.com/pyinstaller/pyinstaller">https://github.com/pyinstaller/pyinstaller</a></p>
-
-<h3 id="section">详细步骤：</h3>
-<p>1. win7下面先安装这个依赖：pywin32，下载下来后切换到venv2.7，然后使用easy_install xxx.exe安装</p>
-
-<p>2. pip安装PyInstaller：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">pip install pyinstaller</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>3. 打包过程中可能会出现msvcp90.dll找不到的问题，
-去<a href="http://cn.dll-files.com/msvcp90.dll.html">http://cn.dll-files.com/msvcp90.dll.html</a>下载第三个zip文件，
-解压后放到C:\Windows\System32，如果是64位的还要放到C:\Windows\SysWOW64目录下。
-        
-        <a href="/blog/20150602/pyinstaller.html" class="more-link">「阅读全文」&rarr;</a>
-    </div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-    <div class="meta">
-        <div class="date">
-
-
-
-
-
-
-
-
-  
-
-
 2015-06-01 10:06</div>
         <div class="tags">
 
@@ -465,6 +414,59 @@ XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力
 <p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：
         
         <a href="/blog/20150517/mosquitto-install.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-26 10:55</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150426/rabbitmq-server.html" itemprop="url">CentOS6.4安装rabbitmq-server</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
+<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
+
+<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
+</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>3,解压tar文件</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>4,编辑Setup.dist</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
+</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>找到
+        
+        <a href="/blog/20150426/rabbitmq-server.html" class="more-link">「阅读全文」&rarr;</a>
     </div>
 
 </article>
