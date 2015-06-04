@@ -1,0 +1,378 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（6）- 模板继承 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="2015-05-02 11:44 django, simpleblog Django1.7开发博客（6）- 模板继承 什么是模板继承？
+就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
+通过这种方式你就需要在每个页面复制粘贴同样的代码了。
+如果你想改变页面某个公共部分， &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150502/simpleblog-06.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	<!-- MathJax Configuration -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  MathMenu: {
+      showLocale: false
+  },
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"
+        type="text/javascript"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?c73136a63585c1ce97569b331e723c0e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+  
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/blog/comments">最新评论</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-02 11:44</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+    </div>
+    <h1 class="title" itemprop="name">
+        Django1.7开发博客（6）- 模板继承
+    </h1>
+    <div class="entry-content" itemprop="articleBody"><h3 id="section">什么是模板继承？</h3>
+<p>就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
+通过这种方式你就需要在每个页面复制粘贴同样的代码了。
+如果你想改变页面某个公共部分，你不需要每个页面的去修改，只需要修改一个模板就行了，
+这样最大化复用，减少了冗余，也减少了出错的几率，而且你敲的代码也少了。</p>
+
+<h3 id="base">创建一个base模板</h3>
+<p>一个base模板就是你全站所有页面都会继承的最基本的网站框架模板。我们在blog/templates/blog/中创建一个base.html模板：</p>
+
+<pre><code>blog
+└───templates
+    └───blog
+            base.html
+            post_list.html
+</code></pre>
+
+<p>打开base.html，然后将post_list.html的所有内容都复制过来，现在它的内容如下：<!--more--></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;title&gt;</span>Django Girls Blog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                {% for post in posts %}
+</span><span class="line">                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">                {% endfor %}
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>在base.html中，将…块替换成下面的：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            {% block content %}
+</span><span class="line">            {% endblock %}
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>我们其实就是将<code>{% for post in posts %}{% endfor %}</code>
+替换成了<code>{% block content %}{% endblock %}</code>。
+在base.html中我们创建了一个名字为content的block，其他页面可以通过继承base.html，
+替换这个content块来生成新的页面，页面其他内容保持不变。</p>
+
+<p>保存后，再修改post_list.html页面，只保留的内容：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% for post in posts %}
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">{% endfor %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后添加这句到post_list.html页面的最开始部分：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这句话的意思就是该模板继承自blog/base.html模板</p>
+
+<p>还有一步就是要将刚刚的内容放到{% block content %}和
+{% endblock content %}之间，这时候整个页面是这样的：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% extends &#39;blog/base.html&#39; %}
+</span><span class="line">{% block content %}
+</span><span class="line">{% for post in posts %}
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">        <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">{% endfor %}
+</span><span class="line">{% endblock content %}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>保存后刷新页面，看下是不是能正常工作：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj016.jpg" alt="" /></p>
+
+<p>一切都OK…</p>
+</div>
+    <ul class="pager" style="padding-bottom:10px;">
+        
+            <li style="float: left;">
+                <a href="/blog/20150501/simpleblog-05.html">« 上一篇: Django1.7开发博客（5）- 页面美化</a>
+            </li>
+        
+        
+            <li style="float: right;">
+                <a href="/blog/20150503/simpleblog-07.html">» 下一篇: Django1.7开发博客（7）- 实现功能</a>
+            </li>
+        
+    </ul>
+
+</article>
+
+  <section id="comments">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150502/simpleblog-06" data-title="Django1.7开发博客（6）- 模板继承" data-url="http://yidao620c.github.io/blog/20150502/simpleblog-06.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">
+    Copyright &copy; 2015
+
+熊能
+
+
+    Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+
+</footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：hadoop | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/hadoop/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[centos6上安装Hadoop和HBase]]></title>
-    <link href="http://yidao620c.github.io/blog/20150423/hadoop-hbase.html"/>
-    <updated>2015-04-23T14:01:57+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150423/hadoop-hbase</id>
+    <link href="http://yidao620c.github.io/blog/20150527/hadoop-hbase.html"/>
+    <updated>2015-05-27T14:01:57+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150527/hadoop-hbase</id>
     <content type="html"><![CDATA[<h3 id="section">安装前的准备</h3>
 <p>操作系统：CentOS 6.5 64位</p>
 

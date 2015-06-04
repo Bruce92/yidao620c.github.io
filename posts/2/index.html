@@ -9,8 +9,9 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-21 19:27 django, simpleblog Django1.7开发博客（12）- I18n国际化 Wiki
-国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。 Django能完美支持文本翻译、日期时间和数字的格式化、时区。 另外， &hellip;">
+	<meta name="description" content="2015-05-16 21:45 django, simpleblog Django1.7开发博客（14）- 集成Xadmin Xadmin介绍
+xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
+目的是替换现有的admin，国人开发， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,8 +127,8 @@ MathJax.Hub.Config({
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -139,19 +140,126 @@ MathJax.Hub.Config({
   
 
 
-2015-04-21 19:27</div>
-		<div class="tags">
+2015-05-16 21:45</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-12.html" itemprop="url">Django1.7开发博客（12）- I18n国际化</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150516/simpleblog-14.html" itemprop="url">Django1.7开发博客（14）- 集成Xadmin</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="xadmin">Xadmin介绍</h3>
+<p>xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
+目的是替换现有的admin，国人开发，有许多新的特性：</p>
+
+<ul>
+  <li>兼容 Django Admin</li>
+  <li>使用 Bootstrap 作为 UI 框架</li>
+  <li>编辑页面灵活布局</li>
+  <li>主页面仪表盘及小部件</li>
+  <li>过滤器强化</li>
+  <li>数据导出</li>
+  <li>强大的插件机制</li>
+</ul>
+
+<p>项目主页：<a href="http://sshwsfc.github.io/django-xadmin/">http://sshwsfc.github.io/django-xadmin/</a></p>
+
+<p>在线demo: <a href="http://demo.xadmin.io/">http://demo.xadmin.io/</a></p>
+
+<h3 id="django">与django的集成</h3>
+
+<p>本篇以simpleblog项目为例，介绍下怎样在django中集成xadmin
+        
+        <a href="/blog/20150516/simpleblog-14.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-15 20:27</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150515/simpleblog-13.html" itemprop="url">Django1.7开发博客（13）- Redis缓存</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="wiki">Wiki</h3>
+<p>Redis 是一个高性能的key-value数据库。redis的出现，
+很大程度补偿了memcached这类keyvalue存储的不足，在部分场合可以对关系数据库起到很好的补充作用。
+它提供了Python，Ruby，Erlang，PHP客户端，使用很方便。</p>
+
+<p>目前Redis已经发布了3.0版本，正式支持分布式，这个特性太强大，以至于你再不用就对不住自己了。</p>
+
+<h3 id="section">性能测试</h3>
+<p>服务器配置：Linux 2.6, Xeon X3320 2.5Ghz</p>
+
+<p>SET操作每秒钟110000次，GET操作每秒钟81000次</p>
+
+<p>stackoverflow网站使用Redis做为缓存服务器。</p>
+
+<h3 id="redis">安装redis</h3>
+<p>服务器安装篇我写了专门文章，
+请参阅<a href="http://yidao620c.github.io/blog/20150418/redis-install.html">redis入门与安装</a></p>
+
+<h3 id="django">django中的配置</h3>
+<p>我们希望在本博客系统中，对于文章点击数、阅览数等数据实现缓存，提高效率。
+        
+        <a href="/blog/20150515/simpleblog-13.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-14 19:27</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150514/simpleblog-12.html" itemprop="url">Django1.7开发博客（12）- I18n国际化</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="wiki">Wiki</h3>
 <p>国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。</p>
 
 <p>Django能完美支持文本翻译、日期时间和数字的格式化、时区。</p>
@@ -171,16 +279,16 @@ MathJax.Hub.Config({
 
 <h4 id="settingspy">settings.py</h4>
 <p>首先在settings中，添加如下内容：
-		
-		<a href="/blog/20150421/simpleblog-12.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150514/simpleblog-12.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -192,19 +300,19 @@ MathJax.Hub.Config({
   
 
 
-2015-04-21 18:27</div>
-		<div class="tags">
+2015-05-12 18:27</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-11.html" itemprop="url">Django1.7开发博客（11）- 富文本与代码高亮</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="tinymce">TinyMCE介绍</h2>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150512/simpleblog-11.html" itemprop="url">Django1.7开发博客（11）- 富文本与代码高亮</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h2 id="tinymce">TinyMCE介绍</h2>
 <p>TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
 功能配置灵活简单（两行代码就可以将编辑器嵌入网页中），支持AJAX。另一特点是加载速度非常快。</p>
 
@@ -220,16 +328,16 @@ MathJax.Hub.Config({
 <p><img src="http://yidaospace.qiniudn.com/tinymce.png" alt="" /></p>
 
 <p>下载下来后，我们把它解压到工程的static/目录下面，如下图所示：
-		
-		<a href="/blog/20150421/simpleblog-11.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150512/simpleblog-11.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -241,19 +349,19 @@ MathJax.Hub.Config({
   
 
 
-2015-04-21 15:47</div>
-		<div class="tags">
+2015-05-10 15:47</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-10.html" itemprop="url">Django1.7开发博客（10）- 全文搜索</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki：</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150510/simpleblog-10.html" itemprop="url">Django1.7开发博客（10）- 全文搜索</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="wiki">Wiki：</h3>
 <p>Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。
 django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。
 其中whoosh为纯python的实现，不是非常大型的应用，是没有问题的。
@@ -270,16 +378,16 @@ django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文�
 <h3 id="section-1">建立模型</h3>
 <p>我们以文章为搜索目标，现在我的app名字为blog，
 模型文件是mysite/blog/models.py ：
-		
-		<a href="/blog/20150421/simpleblog-10.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150510/simpleblog-10.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -291,19 +399,19 @@ django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文�
   
 
 
-2015-04-21 14:47</div>
-		<div class="tags">
+2015-05-09 14:47</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-09.html" itemprop="url">Django1.7开发博客（9）- 用户认证</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="section">安全问题</h2>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150509/simpleblog-09.html" itemprop="url">Django1.7开发博客（9）- 用户认证</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h2 id="section">安全问题</h2>
 <p>你应该注意到了一点，当你去新建、修改和删除文章的时候并不需要登录，
 这样的话任何浏览网站的用户都能随时修改和删除我的文章。这个可不是我想要的！</p>
 
@@ -319,16 +427,16 @@ django中认证的装饰器位于模块django.contrib.auth.decorators中，名�
 
 <p>然后在post_new, post_edit和post_publish这三个函数上添加@login_required，
 类似下面
-		
-		<a href="/blog/20150421/simpleblog-09.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150509/simpleblog-09.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -340,19 +448,19 @@ django中认证的装饰器位于模块django.contrib.auth.decorators中，名�
   
 
 
-2015-04-21 14:24</div>
-		<div class="tags">
+2015-05-06 14:24</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-08.html" itemprop="url">Django1.7开发博客（8）- 继续完善</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150506/simpleblog-08.html" itemprop="url">Django1.7开发博客（8）- 继续完善</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>到现在为止我们已经完成的差不多了，并且基本的东西都已经学到了，是时候用起来了。
 我们的博客还有很多功能需要完善，下面抛砖引玉新增几个功能，还有其他功能等你自己去发现和实现。</p>
 
 <h2 id="section">草稿箱</h2>
@@ -367,107 +475,9 @@ django中认证的装饰器位于模块django.contrib.auth.decorators中，名�
 </pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>的上面一行添加如下链接：
-		
-		<a href="/blog/20150421/simpleblog-08.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 14:02</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-07.html" itemprop="url">Django1.7开发博客（7）- 实现功能</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>到目前为止我们已经完成了一个django应用的所有基础部分。
-包括url配置、视图、模型和模板。接下来开始继续完善我们的博客系统了。</p>
-
-<p>首先我们需要一个显示每篇文章的详细页面，对不？</p>
-
-<h2 id="section">文章详情</h2>
-<p>对于首页每一篇文章，我们希望点击标题后可以进入该文章的阅读页面。修改post_list.html中的标题href如下：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_detail&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>我来详细解释下这个{% url ‘blog.views.post_detail’ pk=post.pk %}，{% %}
-表示使用django模板标签而不是普通的HTML文字，这里我们使用了url标签来生成真正的url链接。
-blog.views.post_detail是视图的全路径。
-		
-		<a href="/blog/20150421/simpleblog-07.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 11:44</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-06.html" itemprop="url">Django1.7开发博客（6）- 模板继承</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">什么是模板继承？</h3>
-<p>就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
-通过这种方式你就需要在每个页面复制粘贴同样的代码了。
-如果你想改变页面某个公共部分，你不需要每个页面的去修改，只需要修改一个模板就行了，
-这样最大化复用，减少了冗余，也减少了出错的几率，而且你敲的代码也少了。</p>
-
-<h3 id="base">创建一个base模板</h3>
-<p>一个base模板就是你全站所有页面都会继承的最基本的网站框架模板。我们在blog/templates/blog/中创建一个base.html模板：</p>
-
-<pre><code>blog
-└───templates
-    └───blog
-            base.html
-            post_list.html
-</code></pre>
-
-<p>打开base.html，然后将post_list.html的所有内容都复制过来，现在它的内容如下：
-		
-		<a href="/blog/20150421/simpleblog-06.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150506/simpleblog-08.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 

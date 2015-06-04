@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：memcached | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/memcached/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用xmemcached客户端]]></title>
-    <link href="http://yidao620c.github.io/blog/20150418/xmemecached.html"/>
-    <updated>2015-04-18T16:36:41+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150418/xmemecached</id>
+    <link href="http://yidao620c.github.io/blog/20150419/xmemecached.html"/>
+    <updated>2015-04-19T16:36:41+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150419/xmemecached</id>
     <content type="html"><![CDATA[<p>Xmemcached是基于java nio实现的高性能可扩展的memcached客户端。它的主要特点：</p>
 
 <ol>
@@ -204,9 +204,9 @@ public void nioPool() throws Exception {
   
   <entry>
     <title type="html"><![CDATA[linux上安装memcached]]></title>
-    <link href="http://yidao620c.github.io/blog/20150418/memcached-install.html"/>
-    <updated>2015-04-18T15:52:35+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150418/memcached-install</id>
+    <link href="http://yidao620c.github.io/blog/20150416/memcached-install.html"/>
+    <updated>2015-04-16T15:52:35+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150416/memcached-install</id>
     <content type="html"><![CDATA[<p><strong>一 准备安装文件</strong></p>
 
 <p>下载memcached与libevent的安装文件：</p>

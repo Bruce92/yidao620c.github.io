@@ -9,8 +9,10 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-20 15:42 java8 Java8中的lambda表达式 2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
-总共增加了55个新特性，其中最最吸引人的就是Lambdas表达式和Stream函数式编程，本文详细讲解这两个特性。 &hellip;">
+	<meta name="description" content="2015-04-26 10:55 rabbitmq CentOS6.4安装rabbitmq-server 在 CentOS 6.4上安装python
+自己手动安装python2.7.5，不要动系统上面其他的版本 1,先安装GCC，用如下命令yum install gcc gcc-c++
+1
+2 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,8 +128,8 @@ MathJax.Hub.Config({
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -139,19 +141,305 @@ MathJax.Hub.Config({
   
 
 
-2015-04-20 15:42</div>
-		<div class="tags">
+2015-04-26 10:55</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150426/rabbitmq-server.html" itemprop="url">CentOS6.4安装rabbitmq-server</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
+<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
+
+<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
+</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>3,解压tar文件</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>4,编辑Setup.dist</strong></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
+</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>找到
+        
+        <a href="/blog/20150426/rabbitmq-server.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-25 11:21</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150425/rabbitmq-python-client.html" itemprop="url">使用python开发RabbitMQ应用</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
+
+<p>测试环境：CentOS 6.2</p>
+
+<p><strong>1，测试环境准备</strong></p>
+
+<p>安装python（一般系统都自带了python）</p>
+
+<p>安装RabbitMQ server可以参考前面的文章。</p>
+
+<p>安装pika</p>
+
+<p>使用pip安装的时候可能会报错：</p>
+
+<p><code>importerror no module named pkg_resources</code></p>
+
+<p>请用下面命令解决这个问题：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后还可能出现：</p>
+
+<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
+
+<p>这时候先把pip卸载掉，执行：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
+
+<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面
+        
+        <a href="/blog/20150425/rabbitmq-python-client.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-24 10:47</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/sort/'>sort</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150424/merge-sort.html" itemprop="url">归并排序中对小数组采用插入排序</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>纯归并排序的复杂度为O(nlgn)，而纯插入排序的时间复杂度为O(n^2)。数据量很大的时候采用归并排序。</p>
+
+<p>但是在n较小的时候插入排序可能运行的会更快点。因此在归并排序中当子问题变得足够小时，
+采用插入排序来使得递归的叶子变粗可以加快排序速度。那么这个足够小到底怎么去衡量呢？ 请看下面：</p>
+
+<p>这么几个我不证明了，比较简单：</p>
+
+<ol>
+  <li>插入排序最坏情况下可以在O(nk)时间内排序每个长度为k的n/k个子列表
+*. 在最坏情况下可在O(nlg(n/k))的时间内合并这些子表
+*. 修订后的算法的最坏情况运行时间复杂度是O(nk + nlg(n/k))</li>
+</ol>
+
+<p>那么，O(nk+nlg(n/k))=O(nlgn).只能最大是k=O(lgn).等式左边中第一项是高阶项。
+k如果大于lgn,则比归并排序复杂度大了。
+左边可以写成nk+nlgn-nlgk，k等于lgn时，就是2nlgn-nlglgn.忽略恒定系数，则与归并排序是一样的。
+最后结论： k &lt; lg(n)的时候，使用插入排序。
+        
+        <a href="/blog/20150424/merge-sort.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-23 16:40</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/keepalived/'>keepalived</a>, <a class='category' href='/blog/categories/lvs/'>lvs</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150423/lvs-keepalived.html" itemprop="url">CentOS6.5上LVS和KeepAlived搭建高可用负载均衡集群</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h2 id="section">一、理论知识（原理）</h2>
+<p>我们不仅要知其然，而且要知其所以然，所以先给大家准备一些理论知识课，这样对以后的应用将会事半功倍。</p>
+
+<p><strong>1、什么是LVS？</strong></p>
+
+<p>请阅读作者章文嵩博士自己的研究报告，共计4部分，看完后对集群和LVS就有了初步的了解，不懂时可以翻翻。</p>
+
+<ul>
+  <li>LVS项目介绍：<a href="http://www.linuxvirtualserver.org/zh/lvs1.html">http://www.linuxvirtualserver.org/zh/lvs1.html</a></li>
+  <li>LVS集群的体系结构：<a href="http://www.linuxvirtualserver.org/zh/lvs2.html">http://www.linuxvirtualserver.org/zh/lvs2.html</a></li>
+  <li>LVS集群中的IP负载均衡技术：<a href="http://www.linuxvirtualserver.org/zh/lvs3.html">http://www.linuxvirtualserver.org/zh/lvs3.html</a></li>
+  <li>LVS集群的负载调度：<a href="http://www.linuxvirtualserver.org/zh/lvs4.html">http://www.linuxvirtualserver.org/zh/lvs4.html</a></li>
+</ul>
+
+<p><strong>2、什么是KeepAlived?</strong></p>
+
+<p>Keepalived原理与实战精讲： <a href="http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/">http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</a></p>
+
+<p><strong>3、什么是CentOS?</strong></p>
+
+<p>百度百科给出的答案：<a href="http://baike.baidu.com/link?url=X3SzN3bJWjW_PkWC6GB2MTs5KhVmxBAxnCRjs9W7-IARDiHloZ_oRWj17BEz0kY3">什么是CentOS</a></p>
+
+<p><strong>4、小结</strong></p>
+
+<p>相信读了以上的理论知识后，已经对集群的实现原理有了大概的了解，那接下来我们就开始动手吧。
+        
+        <a href="/blog/20150423/lvs-keepalived.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-22 13:45</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/fastjson/'>fastjson</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150422/fastjson-date.html" itemprop="url">fastjson对Date的处理</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p><strong>fastjson对日期的序列化方式：</strong></p>
+
+<p>一种方法是通过注解</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>另一种是通过SerializeConfig：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
+</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
+</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>json字符串中使用单引号：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+        
+        <a href="/blog/20150422/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-21 15:42</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/java8/'>java8</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/java8-lambda.html" itemprop="url">Java8中的lambda表达式</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150421/java8-lambda.html" itemprop="url">Java8中的lambda表达式</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
 总共增加了55个新特性，其中最最吸引人的就是Lambdas表达式和Stream函数式编程，本文详细讲解这两个特性。</p>
 
 <p>其他特性比如日期API，泛型，反射，注解，集合框架，并发，Nashorn引擎等等这里暂时就不详细介绍了。
@@ -207,16 +495,16 @@ MathJax.Hub.Config({
 </table>
 
 <p>先来一个小例子见识下Java8的威力！
-		
-		<a href="/blog/20150420/java8-lambda.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150421/java8-lambda.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -228,314 +516,33 @@ MathJax.Hub.Config({
   
 
 
-2015-04-20 14:01</div>
-		<div class="tags">
+2015-04-19 16:36</div>
+        <div class="tags">
 
 
-	<a class='category' href='/blog/categories/xpath/'>xpath</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/xpath-introduce.html" itemprop="url">Xpath入门笔记</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki</h3>
-
-<p>XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言。
-XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力。
-起初XPath的提出的初衷是将其作为一个通用的、介于XPointer与XSL间的语法模型。
-但是XPath很快的被开发者采用来当作小型查询语言。</p>
-
-<p>W3C网址： <a href="http://www.w3schools.com/XPath/">http://www.w3schools.com/XPath/</a></p>
-
-<h3 id="section">表示法</h3>
-
-<p>最常见的XPath表达式是路径表达式（XPath这一名称的另一来源）。</p>
-
-<p>路径表达式是从一个XML节点（当前的上下文节点）到另一个节点、或一组节点的书面步骤顺序。
-这些步骤以“／”字符分开，每一步有三个构成成分：
-		
-		<a href="/blog/20150420/xpath-introduce.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 13:53</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/yaml/'>yaml</a>
+	<a class='category' href='/blog/categories/memcached/'>memcached</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/yaml-introduce.html" itemprop="url">Yaml入门笔记</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>Wiki：</strong></p>
-
-<p>YAML（IPA: /ˈjæməl/，尾音类似camel骆驼）是一个可读性高，用来表达资料序列的格式。
-YAML参考了其他多种语言，包括：XML、C语言、Python、Perl以及电子邮件格式RFC2822。
-Clark Evans在2001年在首次发表了这种语言[1] ，
-另外Ingy döt Net与Oren Ben-Kiki也是这语言的共同设计者。
-目前已经有数种编程语言或脚本语言支援（或者说解析）这种语言。</p>
-
-<p>YAML是”YAML Ain’t a Markup Language”（YAML不是一种置标语言）的递回缩写。
-在开发的这种语言时，YAML 的意思其实是：”Yet Another Markup Language”（仍是一种置标语言），
-但为了强调这种语言以数据做为中心，而不是以置标语言为重点，而用返璞词重新命名。</p>
-
-<p>最新版本为1.2，官方说明地址： <a href="http://www.yaml.org/spec/1.2/spec.html">http://www.yaml.org/spec/1.2/spec.html</a></p>
-
-<p>使用方式：作为配置文件，数据交换格式，序列化对象存储，测试数据文件，</p>
-
-<p>一个简单的示例：
-		
-		<a href="/blog/20150420/yaml-introduce.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 13:45</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/fastjson/'>fastjson</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/fastjson-date.html" itemprop="url">fastjson对Date的处理</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p><strong>fastjson对日期的序列化方式：</strong></p>
-
-<p>一种方法是通过注解</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@JSONField</span> <span class="o">(</span><span class="n">format</span><span class="o">=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">)</span>
-</span><span class="line"><span class="kd">public</span> <span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>另一种是通过SerializeConfig：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">SerializeConfig</span> <span class="n">mapping</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SerializeConfig</span><span class="o">();</span>
-</span><span class="line"><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">dateFormat</span><span class="o">;</span>
-</span><span class="line"><span class="kd">static</span> <span class="o">{</span>
-</span><span class="line">    <span class="n">dateFormat</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">;</span>
-</span><span class="line">    <span class="n">mapping</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="nf">SimpleDateFormatSerializer</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">));</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>json字符串中使用单引号：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">text</span> <span class="o">=</span> <span class="n">JSON</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">SerializerFeature</span><span class="o">.</span><span class="na">UseSingleQuotes</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-		
-		<a href="/blog/20150420/fastjson-date.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 11:21</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-python-client.html" itemprop="url">使用python开发RabbitMQ应用</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>参考了RabbitMQ网站上提供的英文版本入门指南: <a href="http://www.rabbitmq.com/getstarted.html">http://www.rabbitmq.com/getstarted.html</a></p>
-
-<p>测试环境：CentOS 6.2</p>
-
-<p><strong>1，测试环境准备</strong></p>
-
-<p>安装python（一般系统都自带了python）</p>
-
-<p>安装RabbitMQ server可以参考前面的文章。</p>
-
-<p>安装pika</p>
-
-<p>使用pip安装的时候可能会报错：</p>
-
-<p><code>importerror no module named pkg_resources</code></p>
-
-<p>请用下面命令解决这个问题：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | python</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>然后还可能出现：</p>
-
-<p><code>pkg_resources.distributionnotfound pip==1.4.1</code></p>
-
-<p>这时候先把pip卸载掉，执行：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">sudo yum remove python-pip</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>然后去下载最新的get-pip.py文件，执行<code>python get-pip.py</code>安装</p>
-
-<p>在<code>/etc/profile</code>里面将<code>/usr/local/python27/bin</code>加入PATH最前面
-		
-		<a href="/blog/20150420/rabbitmq-python-client.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 10:55</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rabbitmq/'>rabbitmq</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/rabbitmq-server.html" itemprop="url">CentOS6.4安装rabbitmq-server</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="centos-64python">在 CentOS 6.4上安装python</h3>
-<p>自己手动安装python2.7.5，不要动系统上面其他的版本</p>
-
-<p><strong>1,先安装GCC，用如下命令yum install gcc gcc-c++</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">yum install zlib
-</span><span class="line">yum install zlib-devel</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>2,下载 <a href="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz">python-2.7.5.tar.gz</a> 文件，修改文件权限</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">chmode +x python-7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>3,解压tar文件</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">tar -xzvf python-2.7.5.tar.gz</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>4,编辑Setup.dist</strong></p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">cd python-2.7.5
-</span><span class="line">vim Python-2.7.5/Modules/Setup.dist</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>找到
-		
-		<a href="/blog/20150420/rabbitmq-server.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 10:47</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/sort/'>sort</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/merge-sort.html" itemprop="url">归并排序中对小数组采用插入排序</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>纯归并排序的复杂度为O(nlgn)，而纯插入排序的时间复杂度为O(n^2)。数据量很大的时候采用归并排序。</p>
-
-<p>但是在n较小的时候插入排序可能运行的会更快点。因此在归并排序中当子问题变得足够小时，
-采用插入排序来使得递归的叶子变粗可以加快排序速度。那么这个足够小到底怎么去衡量呢？ 请看下面：</p>
-
-<p>这么几个我不证明了，比较简单：</p>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150419/xmemecached.html" itemprop="url">使用xmemcached客户端</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>Xmemcached是基于java nio实现的高性能可扩展的memcached客户端。它的主要特点：</p>
 
 <ol>
-  <li>插入排序最坏情况下可以在O(nk)时间内排序每个长度为k的n/k个子列表
-*. 在最坏情况下可在O(nlg(n/k))的时间内合并这些子表
-*. 修订后的算法的最坏情况运行时间复杂度是O(nk + nlg(n/k))</li>
+  <li>高性能，稳定可靠，已经在众多公司的众多项目里得到应用。</li>
+  <li>功能完备：客户端分布式、权重、最新最完整的协议支持。</li>
+  <li>可扩展，易于集成</li>
+  <li>可动态增删memached节点</li>
+  <li>客户端操作统计</li>
+  <li>NIO连接池</li>
 </ol>
 
-<p>那么，O(nk+nlg(n/k))=O(nlgn).只能最大是k=O(lgn).等式左边中第一项是高阶项。
-k如果大于lgn,则比归并排序复杂度大了。
-左边可以写成nk+nlgn-nlgk，k等于lgn时，就是2nlgn-nlglgn.忽略恒定系数，则与归并排序是一样的。
-最后结论： k &lt; lg(n)的时候，使用插入排序。
-		
-		<a href="/blog/20150420/merge-sort.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+<p>等等，更多信息请见wiki文档。废话不多讲，先上代码：
+        
+        <a href="/blog/20150419/xmemecached.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 

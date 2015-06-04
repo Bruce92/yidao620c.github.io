@@ -1,0 +1,497 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（2）- 模型 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="2015-04-28 18:49 django, simpleblog Django1.7开发博客（2）- 模型 什么是模型？
+django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
+发表的文章就是一个模型，需要存储在数据库中。 &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150428/simpleblog-02.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	<!-- MathJax Configuration -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  MathMenu: {
+      showLocale: false
+  },
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"
+        type="text/javascript"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?c73136a63585c1ce97569b331e723c0e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+  
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/blog/comments">最新评论</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-04-28 18:49</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+    </div>
+    <h1 class="title" itemprop="name">
+        Django1.7开发博客（2）- 模型
+    </h1>
+    <div class="entry-content" itemprop="articleBody"><h3 id="section">什么是模型？</h3>
+<p>django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
+发表的文章就是一个模型，需要存储在数据库中。
+这里我们使用django默认的sqlite3库，对于我们的这个小系统而言已经足够了。</p>
+
+<h3 id="section-1">创建一个应用</h3>
+<p>在django中有两个概念需要弄清楚。一个是工程（project）的概念，一个是应用（application）的概念。
+它们的关系是：一个工程中包含多个应用。每个应用都是独立的，应用通过setting.py注册到工程中来就可以使用了。
+这样可以解耦合，并且好的应用也可以复用。很好的模块化设计！</p>
+
+<p>在manage.py文件所在目录，执行下面命令：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">(myvenv) [mango@centos00 mysite]$ python manage.py startapp blog</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>你会看到一个新的blog文件夹被创建，并且下面多了许多文件，目前结构如下：<!--more--></p>
+
+<pre><code>mysite
+├── mysite
+|       __init__.py
+|       settings.py
+|       urls.py
+|       wsgi.py
+├── manage.py
+└── blog
+    ├── migrations
+    |       __init__.py
+    ├── __init__.py
+    ├── admin.py
+    ├── models.py
+    ├── tests.py
+    └── views.py
+</code></pre>
+
+<p>然后在setting.py中注册这个应用</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;blog&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="section-2">创建一个博客文章的模型</h3>
+<p>在blog/models.py中定义所有的模型，用vim打开后添加下面的内容</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</span><span class="line">    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">    <span class="n">created_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+</span><span class="line">    <span class="n">published_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">published_date</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>我们定义了作者，标题，文章内容，创建时间，发布时间等。还添加了一个publish方法用于保存发布。
+每个字段都需要定义它的类型，这里的几个类型解释如下：</p>
+
+<pre><code>CharField：普通的文本
+TextField：长文本
+DateTimeField：日期时间类型
+ForeignKey：外键类型
+</code></pre>
+
+<p>详细的字段类型说明请参考官方文档：<a href="https://docs.djangoproject.com/en/1.7/ref/models/fields/#field-types">field-types</a></p>
+
+<p><strong>在数据库中为模型生成表结构：</strong></p>
+
+<p>每次我们新建了一个模型后，需要在数据库中添加对应的表。</p>
+
+<p>第一步是先让django感知到我们刚刚已经创建了一个新的模型：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">blog</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>输出如下：</p>
+
+<pre><code>Migrations for 'blog':
+  0001_initial.py:
+    - Create model Post
+</code></pre>
+
+<p>这时候django已经为我们准备好了数据库更新的sql文件。</p>
+
+<p>第二步是让django帮我们执行这些文件：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="n">blog</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>输出如下：</p>
+
+<pre><code>Operations to perform:
+  Apply all migrations: blog
+Running migrations:
+  Applying blog.0001_initial... OK
+</code></pre>
+
+<p>OK，这时候数据库中已经有post这张表了。</p>
+
+<h3 id="orm">对象关系映射ORM</h3>
+<p>下面我们看看django的ORM是怎样和数据库打交道的。</p>
+
+<p>首先解释下QuerySet，它是某个模型的对象列表，用来从数据库中读取数据，过滤和排序等等。</p>
+
+<h3 id="djangodjango-shell">Django控制台Django Shell</h3>
+<p>执行以下命令可以打开django的控制台</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">shell</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>查询所有的博客文章</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Post</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span class="line"><span class="p">[]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这时候肯定是空的，因为我们还没有任何数据。</p>
+
+<p>下面我们去新建几篇文章</p>
+
+<p>先要创建一个用户，因为Post里面有User外键</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;ola&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="o">&lt;</span><span class="n">User</span><span class="p">:</span> <span class="n">ola</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">User</span><span class="p">:</span> <span class="n">ola</span><span class="o">&gt;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后添加文章：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;ola&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">author</span> <span class="o">=</span> <span class="n">user</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;Sample title&#39;</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Test&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Sample</span> <span class="n">title</span><span class="o">&gt;</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Sample</span> <span class="n">title</span><span class="o">&gt;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>文章过滤</strong></p>
+
+<p>先像前面那样再添加几篇文章，此处省略七十二个字….</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Sample</span> <span class="n">title</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Cool</span> <span class="n">day</span> <span class="n">Aha</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">LiLei</span> <span class="ow">and</span> <span class="n">Hanmeimei</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Happy</span> <span class="n">boy</span><span class="o">&gt;</span><span class="p">]</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title__contains</span><span class="o">=</span><span class="s">&#39;LiLei&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">LiLei</span> <span class="ow">and</span> <span class="n">Hanmeimei</span><span class="o">&gt;</span><span class="p">]</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">published_date__isnull</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</span><span class="line"><span class="p">[]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>最后的输出表示所有的文章published_date都是空的。我想改变这个情况。可以这样做</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">post</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">post</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">published_date__isnull</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Sample</span> <span class="n">title</span><span class="o">&gt;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>结果排序</strong></p>
+
+<p>还可以根据某个或某几个字段来排序检索结果</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;created_date&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Sample</span> <span class="n">title</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Cool</span> <span class="n">day</span> <span class="n">Aha</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">LiLei</span> <span class="ow">and</span> <span class="n">Hanmeimei</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Happy</span> <span class="n">boy</span><span class="o">&gt;</span><span class="p">]</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-created_date&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="p">[</span><span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Happy</span> <span class="n">boy</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">LiLei</span> <span class="ow">and</span> <span class="n">Hanmeimei</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Cool</span> <span class="n">day</span> <span class="n">Aha</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Post</span><span class="p">:</span> <span class="n">Sample</span> <span class="n">title</span><span class="o">&gt;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>OK，目前为止你应该对django的ORM有了大体的了解了。</p>
+
+<p>请用exit()退出django的控制台</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">exit</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="django-admin">利用django admin修改模型</h3>
+<p>在上面我们已经创建了Post模型并且通过django控制台来添加修改模型。
+然后我们使用django自带的web管理界面admin来在页面上修改模型数据。</p>
+
+<h3 id="section-3">模型注册</h3>
+<p>首先我们需要在admin中注册对应的模型，打开blog/admin.py文件，修改如下</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span>
+</span><span class="line">
+</span><span class="line"><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Post</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>注意上面的from .models import Post，使用到了python3的相对导入。</p>
+
+<h3 id="section-4">运行服务器</h3>
+<p>一切都这么简单，接下来我们启动服务器</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">203.95</span><span class="p">:</span><span class="mi">8000</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>打开链接：http://192.168.203.95:8000/admin/</p>
+
+<p>看到下面的界面：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj002.jpg" alt="" /></p>
+
+<h3 id="section-5">添加管理员</h3>
+
+<p>不过你需要一个管理员才能登录。运行python manage.py createsuperuser可以创建管理员账号。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="p">(</span><span class="n">myvenv</span><span class="p">)</span> <span class="p">[</span><span class="n">mango</span><span class="nd">@centos00</span> <span class="n">mysite</span><span class="p">]</span><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+</span><span class="line"><span class="n">Username</span> <span class="p">(</span><span class="n">leave</span> <span class="n">blank</span> <span class="n">to</span> <span class="n">use</span> <span class="s">&#39;mango&#39;</span><span class="p">):</span> <span class="n">admin</span>
+</span><span class="line"><span class="n">Email</span> <span class="n">address</span><span class="p">:</span> <span class="n">admin</span><span class="nd">@gmail.com</span>
+</span><span class="line"><span class="n">Password</span><span class="p">:</span>
+</span><span class="line"><span class="n">Password</span> <span class="p">(</span><span class="n">again</span><span class="p">):</span>
+</span><span class="line"><span class="n">Superuser</span> <span class="n">created</span> <span class="n">successfully</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>我创建了一个admin/admin的账户。这时候登录</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj003.jpg" alt="" /></p>
+
+<p>点击Posts修改或者增加等等，确保里面至少2个又published_date，这个后面会用到。</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj004.jpg" alt="" /></p>
+
+<p>更多关于django admin的内容，参考官方文档：<a href="https://docs.djangoproject.com/en/1.7/ref/contrib/admin/">admin</a></p>
+
+<h3 id="section-6">接下来呢？</h3>
+<p>先别急嘛，坐下来喝杯咖啡先。到现在为止你已经前进了很远了。</p>
+
+</div>
+    <ul class="pager" style="padding-bottom:10px;">
+        
+            <li style="float: left;">
+                <a href="/blog/20150427/simpleblog-01.html">« 上一篇: Django1.7开发博客（1）- 入门篇</a>
+            </li>
+        
+        
+            <li style="float: right;">
+                <a href="/blog/20150429/simpleblog-03.html">» 下一篇: Django1.7开发博客（3）- 部署</a>
+            </li>
+        
+    </ul>
+
+</article>
+
+  <section id="comments">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150428/simpleblog-02" data-title="Django1.7开发博客（2）- 模型" data-url="http://yidao620c.github.io/blog/20150428/simpleblog-02.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">
+    Copyright &copy; 2015
+
+熊能
+
+
+    Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+
+</footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

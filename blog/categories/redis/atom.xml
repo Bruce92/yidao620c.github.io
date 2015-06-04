@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：redis | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[redis入门与安装]]></title>
-    <link href="http://yidao620c.github.io/blog/20150418/redis-install.html"/>
-    <updated>2015-04-18T16:44:16+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150418/redis-install</id>
+    <link href="http://yidao620c.github.io/blog/20150417/redis-install.html"/>
+    <updated>2015-04-17T16:44:16+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150417/redis-install</id>
     <content type="html"><![CDATA[<h2 id="redis">一 Redis介绍</h2>
 
 <p>Redis是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</p>

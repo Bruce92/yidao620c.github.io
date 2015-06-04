@@ -9,9 +9,8 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-21 10:23 django, simpleblog Django1.7开发博客（5）- 页面美化 什么是css？
-css是一种用来描述某种标记语言写的web站点的样式语言。
-这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： Codeacademy HTML & &hellip;">
+	<meta name="description" content="2015-05-03 14:02 django, simpleblog Django1.7开发博客（7）- 实现功能 到目前为止我们已经完成了一个django应用的所有基础部分。
+包括url配置、视图、模型和模板。接下来开始继续完善我们的博客系统了。 首先我们需要一个显示每篇文章的详细页面，对不 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,8 +126,8 @@ MathJax.Hub.Config({
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -140,19 +139,117 @@ MathJax.Hub.Config({
   
 
 
-2015-04-21 10:23</div>
-		<div class="tags">
+2015-05-03 14:02</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-05.html" itemprop="url">Django1.7开发博客（5）- 页面美化</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="css">什么是css？</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150503/simpleblog-07.html" itemprop="url">Django1.7开发博客（7）- 实现功能</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>到目前为止我们已经完成了一个django应用的所有基础部分。
+包括url配置、视图、模型和模板。接下来开始继续完善我们的博客系统了。</p>
+
+<p>首先我们需要一个显示每篇文章的详细页面，对不？</p>
+
+<h2 id="section">文章详情</h2>
+<p>对于首页每一篇文章，我们希望点击标题后可以进入该文章的阅读页面。修改post_list.html中的标题href如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;blog.views.post_detail&#39; pk=post.pk %}&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>我来详细解释下这个{% url ‘blog.views.post_detail’ pk=post.pk %}，{% %}
+表示使用django模板标签而不是普通的HTML文字，这里我们使用了url标签来生成真正的url链接。
+blog.views.post_detail是视图的全路径。
+        
+        <a href="/blog/20150503/simpleblog-07.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-02 11:44</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150502/simpleblog-06.html" itemprop="url">Django1.7开发博客（6）- 模板继承</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">什么是模板继承？</h3>
+<p>就是网站的多个页面可以共享同一个页面布局或者是页面的某几个部分的内容。
+通过这种方式你就需要在每个页面复制粘贴同样的代码了。
+如果你想改变页面某个公共部分，你不需要每个页面的去修改，只需要修改一个模板就行了，
+这样最大化复用，减少了冗余，也减少了出错的几率，而且你敲的代码也少了。</p>
+
+<h3 id="base">创建一个base模板</h3>
+<p>一个base模板就是你全站所有页面都会继承的最基本的网站框架模板。我们在blog/templates/blog/中创建一个base.html模板：</p>
+
+<pre><code>blog
+└───templates
+    └───blog
+            base.html
+            post_list.html
+</code></pre>
+
+<p>打开base.html，然后将post_list.html的所有内容都复制过来，现在它的内容如下：
+        
+        <a href="/blog/20150502/simpleblog-06.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-01 10:23</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150501/simpleblog-05.html" itemprop="url">Django1.7开发博客（5）- 页面美化</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="css">什么是css？</h3>
 <p>css是一种用来描述某种标记语言写的web站点的样式语言。
 这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： <a href="http://www.codecademy.com/tracks/web">Codeacademy HTML &amp; CSS course</a></p>
 
@@ -172,16 +269,16 @@ MathJax.Hub.Config({
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>你的工程里面不需要引入任何的文件，因为这里直接引用了bootstrap公共的css和js文件。
-		
-		<a href="/blog/20150421/simpleblog-05.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150501/simpleblog-05.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -193,19 +290,19 @@ MathJax.Hub.Config({
   
 
 
-2015-04-20 19:16</div>
-		<div class="tags">
+2015-04-30 19:16</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-04.html" itemprop="url">Django1.7开发博客（4）- 三部曲</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">什么是三部曲？</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150430/simpleblog-04.html" itemprop="url">Django1.7开发博客（4）- 三部曲</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">什么是三部曲？</h3>
 <p>其实在django中实现一个功能只需要三个步骤即可，这里我姑且叫它三部曲。</p>
 
 <p>这三部曲就是：</p>
@@ -222,16 +319,16 @@ MathJax.Hub.Config({
 
 <h3 id="djangourl">Django中的URL工作原理</h3>
 <p>我们打开mysite/urls.py文件，会发现类似下面这样：
-		
-		<a href="/blog/20150420/simpleblog-04.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150430/simpleblog-04.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -243,19 +340,19 @@ MathJax.Hub.Config({
   
 
 
-2015-04-20 19:03</div>
-		<div class="tags">
+2015-04-29 19:03</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-03.html" itemprop="url">Django1.7开发博客（3）- 部署</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？</p>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150429/simpleblog-03.html" itemprop="url">Django1.7开发博客（3）- 部署</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？</p>
 
 <h3 id="heroku">Heroku简介</h3>
 <p>Heroku是一个主机托管平台，对于访问量不是很大的小应用是免费的，正好适用于我们的这个例子。</p>
@@ -269,16 +366,16 @@ MathJax.Hub.Config({
 <p>我们需要创建一个requirements.txt文件来告知Heroku需要在服务器上创建哪些python包。</p>
 
 <p>不过首先，Heroku需要我们在本地按照一些包。在python虚拟环境virtualenv下面执行：
-		
-		<a href="/blog/20150420/simpleblog-03.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150429/simpleblog-03.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -290,19 +387,19 @@ MathJax.Hub.Config({
   
 
 
-2015-04-20 18:49</div>
-		<div class="tags">
+2015-04-28 18:49</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-02.html" itemprop="url">Django1.7开发博客（2）- 模型</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">什么是模型？</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150428/simpleblog-02.html" itemprop="url">Django1.7开发博客（2）- 模型</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">什么是模型？</h3>
 <p>django的模型就是用于在数据库中存储的某种类型的对象。在我们的博客系统中，
 发表的文章就是一个模型，需要存储在数据库中。
 这里我们使用django默认的sqlite3库，对于我们的这个小系统而言已经足够了。</p>
@@ -316,16 +413,16 @@ MathJax.Hub.Config({
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">(myvenv) [mango@centos00 mysite]$ python manage.py startapp blog</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>你会看到一个新的blog文件夹被创建，并且下面多了许多文件，目前结构如下：
-		
-		<a href="/blog/20150420/simpleblog-02.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150428/simpleblog-02.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -337,19 +434,19 @@ MathJax.Hub.Config({
   
 
 
-2015-04-20 17:31</div>
-		<div class="tags">
+2015-04-27 17:31</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/simpleblog-01.html" itemprop="url">Django1.7开发博客（1）- 入门篇</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">开篇</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150427/simpleblog-01.html" itemprop="url">Django1.7开发博客（1）- 入门篇</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">开篇</h3>
 <p>笔者用过django一段时间了，是时候做点笔记了。不过官网文档稍微有点复杂，对新手而言很困难，
 而网上的一些教程很多都过时了。
 最近看到一个外文的教程非常不错，
@@ -363,121 +460,9 @@ MathJax.Hub.Config({
 <p>GitHub项目地址：<a href="https://github.com/yidao620c/simpleblog">https://github.com/yidao620c/simpleblog</a></p>
 
 <p>Heroku演示地址：<a href="https://yidaoblog.herokuapp.com/">https://yidaoblog.herokuapp.com/</a>
-		
-		<a href="/blog/20150420/simpleblog-01.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 16:40</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/keepalived/'>keepalived</a>, <a class='category' href='/blog/categories/lvs/'>lvs</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/lvs-keepalived.html" itemprop="url">CentOS6.5上LVS和KeepAlived搭建高可用负载均衡集群</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="section">一、理论知识（原理）</h2>
-<p>我们不仅要知其然，而且要知其所以然，所以先给大家准备一些理论知识课，这样对以后的应用将会事半功倍。</p>
-
-<p><strong>1、什么是LVS？</strong></p>
-
-<p>请阅读作者章文嵩博士自己的研究报告，共计4部分，看完后对集群和LVS就有了初步的了解，不懂时可以翻翻。</p>
-
-<ul>
-  <li>LVS项目介绍：<a href="http://www.linuxvirtualserver.org/zh/lvs1.html">http://www.linuxvirtualserver.org/zh/lvs1.html</a></li>
-  <li>LVS集群的体系结构：<a href="http://www.linuxvirtualserver.org/zh/lvs2.html">http://www.linuxvirtualserver.org/zh/lvs2.html</a></li>
-  <li>LVS集群中的IP负载均衡技术：<a href="http://www.linuxvirtualserver.org/zh/lvs3.html">http://www.linuxvirtualserver.org/zh/lvs3.html</a></li>
-  <li>LVS集群的负载调度：<a href="http://www.linuxvirtualserver.org/zh/lvs4.html">http://www.linuxvirtualserver.org/zh/lvs4.html</a></li>
-</ul>
-
-<p><strong>2、什么是KeepAlived?</strong></p>
-
-<p>Keepalived原理与实战精讲： <a href="http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/">http://zhumeng8337797.blog.163.com/blog/static/100768914201191762253640/</a></p>
-
-<p><strong>3、什么是CentOS?</strong></p>
-
-<p>百度百科给出的答案：<a href="http://baike.baidu.com/link?url=X3SzN3bJWjW_PkWC6GB2MTs5KhVmxBAxnCRjs9W7-IARDiHloZ_oRWj17BEz0kY3">什么是CentOS</a></p>
-
-<p><strong>4、小结</strong></p>
-
-<p>相信读了以上的理论知识后，已经对集群的实现原理有了大概的了解，那接下来我们就开始动手吧。
-		
-		<a href="/blog/20150420/lvs-keepalived.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-20 16:33</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/mosquitto/'>mosquitto</a>, <a class='category' href='/blog/categories/mqtt/'>mqtt</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150420/mosquitto-install.html" itemprop="url">Mqtt消息中间件mosquitto的安装和配置</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki</h3>
-<p>Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。</p>
-
-<p>MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，
-适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。</p>
-
-<p>值得一提的是mqtt提供三种不同质量的消息服务：</p>
-
-<ul>
-  <li>“至多一次”：消息发布完全依赖底层 TCP/IP 网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。</li>
-  <li>“至少一次”：确保消息到达，但消息重复可能会发生。</li>
-  <li>“只有一次”：确保消息到达一次。这一级别可用于如下情况，在计费系统中，消息重复或丢失会导致不正确的结果。</li>
-</ul>
-
-<h3 id="httpmosquittoorgdownload">安装：(参考官网 <a href="http://mosquitto.org/download/">http://mosquitto.org/download/</a>)</h3>
-
-<p>服务器操作系统为CentOS6.4，使用最简单的yum安装</p>
-
-<p>1，先加入yum源：</p>
-
-<p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：
-		
-		<a href="/blog/20150420/mosquitto-install.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150427/simpleblog-01.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 

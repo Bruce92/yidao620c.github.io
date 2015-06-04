@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：mqtt | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/mqtt/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[mqtt消息中间件mosquitto的安装和配置]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/mosquitto-install.html"/>
-    <updated>2015-04-20T16:33:07+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/mosquitto-install</id>
+    <link href="http://yidao620c.github.io/blog/20150517/mosquitto-install.html"/>
+    <updated>2015-05-17T16:33:07+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150517/mosquitto-install</id>
     <content type="html"><![CDATA[<h3 id="wiki">Wiki</h3>
 <p>Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。</p>
 

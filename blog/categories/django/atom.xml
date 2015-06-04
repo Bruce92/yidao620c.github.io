@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：django | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/django/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（14）- 集成Xadmin]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-14.html"/>
-    <updated>2015-04-21T21:45:29+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-14</id>
+    <link href="http://yidao620c.github.io/blog/20150516/simpleblog-14.html"/>
+    <updated>2015-05-16T21:45:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150516/simpleblog-14</id>
     <content type="html"><![CDATA[<h3 id="xadmin">Xadmin介绍</h3>
 <p>xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
 目的是替换现有的admin，国人开发，有许多新的特性：</p>
@@ -296,9 +296,9 @@ xversion.register_models()</p>
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（13）- redis缓存]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-13.html"/>
-    <updated>2015-04-21T20:27:29+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-13</id>
+    <link href="http://yidao620c.github.io/blog/20150515/simpleblog-13.html"/>
+    <updated>2015-05-15T20:27:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150515/simpleblog-13</id>
     <content type="html"><![CDATA[<h3 id="wiki">Wiki</h3>
 <p>Redis 是一个高性能的key-value数据库。redis的出现，
 很大程度补偿了memcached这类keyvalue存储的不足，在部分场合可以对关系数据库起到很好的补充作用。
@@ -562,9 +562,9 @@ APScheduler==3.0.1
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（12）- i18n国际化]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-12.html"/>
-    <updated>2015-04-21T19:27:29+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-12</id>
+    <link href="http://yidao620c.github.io/blog/20150514/simpleblog-12.html"/>
+    <updated>2015-05-14T19:27:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150514/simpleblog-12</id>
     <content type="html"><![CDATA[<h3 id="wiki">Wiki</h3>
 <p>国际化与本地化的目的为了能为各个不同的用户以他们最熟悉的语言和格式来显示网页。</p>
 
@@ -700,9 +700,9 @@ django-admin.py compilemessages
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（11）- 富文本与代码高亮]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-11.html"/>
-    <updated>2015-04-21T18:27:29+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-11</id>
+    <link href="http://yidao620c.github.io/blog/20150512/simpleblog-11.html"/>
+    <updated>2015-05-12T18:27:29+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150512/simpleblog-11</id>
     <content type="html"><![CDATA[<h2 id="tinymce">TinyMCE介绍</h2>
 <p>TinyMCE是一个轻量级的基于浏览器的所见即所得编辑器，支持目前流行的各种浏览器，由JavaScript写成。
 功能配置灵活简单（两行代码就可以将编辑器嵌入网页中），支持AJAX。另一特点是加载速度非常快。</p>
@@ -874,9 +874,9 @@ plugins: [
   
   <entry>
     <title type="html"><![CDATA[Django1.7开发博客（10）- 全文搜索]]></title>
-    <link href="http://yidao620c.github.io/blog/20150421/simpleblog-10.html"/>
-    <updated>2015-04-21T15:47:28+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150421/simpleblog-10</id>
+    <link href="http://yidao620c.github.io/blog/20150510/simpleblog-10.html"/>
+    <updated>2015-05-10T15:47:28+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150510/simpleblog-10</id>
     <content type="html"><![CDATA[<h3 id="wiki">Wiki：</h3>
 <p>Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。
 django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。

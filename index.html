@@ -126,8 +126,8 @@ MathJax.Hub.Config({
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -140,18 +140,18 @@ MathJax.Hub.Config({
 
 
 2020-08-15 14:02</div>
-		<div class="tags">
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/joke/'>joke</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20200815/joke.html" itemprop="url">开心一刻</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>乌龟生病了，他的朋友蜗牛帮他去买药，走了三天没回来。乌龟生气的说：“这个小蜗牛也太慢啦！”
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20200815/joke.html" itemprop="url">开心一刻</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p>乌龟生病了，他的朋友蜗牛帮他去买药，走了三天没回来。乌龟生气的说：“这个小蜗牛也太慢啦！”
 话音刚落，蜗牛开门说：“你要是再说我，我可不去了啊。”</p>
 
 <p>我女朋友哪都好，就是路痴，这都多少年了还没找到我。</p>
@@ -160,16 +160,16 @@ MathJax.Hub.Config({
 MM：“真人版Windows优化大师！”</p>
 
 <p>十年前，男：我就抱抱不干什么。女：不行！ 十年后，男：我就抱抱不干什么。女：不行！
-		
-		<a href="/blog/20200815/joke.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20200815/joke.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -181,19 +181,116 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-04-23 14:01</div>
-		<div class="tags">
+2015-06-02 10:22</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/pyinstaller/'>pyinstaller</a>, <a class='category' href='/blog/categories/python/'>python</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150602/pyinstaller.html" itemprop="url">使用PyInstaller打包Python程序</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="pyinstaller">PyInstaller介绍：</h3>
+<p>PyInstaller是一个能将Python程序转换成单个可执行文件的程序，
+操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。</p>
+
+<p>环境为windows7操作系统，python2.7.8 virtual environment</p>
+
+<p>官网：<a href="https://github.com/pyinstaller/pyinstaller">https://github.com/pyinstaller/pyinstaller</a></p>
+
+<h3 id="section">详细步骤：</h3>
+<p>1. win7下面先安装这个依赖：pywin32，下载下来后切换到venv2.7，然后使用easy_install xxx.exe安装</p>
+
+<p>2. pip安装PyInstaller：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pip install pyinstaller</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3. 打包过程中可能会出现msvcp90.dll找不到的问题，
+去<a href="http://cn.dll-files.com/msvcp90.dll.html">http://cn.dll-files.com/msvcp90.dll.html</a>下载第三个zip文件，
+解压后放到C:\Windows\System32，如果是64位的还要放到C:\Windows\SysWOW64目录下。
+        
+        <a href="/blog/20150602/pyinstaller.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-06-01 10:06</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/decorator/'>decorator</a>, <a class='category' href='/blog/categories/python/'>python</a>
+
+
+</div>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150601/python-decorator.html" itemprop="url">Python函数装饰器详解</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">装饰器简介</h3>
+<p>python有着强大的表达式语法和函数特性，其中一个我的最爱便是装饰器。
+在设计模式中，装饰器能够在不使用子类的情况下动态的修改函数、方法或类的功能。</p>
+
+<p>当你需要扩展某个函数的功能却不想直接修改这个函数的时候，装饰器就可以派上用场了。
+实现装饰器模式有很多种方法，但是python通过强大的语法支持来让这个变得相当容易。</p>
+
+<p>在这篇文章中我将深入讲解Python的函数装饰器，并通过一系列的源码示例来彻底讲清楚这个东西。
+所有例子都在Python2.7下运行通过，不过只需要稍作改变就可以运行在Python3上了，
+甚至我猜测什么都不用改变都可以的，读者可以自己去试试。</p>
+
+<p>本质上来讲，装饰器是以包装器形式工作的，其实就是在执行目标函数之前或之后加入自己的逻辑，
+而不需要改变目标函数本身就可以增强它的功能，也就是说装饰了它。
+        
+        <a href="/blog/20150601/python-decorator.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-27 14:01</div>
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/hadoop/'>hadoop</a>, <a class='category' href='/blog/categories/hbase/'>hbase</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150423/hadoop-hbase.html" itemprop="url">centos6上安装Hadoop和HBase</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">安装前的准备</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150527/hadoop-hbase.html" itemprop="url">centos6上安装Hadoop和HBase</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">安装前的准备</h3>
 <p>操作系统：CentOS 6.5 64位</p>
 
 <p>在linux环境安装Hadoop之前，我们需要使用到ssh，所以要先安装ssh，并且创建一个hadoop用户</p>
@@ -214,16 +311,16 @@ MM：“真人版Windows优化大师！”</p>
 </span><span class="line">service sshd restart  #重新启动</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h4 id="hadoop--more--">创建hadoop用户
-		
-		<a href="/blog/20150423/hadoop-hbase.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150527/hadoop-hbase.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -235,69 +332,45 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-04-23 10:42</div>
-		<div class="tags">
+2015-05-22 13:53</div>
+        <div class="tags">
 
 
-	<a class='category' href='/blog/categories/sitemesh/'>sitemesh</a>
+	<a class='category' href='/blog/categories/yaml/'>yaml</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150423/sitemesh.html" itemprop="url">SiteMesh使用笔记</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">简介</h3>
-<p>SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重复编码的。</p>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150522/yaml-introduce.html" itemprop="url">Yaml入门笔记</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <p><strong>Wiki：</strong></p>
 
-<p>它定义了一个过滤器，然后把页面都加上统一的头部和底部。</p>
+<p>YAML（IPA: /ˈjæməl/，尾音类似camel骆驼）是一个可读性高，用来表达资料序列的格式。
+YAML参考了其他多种语言，包括：XML、C语言、Python、Perl以及电子邮件格式RFC2822。
+Clark Evans在2001年在首次发表了这种语言[1] ，
+另外Ingy döt Net与Oren Ben-Kiki也是这语言的共同设计者。
+目前已经有数种编程语言或脚本语言支援（或者说解析）这种语言。</p>
 
-<p>在maven工程的pom.xml中加入SiteMesh依赖：</p>
+<p>YAML是”YAML Ain’t a Markup Language”（YAML不是一种置标语言）的递回缩写。
+在开发的这种语言时，YAML 的意思其实是：”Yet Another Markup Language”（仍是一种置标语言），
+但为了强调这种语言以数据做为中心，而不是以置标语言为重点，而用返璞词重新命名。</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;dependency&gt;</span>
-</span><span class="line">    <span class="nt">&lt;groupId&gt;</span>opensymphony<span class="nt">&lt;/groupId&gt;</span>
-</span><span class="line">    <span class="nt">&lt;artifactId&gt;</span>sitemesh<span class="nt">&lt;/artifactId&gt;</span>
-</span><span class="line">    <span class="nt">&lt;version&gt;</span>2.4.2<span class="nt">&lt;/version&gt;</span>
-</span><span class="line"><span class="nt">&lt;/dependency&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>最新版本为1.2，官方说明地址： <a href="http://www.yaml.org/spec/1.2/spec.html">http://www.yaml.org/spec/1.2/spec.html</a></p>
 
-<h3 id="section-1">过滤器定义：</h3>
-<p>在web.xml中：</p>
+<p>使用方式：作为配置文件，数据交换格式，序列化对象存储，测试数据文件，</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;filter&gt;</span>
-</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
-</span><span class="line">    <span class="nt">&lt;filter-class&gt;</span>com.opensymphony.sitemesh.webapp.SiteMeshFilter<span class="nt">&lt;/filter-class&gt;</span>
-</span><span class="line"><span class="nt">&lt;/filter&gt;</span>
-</span><span class="line"><span class="nt">&lt;filter-mapping&gt;</span>
-</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
-</span><span class="line">    <span class="nt">&lt;url-pattern&gt;</span>*.html<span class="nt">&lt;/url-pattern&gt;</span>
-</span><span class="line"><span class="nt">&lt;/filter-mapping&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h3 id="web-infdecoratorsxml--more--">WEB-INF下新建decorators.xml文件：
-		
-		<a href="/blog/20150423/sitemesh.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+<p>一个简单的示例：
+        
+        <a href="/blog/20150522/yaml-introduce.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -309,46 +382,43 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-04-23 10:22</div>
-		<div class="tags">
+2015-05-19 14:01</div>
+        <div class="tags">
 
 
-	<a class='category' href='/blog/categories/pyinstaller/'>pyinstaller</a>, <a class='category' href='/blog/categories/python/'>python</a>
+	<a class='category' href='/blog/categories/xpath/'>xpath</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150423/pyinstaller.html" itemprop="url">使用PyInstaller打包Python程序</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="pyinstaller">PyInstaller介绍：</h3>
-<p>PyInstaller是一个能将Python程序转换成单个可执行文件的程序，
-操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。</p>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150519/xpath-introduce.html" itemprop="url">Xpath入门笔记</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="wiki">Wiki</h3>
 
-<p>环境为windows7操作系统，python2.7.8 virtual environment</p>
+<p>XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言。
+XPath基于XML的树状结构，提供在数据结构树中找寻节点的能力。
+起初XPath的提出的初衷是将其作为一个通用的、介于XPointer与XSL间的语法模型。
+但是XPath很快的被开发者采用来当作小型查询语言。</p>
 
-<p>官网：<a href="https://github.com/pyinstaller/pyinstaller">https://github.com/pyinstaller/pyinstaller</a></p>
+<p>W3C网址： <a href="http://www.w3schools.com/XPath/">http://www.w3schools.com/XPath/</a></p>
 
-<h3 id="section">详细步骤：</h3>
-<p>1. win7下面先安装这个依赖：pywin32，下载下来后切换到venv2.7，然后使用easy_install xxx.exe安装</p>
+<h3 id="section">表示法</h3>
 
-<p>2. pip安装PyInstaller：</p>
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">pip install pyinstaller</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>最常见的XPath表达式是路径表达式（XPath这一名称的另一来源）。</p>
 
-<p>3. 打包过程中可能会出现msvcp90.dll找不到的问题，
-去<a href="http://cn.dll-files.com/msvcp90.dll.html">http://cn.dll-files.com/msvcp90.dll.html</a>下载第三个zip文件，
-解压后放到C:\Windows\System32，如果是64位的还要放到C:\Windows\SysWOW64目录下。
-		
-		<a href="/blog/20150423/pyinstaller.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+<p>路径表达式是从一个XML节点（当前的上下文节点）到另一个节点、或一组节点的书面步骤顺序。
+这些步骤以“／”字符分开，每一步有三个构成成分：
+        
+        <a href="/blog/20150519/xpath-introduce.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -360,141 +430,42 @@ MM：“真人版Windows优化大师！”</p>
   
 
 
-2015-04-23 10:06</div>
-		<div class="tags">
+2015-05-17 16:33</div>
+        <div class="tags">
 
 
-	<a class='category' href='/blog/categories/decorator/'>decorator</a>, <a class='category' href='/blog/categories/python/'>python</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150423/python-decorator.html" itemprop="url">Python函数装饰器详解</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">装饰器简介</h3>
-<p>python有着强大的表达式语法和函数特性，其中一个我的最爱便是装饰器。
-在设计模式中，装饰器能够在不使用子类的情况下动态的修改函数、方法或类的功能。</p>
-
-<p>当你需要扩展某个函数的功能却不想直接修改这个函数的时候，装饰器就可以派上用场了。
-实现装饰器模式有很多种方法，但是python通过强大的语法支持来让这个变得相当容易。</p>
-
-<p>在这篇文章中我将深入讲解Python的函数装饰器，并通过一系列的源码示例来彻底讲清楚这个东西。
-所有例子都在Python2.7下运行通过，不过只需要稍作改变就可以运行在Python3上了，
-甚至我猜测什么都不用改变都可以的，读者可以自己去试试。</p>
-
-<p>本质上来讲，装饰器是以包装器形式工作的，其实就是在执行目标函数之前或之后加入自己的逻辑，
-而不需要改变目标函数本身就可以增强它的功能，也就是说装饰了它。
-		
-		<a href="/blog/20150423/python-decorator.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 21:45</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+	<a class='category' href='/blog/categories/mosquitto/'>mosquitto</a>, <a class='category' href='/blog/categories/mqtt/'>mqtt</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-14.html" itemprop="url">Django1.7开发博客（14）- 集成Xadmin</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="xadmin">Xadmin介绍</h3>
-<p>xadmin是一个django的管理后台实现，使用了更加灵活的架构设计及Bootstrap UI框架，
-目的是替换现有的admin，国人开发，有许多新的特性：</p>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150517/mosquitto-install.html" itemprop="url">Mqtt消息中间件mosquitto的安装和配置</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="wiki">Wiki</h3>
+<p>Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。</p>
+
+<p>MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，
+适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。</p>
+
+<p>值得一提的是mqtt提供三种不同质量的消息服务：</p>
 
 <ul>
-  <li>兼容 Django Admin</li>
-  <li>使用 Bootstrap 作为 UI 框架</li>
-  <li>编辑页面灵活布局</li>
-  <li>主页面仪表盘及小部件</li>
-  <li>过滤器强化</li>
-  <li>数据导出</li>
-  <li>强大的插件机制</li>
+  <li>“至多一次”：消息发布完全依赖底层 TCP/IP 网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。</li>
+  <li>“至少一次”：确保消息到达，但消息重复可能会发生。</li>
+  <li>“只有一次”：确保消息到达一次。这一级别可用于如下情况，在计费系统中，消息重复或丢失会导致不正确的结果。</li>
 </ul>
 
-<p>项目主页：<a href="http://sshwsfc.github.io/django-xadmin/">http://sshwsfc.github.io/django-xadmin/</a></p>
+<h3 id="httpmosquittoorgdownload">安装：(参考官网 <a href="http://mosquitto.org/download/">http://mosquitto.org/download/</a>)</h3>
 
-<p>在线demo: <a href="http://demo.xadmin.io/">http://demo.xadmin.io/</a></p>
+<p>服务器操作系统为CentOS6.4，使用最简单的yum安装</p>
 
-<h3 id="django">与django的集成</h3>
+<p>1，先加入yum源：</p>
 
-<p>本篇以simpleblog项目为例，介绍下怎样在django中集成xadmin
-		
-		<a href="/blog/20150421/simpleblog-14.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-2015-04-21 20:27</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150421/simpleblog-13.html" itemprop="url">Django1.7开发博客（13）- Redis缓存</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="wiki">Wiki</h3>
-<p>Redis 是一个高性能的key-value数据库。redis的出现，
-很大程度补偿了memcached这类keyvalue存储的不足，在部分场合可以对关系数据库起到很好的补充作用。
-它提供了Python，Ruby，Erlang，PHP客户端，使用很方便。</p>
-
-<p>目前Redis已经发布了3.0版本，正式支持分布式，这个特性太强大，以至于你再不用就对不住自己了。</p>
-
-<h3 id="section">性能测试</h3>
-<p>服务器配置：Linux 2.6, Xeon X3320 2.5Ghz</p>
-
-<p>SET操作每秒钟110000次，GET操作每秒钟81000次</p>
-
-<p>stackoverflow网站使用Redis做为缓存服务器。</p>
-
-<h3 id="redis">安装redis</h3>
-<p>服务器安装篇我写了专门文章，
-请参阅<a href="http://yidao620c.github.io/blog/20150418/redis-install.html">redis入门与安装</a></p>
-
-<h3 id="django">django中的配置</h3>
-<p>我们希望在本博客系统中，对于文章点击数、阅览数等数据实现缓存，提高效率。
-		
-		<a href="/blog/20150421/simpleblog-13.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+<p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：
+        
+        <a href="/blog/20150517/mosquitto-install.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 

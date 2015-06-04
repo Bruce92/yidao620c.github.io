@@ -9,7 +9,12 @@
 	<meta name="author" content="熊能">
 
 	
-	<meta name="description" content="2015-04-06 21:08 servlet Servlet Filter详解 在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点， &hellip;">
+	<meta name="description" content="2015-03-28 10:42 sitemesh SiteMesh使用笔记 简介
+SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重复编码的。 它定义了一个过滤器，然后把页面都加上统一的头部和底部。 在maven工程的pom.xml中加入SiteMesh依赖： 1
+2
+3
+4
+5 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -125,8 +130,8 @@ MathJax.Hub.Config({
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -138,46 +143,69 @@ MathJax.Hub.Config({
   
 
 
-2015-04-06 21:08</div>
-		<div class="tags">
+2015-03-28 10:42</div>
+        <div class="tags">
 
 
-	<a class='category' href='/blog/categories/servlet/'>servlet</a>
+	<a class='category' href='/blog/categories/sitemesh/'>sitemesh</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150406/servlet-filter.html" itemprop="url">Servlet Filter详解</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>在写一个springmvc项目中想对用户的请求进行拦截，只有登录用户才能访问资源。这时候可以使用到SpringMVC的拦截器Intercepter，但是这个只能局限在SpringMVC中使用，如果想更加通用一点，最好使用Servlet Filter实现这个需求。</p>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150328/sitemesh.html" itemprop="url">SiteMesh使用笔记</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">简介</h3>
+<p>SiteMesh的介绍就不多说了，主要是用来统一页面风格，减少重复编码的。</p>
 
-<p>本文将通过几个实际的例子展示下Servlet中的Filter的使用。</p>
+<p>它定义了一个过滤器，然后把页面都加上统一的头部和底部。</p>
 
-<p><strong>1 我们为什么需要使用Filter？</strong></p>
+<p>在maven工程的pom.xml中加入SiteMesh依赖：</p>
 
-<p>通常我们会使用session来保存登录用户的信息，通过从session中取出保存的属性值来判断用户是否登录，但是如果我们有大量的请求方法，每个人方法中都这样去判断就会有很多重复代码，将来我们想改动下逻辑，那得改动所有的请求方法实现，所以这个是不可取的。</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;dependency&gt;</span>
+</span><span class="line">    <span class="nt">&lt;groupId&gt;</span>opensymphony<span class="nt">&lt;/groupId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;artifactId&gt;</span>sitemesh<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class="line">    <span class="nt">&lt;version&gt;</span>2.4.2<span class="nt">&lt;/version&gt;</span>
+</span><span class="line"><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>这时候就是使用Servlet Filter的时候了，它是可插拔的，对于普通的action方法来讲是透明的。它会在执行其他方法之前或将结果返回给客户端之前来执行其他逻辑。</p>
+<h3 id="section-1">过滤器定义：</h3>
+<p>在web.xml中：</p>
 
-<p>以下几种场景下我们会使用到Servlet Filter：</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;filter&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-class&gt;</span>com.opensymphony.sitemesh.webapp.SiteMeshFilter<span class="nt">&lt;/filter-class&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter&gt;</span>
+</span><span class="line"><span class="nt">&lt;filter-mapping&gt;</span>
+</span><span class="line">    <span class="nt">&lt;filter-name&gt;</span>sitemeshFilter<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;url-pattern&gt;</span>*.html<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter-mapping&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<ul>
-  <li>将请求的参数写入日志文件</li>
-  <li>对于资源的访问进行统一的授权与验证</li>
-  <li>在请求到达实际Servlet之前格式化请求内容或请求头</li>
-  <li>压缩返回数据后发送给客户端</li>
-  <li>修改返回内容，增加一些cookie、header等信息
-		
-		<a href="/blog/20150406/servlet-filter.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+<h3 id="web-infdecoratorsxml--more--">WEB-INF下新建decorators.xml文件：
+        
+        <a href="/blog/20150328/sitemesh.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
+    <div class="meta">
+        <div class="date">
 
 
 
@@ -190,18 +218,18 @@ MathJax.Hub.Config({
 
 
 2015-03-18 17:41</div>
-		<div class="tags">
+        <div class="tags">
 
 
 	<a class='category' href='/blog/categories/github/'>github</a>, <a class='category' href='/blog/categories/octopress/'>octopress</a>
 
 
 </div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/20150318/octopress-blog.html" itemprop="url">windows7上面使用Octopress搭建GitHub博客</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="section">前言</h3>
+        
+    </div>
+    <h1 class="title" itemprop="name"><a href="/blog/20150318/octopress-blog.html" itemprop="url">windows7上面使用Octopress搭建GitHub博客</a></h1>
+    <div class="entry-content" itemprop="articleBody">
+        <h3 id="section">前言</h3>
 <p>经过iteye博客——WordPress——github的三重进化，时间来到了2015年，
 荒废了两年的Blog大业再次东山再起，于是经过一天的配置，本博客终于展现在你的眼前。
 本博客基于Octopress+Github Pages搭建，可以搭建全免费、稳定运行的个人博客。
@@ -217,9 +245,9 @@ MathJax.Hub.Config({
 注册用户可以申请一个和自己账号关联的二级域名，
 在上面可以托管一个静态网站，网站内容本身就是Github的一个repository也就是项目，
 维护这个项目的代码就是在维护自己的网站。
-		
-		<a href="/blog/20150318/octopress-blog.html" class="more-link">「阅读全文」&rarr;</a>
-	</div>
+        
+        <a href="/blog/20150318/octopress-blog.html" class="more-link">「阅读全文」&rarr;</a>
+    </div>
 
 </article>
 

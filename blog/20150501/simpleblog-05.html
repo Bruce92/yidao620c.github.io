@@ -1,0 +1,508 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Django1.7开发博客（5）- 页面美化 - 笨跑的一刀</title>
+	<meta name="author" content="熊能">
+
+	
+	<meta name="description" content="2015-05-01 10:23 django, simpleblog Django1.7开发博客（5）- 页面美化 什么是css？
+css是一种用来描述某种标记语言写的web站点的样式语言。
+这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： Codeacademy HTML & &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="笨跑的一刀" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://yidao620c.github.io/blog/20150501/simpleblog-05.html">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.useso.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+	<!-- MathJax Configuration -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  MathMenu: {
+      showLocale: false
+  },
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"
+        type="text/javascript"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?c73136a63585c1ce97569b331e723c0e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+  
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<img src="/images/profile.jpg" alt="Profile Picture" style="width: 160px;" />
+</div>
+<hgroup>
+  <h1><a href="/">笨跑的一刀</a></h1>
+  
+    <h2>Code is sexy, like Amy</h2>
+  
+</hgroup>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+	<li><a href="/blog/categories">标签云</a></li>
+	<li><a href="/blog/archives">文章列表</a></li>
+    <li><a href="/blog/comments">最新评论</a></li>
+    <li><a href="/opensource/">开源项目</a></li>
+    <li><a href="/about">About</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:yidao620@gmail.com" title="Email">Email</a>
+		
+		
+		
+			<a class="google" href="https://plus.google.com/yidao620@gmail.com" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/yidao620@gmail.com" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/yidao620c" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="meta">
+        <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+2015-05-01 10:23</div>
+        <div class="tags">
+
+
+	<a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/simpleblog/'>simpleblog</a>
+
+
+</div>
+    </div>
+    <h1 class="title" itemprop="name">
+        Django1.7开发博客（5）- 页面美化
+    </h1>
+    <div class="entry-content" itemprop="articleBody"><h3 id="css">什么是css？</h3>
+<p>css是一种用来描述某种标记语言写的web站点的样式语言。
+这里我们并不想展开讨论，关于CSS我在这里推荐一个很不错的资源： <a href="http://www.codecademy.com/tracks/web">Codeacademy HTML &amp; CSS course</a></p>
+
+<p>不想从头开始写，因为我们有现成的css框架，没必要重复造轮子。</p>
+
+<h3 id="bootstrap">使用Bootstrap</h3>
+<p>目前最流行的css框架非bootstrap莫属了，官网地址：<a href="http://getbootstrap.com/">http://getbootstrap.com/</a></p>
+
+<p>只需要在你的html模板页面的开始部分添加下面几句就行了</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>你的工程里面不需要引入任何的文件，因为这里直接引用了bootstrap公共的css和js文件。<!--more--></p>
+
+<p>再次打开模板文件，效果如下：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj011.jpg" alt="" /></p>
+
+<p>是不是感觉变美观了。^_^</p>
+
+<h3 id="django">django静态文件</h3>
+<p>这里我还将讲解下django中的静态文件。静态文件就是css、js、图片、视频等等那些内容不会改变的文件，不管任何时候，对于任何用户都是一样的。</p>
+
+<p>css就是一种静态文件，为了自定义css，我们必须先再django中配置，你只需要配置一次就可以了。那让我们马上开始吧！</p>
+
+<h3 id="django-1">django中配置静态文件</h3>
+<p>首先我们需要创建一个目录来存储静态文件，在manage.py的同级目录中创建一个static文件夹</p>
+
+<pre><code>mysite
+├─── static
+└─── manage.py
+</code></pre>
+
+<p>打开配置文件mysite/settings.py，在最后面添加如下配置：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class="line">    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">&quot;static&quot;</span><span class="p">),</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>它告知django应该在哪个位置去查找静态文件。</p>
+
+<h3 id="css-1">第一个CSS文件</h3>
+<p>现在我们开始创建自己的css文件了，首先在static目录中新建一个css目录，然后在里面创建一个blog.css文件。目录结构如下</p>
+
+<pre><code>static
+└─── css
+     └───blog.css
+</code></pre>
+
+<p>打开文件static/css/blog.css后，添加如下内容</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nt">h1</span> <span class="nt">a</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#FCA205</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>h1 a是CSS选择器，上面的意思是在h1标签下的链接a的文字颜色会是#FCA205，其实就是橘黄色，颜色都是用十六进制表示的。</p>
+
+<p>接下来我们要让模板加载静态css文件，打开blog/templates/blog/post_list.html，在最开始部分加入：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="p">{</span><span class="o">%</span> <span class="n">load</span> <span class="n">staticfiles</span> <span class="o">%</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>然后在bootstrap引用的后面添加下面这句</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>最后，整个模板文件类似这样：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">{% load staticfiles %}
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line">    <span class="nt">&lt;head&gt;</span>
+</span><span class="line">        <span class="nt">&lt;title&gt;</span>Django Girls blog<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;{% static &#39;css/blog.css&#39; %}&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;body&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div&gt;</span>
+</span><span class="line">            <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line">        {% for post in posts %}
+</span><span class="line">            <span class="nt">&lt;div&gt;</span>
+</span><span class="line">                <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">                <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        {% endfor %}
+</span><span class="line">    <span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>OK，保存并刷新后看看效果</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj012.jpg" alt="" /></p>
+
+<p>我想要文字左边的边距大一点，这样会好看些。那么在blog.css中添加如下内容：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nt">body</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">padding-left</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>刷新页面后效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj013.jpg" alt="" /></p>
+
+<p>我还想自定义文字标题的字体，在post_list.html模板的中添加如下一句</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>这句会引入Google的一个字体Lobster，然后修改blog.css中的h1 a的样式如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nt">h1</span> <span class="nt">a</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#FCA205</span><span class="p">;</span>
+</span><span class="line">    <span class="k">font-family</span><span class="o">:</span> <span class="s1">&#39;Lobster&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>刷新后的效果：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj014.jpg" alt="" /></p>
+
+<h3 id="cssclass">CSS中的class</h3>
+<p>在CSS中有一个class的概念，它可以让你只改变HTML中某一部分的样式而不会影响到其他部分。</p>
+
+<p>这里我们将区别标题头和文章本身的样式。</p>
+
+<p>在post_list.html中添加如下的标题段：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/&quot;</span><span class="nt">&gt;</span>Django Girls Blog<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>文章列表段修改如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            {% for post in posts %}
+</span><span class="line">                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/h1&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;p&gt;</span>published: {{ post.published_date }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                    <span class="nt">&lt;p&gt;</span>{{ post.text|linebreaks }}<span class="nt">&lt;/p&gt;</span>
+</span><span class="line">                <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">            {% endfor %}
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>blog.css样式修改如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nc">.page-header</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">background-color</span><span class="o">:</span> <span class="m">#ff9400</span><span class="p">;</span>
+</span><span class="line">    <span class="k">margin-top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class="line">    <span class="k">padding</span><span class="o">:</span> <span class="m">20px</span> <span class="m">20px</span> <span class="m">20px</span> <span class="m">40px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.page-header</span> <span class="nt">h1</span><span class="o">,</span> <span class="nc">.page-header</span> <span class="nt">h1</span> <span class="nt">a</span><span class="o">,</span> <span class="nc">.page-header</span> <span class="nt">h1</span> <span class="nt">a</span><span class="nd">:visited</span><span class="o">,</span> <span class="nc">.page-header</span> <span class="nt">h1</span> <span class="nt">a</span><span class="nd">:active</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+</span><span class="line">    <span class="k">font-size</span><span class="o">:</span> <span class="m">36pt</span><span class="p">;</span>
+</span><span class="line">    <span class="k">text-decoration</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.content</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">margin-left</span><span class="o">:</span> <span class="m">40px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span><span class="o">,</span> <span class="nt">h4</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">font-family</span><span class="o">:</span> <span class="s1">&#39;Lobster&#39;</span><span class="o">,</span> <span class="k">cursive</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.date</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#828282</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.save</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.post-form</span> <span class="nt">textarea</span><span class="o">,</span> <span class="nc">.post-form</span> <span class="nt">input</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.top-menu</span><span class="o">,</span> <span class="nc">.top-menu</span><span class="nd">:hover</span><span class="o">,</span> <span class="nc">.top-menu</span><span class="nd">:visited</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+</span><span class="line">    <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+</span><span class="line">    <span class="k">font-size</span><span class="o">:</span> <span class="m">26pt</span><span class="p">;</span>
+</span><span class="line">    <span class="k">margin-right</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.post</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">70px</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nc">.post</span> <span class="nt">h1</span> <span class="nt">a</span><span class="o">,</span> <span class="nc">.post</span> <span class="nt">h1</span> <span class="nt">a</span><span class="nd">:visited</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">color</span><span class="o">:</span> <span class="m">#000000</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>保存这些文件后，刷新页面，看看，是不是很酷了：</p>
+
+<p><img src="http://yidaospace.qiniudn.com/dj015.jpg" alt="" /></p>
+
+<p>已经比较美观了。上面的css应该看起来不会那么难，可以自己试着去修改它，没关系的，反正出错了可以撤销。最好多练习才行。</p>
+
+<p>下一节我将介绍django中模板的继承机制！</p>
+
+</div>
+    <ul class="pager" style="padding-bottom:10px;">
+        
+            <li style="float: left;">
+                <a href="/blog/20150430/simpleblog-04.html">« 上一篇: Django1.7开发博客（4）- 三部曲</a>
+            </li>
+        
+        
+            <li style="float: right;">
+                <a href="/blog/20150502/simpleblog-06.html">» 下一篇: Django1.7开发博客（6）- 模板继承</a>
+            </li>
+        
+    </ul>
+
+</article>
+
+  <section id="comments">
+   <!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/20150501/simpleblog-05" data-title="Django1.7开发博客（5）- 页面美化" data-url="http://yidao620c.github.io/blog/20150501/simpleblog-05.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"yidao620c"};
+    (function() {
+
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+     })();
+ </script>
+ <!-- 多说公共JS代码 end -->
+  </section>
+</div>
+			</div>
+			<footer id="footer" class="inner">
+    Copyright &copy; 2015
+
+熊能
+
+
+    Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+
+</footer>
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：puzzle | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/puzzle/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[利用递归算法并行化解决谜题框架]]></title>
-    <link href="http://yidao620c.github.io/blog/20150418/concurrent-recursive.html"/>
-    <updated>2015-04-18T15:41:16+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150418/concurrent-recursive</id>
+    <link href="http://yidao620c.github.io/blog/20150414/concurrent-recursive.html"/>
+    <updated>2015-04-14T15:41:16+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150414/concurrent-recursive</id>
     <content type="html"><![CDATA[<p>我们将谜题定义为：包含一个初始位置，一个目标位置，以及用于判断是否是有效移动的规则集。</p>
 
 <p>规则集包含两部分：计算从指定位置开始的所有合法移动，以及每次移动的结果位置。</p>

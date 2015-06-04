@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：java8 | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/java8/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-03T14:59:38+08:00</updated>
+  <updated>2015-06-04T10:37:29+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Java8中的lambda表达式]]></title>
-    <link href="http://yidao620c.github.io/blog/20150420/java8-lambda.html"/>
-    <updated>2015-04-20T15:42:11+08:00</updated>
-    <id>http://yidao620c.github.io/blog/20150420/java8-lambda</id>
+    <link href="http://yidao620c.github.io/blog/20150421/java8-lambda.html"/>
+    <updated>2015-04-21T15:42:11+08:00</updated>
+    <id>http://yidao620c.github.io/blog/20150421/java8-lambda</id>
     <content type="html"><![CDATA[<p>2014年3月18日，Oracle终于发布Java8正式版。在新的版本里面加入了很多特性，
 总共增加了55个新特性，其中最最吸引人的就是Lambdas表达式和Stream函数式编程，本文详细讲解这两个特性。</p>
 
