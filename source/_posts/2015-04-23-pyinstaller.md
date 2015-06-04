@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "使用PyInstaller打包Python程序"
-date: 2015-06-02 10:22:26 +0800
+date: 2015-04-23 10:22:26 +0800
 comments: true
 categories: python pyinstaller
 ---
