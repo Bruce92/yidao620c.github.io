@@ -3,7 +3,7 @@ layout: post
 title: "归并排序中对小数组采用插入排序"
 date: 2015-04-24 10:47:35 +0800
 comments: true
-categories: sort
+categories: 归并排序
 ---
 
 纯归并排序的复杂度为O(nlgn)，而纯插入排序的时间复杂度为O(n^2)。数据量很大的时候采用归并排序。

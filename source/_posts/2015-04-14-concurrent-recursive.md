@@ -3,7 +3,7 @@ layout: post
 title: "利用递归算法并行化解决谜题框架"
 date: 2015-04-14 15:41:16 +0800
 comments: true
-categories: recursive puzzle
+categories: 递归 谜题
 ---
 
 我们将谜题定义为：包含一个初始位置，一个目标位置，以及用于判断是否是有效移动的规则集。

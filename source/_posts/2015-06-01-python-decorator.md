@@ -3,7 +3,7 @@ layout: post
 title: "python函数装饰器详解"
 date: 2015-06-01 10:06:22 +0800
 comments: true
-categories: python decorator
+categories: python
 ---
 
 ### 装饰器简介
