@@ -16,7 +16,7 @@
     border: solid #000 1px;
     padding: 5px;
 }
-.tagli {
+#categories li {
     float:left;
     padding-right:60px;
     padding-top:25px;

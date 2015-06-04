@@ -4,7 +4,7 @@
   <title><![CDATA[分类目录：pyinstaller | 笨跑的一刀]]></title>
   <link href="http://yidao620c.github.io/blog/categories/pyinstaller/atom.xml" rel="self"/>
   <link href="http://yidao620c.github.io/"/>
-  <updated>2015-06-04T11:00:53+08:00</updated>
+  <updated>2015-06-04T14:44:34+08:00</updated>
   <id>http://yidao620c.github.io/</id>
   <author>
     <name><![CDATA[熊能]]></name>
@@ -120,46 +120,82 @@ exe = EXE(pyz,
 注意：我在a.datas下面添加了那行配置，具体的路径自己去修改下。</p>
 
 <p>上面是添加单个文件，如果有多个文件，可以一个个的添加。不过如果文件多了话，那么就使用下面的方法：
-&#8220;`
-# -<em>- mode: python -</em>-
-a = Analysis([‘main.py’],
-             pathex=[‘d:\tmp\core-wxpython’],
-             hiddenimports=[],
-             hookspath=None,
-             runtime_hooks=None)</p>
-
-<p>def extra_datas(mydir):
-    def rec_glob(p, files):
-        import os
-        import glob
-        for d in glob.glob(p):
-            if os.path.isfile(d):
-                files.append(d)
-            rec_glob(“%s/<em>” % d, files)
-    files = []
-    rec_glob(“%s/</em>” % mydir, files)
-    extra_datas = []
-    for f in files:
-        extra_datas.append((f, f, ‘DATA’))</p>
-
-<pre><code>return extra_datas
-</code></pre>
-
-<h1 id="append-the-resources-dir">append the ‘resources’ dir</h1>
-<p>a.datas += extra_datas(‘resources’)</p>
-
-<p>pyz = PYZ(a.pure)
-exe = EXE(pyz,
-          a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
-          name=’main.exe’,
-          debug=False,
-          strip=None,
-          upx=True,
-          console=True , icon=’d:\tmp\main.ico’)
-&#8220;`
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># -&lt;em&gt;- mode: python -&lt;/em&gt;-
+</span><span class='line'>a = Analysis([‘main.py’],
+</span><span class='line'>             pathex=[‘d:\tmp\core-wxpython’],
+</span><span class='line'>             hiddenimports=[],
+</span><span class='line'>             hookspath=None,
+</span><span class='line'>             runtime_hooks=None)&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;def extra_datas(mydir):
+</span><span class='line'>    def rec_glob(p, files):
+</span><span class='line'>        import os
+</span><span class='line'>        import glob
+</span><span class='line'>        for d in glob.glob(p):
+</span><span class='line'>            if os.path.isfile(d):
+</span><span class='line'>                files.append(d)
+</span><span class='line'>            rec_glob(“%s/&lt;em&gt;” % d, files)
+</span><span class='line'>    files = []
+</span><span class='line'>    rec_glob(“%s/&lt;/em&gt;” % mydir, files)
+</span><span class='line'>    extra_datas = []
+</span><span class='line'>    for f in files:
+</span><span class='line'>        extra_datas.append((f, f, ‘DATA’))&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;return extra_datas
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1 id="append-the-resources-dir"&gt;append the ‘resources’ dir&lt;/h1&gt;
+</span><span class='line'>&lt;p&gt;a.datas += extra_datas(‘resources’)&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;pyz = PYZ(a.pure)
+</span><span class='line'>exe = EXE(pyz,
+</span><span class='line'>          a.scripts,
+</span><span class='line'>          a.binaries,
+</span><span class='line'>          a.zipfiles,
+</span><span class='line'>          a.datas,
+</span><span class='line'>          name=’main.exe’,
+</span><span class='line'>          debug=False,
+</span><span class='line'>          strip=None,
+</span><span class='line'>          upx=True,
+</span><span class='line'>          console=True , icon=’d:\tmp\main.ico’)</span></code></pre></td></tr></table></div></figure>
 它会把某个指定的文件下的所有文件递归的添加到最终的包中。省去很多事情！</p>
 
 <p>第五步，执行：pyinstaller D:\tmp\core-wxpython\main.spec</p>

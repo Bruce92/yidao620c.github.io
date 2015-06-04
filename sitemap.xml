@@ -182,13 +182,13 @@
     <loc>http://yidao620c.github.io/blog/categories/linux/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/recursive/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/di-gui/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/puzzle/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/mi-ti/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/eight-queens/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/ba-huang-hou/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/blog/categories/memcached/</loc>
@@ -197,10 +197,10 @@
     <loc>http://yidao620c.github.io/blog/categories/redis/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/sort/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/kuai-su-pai-xu/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/search/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/er-fen-cha-zhao/</loc>
   </url>
   <url>
     <loc>http://yidao620c.github.io/blog/categories/django/</loc>
@@ -227,6 +227,9 @@
     <loc>http://yidao620c.github.io/blog/categories/keepalived/</loc>
   </url>
   <url>
+    <loc>http://yidao620c.github.io/blog/categories/gui-bing-pai-xu/</loc>
+  </url>
+  <url>
     <loc>http://yidao620c.github.io/blog/categories/rabbitmq/</loc>
   </url>
   <url>
@@ -248,9 +251,6 @@
     <loc>http://yidao620c.github.io/blog/categories/hbase/</loc>
   </url>
   <url>
-    <loc>http://yidao620c.github.io/blog/categories/decorator/</loc>
-  </url>
-  <url>
-    <loc>http://yidao620c.github.io/blog/categories/joke/</loc>
+    <loc>http://yidao620c.github.io/blog/categories/xiao-hua/</loc>
   </url>
 </urlset>
