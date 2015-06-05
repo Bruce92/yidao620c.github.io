@@ -2,6 +2,7 @@
 .container .left-col {
     background-size: cover;
     background-image: url(http://yidaospace.qiniudn.com/left-bg.jpg);
+    -webkit-transform: translateZ(0);
 }
 .middletitle{
     margin-left: 0;
